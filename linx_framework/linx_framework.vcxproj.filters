@@ -5,13 +5,83 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="头文件">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
     <Filter Include="资源文件">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{57879fd5-f066-4729-b8cc-2745aa5ea131}</UniqueIdentifier>
+      <Extensions>h;hpp</Extensions>
+    </Filter>
+    <Filter Include="头文件\IO">
+      <UniqueIdentifier>{2ae7a665-f858-4392-ba88-8bf47dad9394}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\IO">
+      <UniqueIdentifier>{75465f1d-abf8-43c1-9a3e-7d96999b3ec0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\IO\Network">
+      <UniqueIdentifier>{7764f0b7-1435-4850-ad2e-da56ffeb3405}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\IO\Network">
+      <UniqueIdentifier>{cefaf2c5-0611-4627-8423-f449bcce85be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\IO\Network\Base">
+      <UniqueIdentifier>{95612b04-8d99-4707-8f93-4b65b8ec50b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\IO\Network\Base">
+      <UniqueIdentifier>{5d212175-6c34-43e9-8ea1-15929d14c21d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Containers">
+      <UniqueIdentifier>{d444de5b-a6b2-42ec-898a-34ac0149b531}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Containers">
+      <UniqueIdentifier>{68e7694c-242d-45f4-81c3-7c0e9bf8b199}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Framework\Containers\RingBuffer.cpp">
+      <Filter>源文件\Containers</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\IO\Network\Base\SocketBase.cpp">
+      <Filter>源文件\IO\Network\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\IO\Network\TcpClientSocket.cpp">
+      <Filter>源文件\IO\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\IO\Network\TcpServerSocket.cpp">
+      <Filter>源文件\IO\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\IO\Network\Base\TcpSocket.cpp">
+      <Filter>源文件\IO\Network\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\IO\Network\TestNetwork.cpp">
+      <Filter>源文件\IO\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\Containers\TestRingBuffer.cpp">
+      <Filter>源文件\Containers</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\IO\Network\UdpSocket.cpp">
+      <Filter>源文件\IO\Network</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Framework\Containers\RingBuffer.h">
+      <Filter>头文件\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\IO\Network\Base\SocketBase.h">
+      <Filter>头文件\IO\Network\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\IO\Network\TcpClientSocket.h">
+      <Filter>头文件\IO\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\IO\Network\TcpServerSocket.h">
+      <Filter>头文件\IO\Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\IO\Network\Base\TcpSocket.h">
+      <Filter>头文件\IO\Network\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\IO\Network\UdpSocket.h">
+      <Filter>头文件\IO\Network</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
