@@ -15,13 +15,6 @@ namespace linx
 	class SocketBase
 	{
 	public:
-#ifdef _WIN32
-		using socket_type = SOCKET;
-#elif __linux__
-		using socket_type = int;
-#endif
-
-	public:
 		SocketBase();
 		virtual ~SocketBase();
 
@@ -65,10 +58,17 @@ namespace linx
 		unsigned int GetLastError() noexcept;
 
 	protected:
+#ifdef _WIN32
 		/** An ID of the self socket */
-		socket_type Sock = 0;
+		SOCKET Sock = 0;
 		/** An ID of the target socket */
-		socket_type TargetSock = 0;
+		SOCKET TargetSock = 0;
+#elif __linux__
+		/** The ID of self socket */
+		int Sock = 0;
+		/** The ID of the target socket */
+		int TargetSock = 0;
+#endif
 
 		/** Stores self socket information */
 		sockaddr_in Addr;

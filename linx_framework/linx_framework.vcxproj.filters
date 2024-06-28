@@ -83,8 +83,5 @@
     <ClInclude Include="Framework\IO\Network\UdpSocket.h">
       <Filter>头文件\IO\Network</Filter>
     </ClInclude>
-    <ClInclude Include="Framework\TestConfig.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

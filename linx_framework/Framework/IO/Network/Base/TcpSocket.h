@@ -21,9 +21,18 @@ namespace linx
 		// End SocketBase Interface.
 
 	protected:
+
+#ifdef _WIN32
 		/** Server socket */
-		socket_type* pServerSock;
+		SOCKET* pServerSock;
 		/** Client socket */
-		socket_type* pClientSock;
+		SOCKET* pClientSock;
+
+#elif __linux__
+		/** Server socket */
+		int* pServerSock;
+		/** Client socket */
+		int* pClientSock;
+#endif
 	};
 }
