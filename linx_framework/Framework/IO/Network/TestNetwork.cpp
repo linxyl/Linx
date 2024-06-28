@@ -1,5 +1,5 @@
-#define OPEN_TEST
-#ifdef OPEN_TEST
+#include "TestConfig.h"
+#ifdef NETWORK
 #include <thread>
 #include <iostream>
 #include <mutex>

@@ -35,6 +35,7 @@
     <ClInclude Include="Framework\IO\Network\TcpClientSocket.h" />
     <ClInclude Include="Framework\IO\Network\TcpServerSocket.h" />
     <ClInclude Include="Framework\IO\Network\UdpSocket.h" />
+    <ClInclude Include="Framework\TestConfig.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B7D61B23-DEE9-46AF-B612-E41F90B8EFFC}</ProjectGuid>
@@ -51,7 +52,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -92,6 +93,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>C:\Users\linx\Desktop\函数库\c++\linx_framework\linx_framework\Framework;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

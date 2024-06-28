@@ -18,9 +18,9 @@ TcpServerSocket::TcpServerSocket()
 	}
 }
 
-bool TcpServerSocket::Listen() noexcept
+bool TcpServerSocket::Listen(size_t Num) noexcept
 {
-    if(listen(Sock, 1) < 0)
+    if(listen(Sock, Num) < 0)
     {
 		return false;
     }
@@ -28,7 +28,7 @@ bool TcpServerSocket::Listen() noexcept
 	return true;
 }
 
-bool TcpServerSocket::Accept() noexcept
+bool TcpServerSocket::Accept(bool bSwitchClient) noexcept
 {
 #ifdef _WIN32
 	int len = sizeof(TargetAddr);
@@ -36,25 +36,55 @@ bool TcpServerSocket::Accept() noexcept
 	socklen_t len = sizeof(TargetAddr);
 #endif
 
-	if((TargetSock = accept(Sock,(sockaddr*)&TargetAddr, &len)) == -1)
+	socket_type AcceptSocket;
+	if((AcceptSocket = accept(Sock,(sockaddr*)&TargetAddr, &len)) == -1)
 	{
 		return false;
 	}
 
+	if (bSwitchClient)
+	{
+		TargetSock = AcceptSocket;
+	}
+
+	ClientSockets.insert(TargetSock);
+
 	return true;
+}
+
+void TcpServerSocket::SetTargetClient(socket_type ClientSocket) noexcept
+{
+	TargetSock = ClientSocket;
+}
+
+void TcpServerSocket::CloseClient(socket_type ClientSocket) noexcept
+{
+	if (ClientSocket)
+	{
+#ifdef _WIN32
+		closesocket(ClientSocket);
+#elif __linux__
+		close(ClientSocket);
+#endif
+		ClientSockets.erase(ClientSocket);
+	}
 }
 
 void TcpServerSocket::Close() noexcept
 {
 	Super::Close();
 
-	if (TargetSock)
+	for (auto it : ClientSockets)
 	{
-#ifdef _WIN32
-		closesocket(TargetSock);
-#elif __linux__
-		close(TargetSock);
-#endif
-		TargetSock = 0;
+		if (TargetSock)
+		{
+	#ifdef _WIN32
+			closesocket(TargetSock);
+	#elif __linux__
+			close(TargetSock);
+	#endif
+		}
 	}
+
+	ClientSockets = decltype(ClientSockets)();
 }
