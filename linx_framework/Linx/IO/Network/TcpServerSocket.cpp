@@ -4,7 +4,7 @@
 
 #include "TcpServerSocket.h"
 
-using namespace linx;
+using namespace Linx;
 
 TcpServerSocket::TcpServerSocket()
 {

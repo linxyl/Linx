@@ -19,23 +19,26 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Framework\Containers\RingBuffer.cpp" />
-    <ClCompile Include="Framework\Containers\TestRingBuffer.cpp" />
-    <ClCompile Include="Framework\IO\Network\Base\SocketBase.cpp" />
-    <ClCompile Include="Framework\IO\Network\Base\TcpSocket.cpp" />
-    <ClCompile Include="Framework\IO\Network\TcpClientSocket.cpp" />
-    <ClCompile Include="Framework\IO\Network\TcpServerSocket.cpp" />
-    <ClCompile Include="Framework\IO\Network\TestNetwork.cpp" />
-    <ClCompile Include="Framework\IO\Network\UdpSocket.cpp" />
+    <ClCompile Include="Linx\Containers\RingBuffer.cpp" />
+    <ClCompile Include="Linx\Containers\TestRingBuffer.cpp" />
+    <ClCompile Include="Linx\IO\Network\Base\SocketBase.cpp" />
+    <ClCompile Include="Linx\IO\Network\Base\TcpSocket.cpp" />
+    <ClCompile Include="Linx\IO\Network\TcpClientSocket.cpp" />
+    <ClCompile Include="Linx\IO\Network\TcpServerSocket.cpp" />
+    <ClCompile Include="Linx\IO\Network\TestNetwork.cpp" />
+    <ClCompile Include="Linx\IO\Network\UdpSocket.cpp" />
+    <ClCompile Include="Linx\Math\MathUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Framework\Containers\RingBuffer.h" />
-    <ClInclude Include="Framework\IO\Network\Base\SocketBase.h" />
-    <ClInclude Include="Framework\IO\Network\Base\TcpSocket.h" />
-    <ClInclude Include="Framework\IO\Network\TcpClientSocket.h" />
-    <ClInclude Include="Framework\IO\Network\TcpServerSocket.h" />
-    <ClInclude Include="Framework\IO\Network\UdpSocket.h" />
-    <ClInclude Include="Framework\TestConfig.h" />
+    <ClInclude Include="Linx\Containers\RingBuffer.h" />
+    <ClInclude Include="Linx\IO\Network\Base\SocketBase.h" />
+    <ClInclude Include="Linx\IO\Network\Base\TcpSocket.h" />
+    <ClInclude Include="Linx\IO\Network\TcpClientSocket.h" />
+    <ClInclude Include="Linx\IO\Network\TcpServerSocket.h" />
+    <ClInclude Include="Linx\IO\Network\UdpSocket.h" />
+    <ClInclude Include="Linx\Math\MathUtils.h" />
+    <ClInclude Include="Linx\TestConfig.h" />
+    <ClInclude Include="Linx\Utils\Debug.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B7D61B23-DEE9-46AF-B612-E41F90B8EFFC}</ProjectGuid>
@@ -93,7 +96,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Users\linx\Desktop\函数库\c++\linx_framework\linx_framework\Framework;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\linx\Desktop\函数库\c++\linx_framework\linx_framework\Linx;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -110,6 +113,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>C:\Users\linx\Desktop\函数库\c++\linx_framework\linx_framework\Linx;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>

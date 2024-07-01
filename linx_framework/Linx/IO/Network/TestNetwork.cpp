@@ -9,7 +9,7 @@
 #include "UdpSocket.h"
 
 using namespace std;
-using namespace linx;
+using namespace Linx;
 
 #ifdef __linux__
 #include <unistd.h>

@@ -7,7 +7,7 @@
 
 #include "SocketBase.h"
 
-using namespace linx;
+using namespace Linx;
 
 SocketBase::SocketBase()
 {
@@ -58,22 +58,22 @@ void SocketBase::Close() noexcept
 	}
 }
 
-void linx::SocketBase::SetRecvTimeout(int mseconds) noexcept
+void Linx::SocketBase::SetRecvTimeout(int mseconds) noexcept
 {
 	::setsockopt(Sock, SOL_SOCKET, SO_RCVTIMEO, (char*)&mseconds, sizeof(mseconds));
 }
 
-void linx::SocketBase::SetSendTimeout(int mseconds) noexcept
+void Linx::SocketBase::SetSendTimeout(int mseconds) noexcept
 {
 	::setsockopt(Sock, SOL_SOCKET, SO_SNDTIMEO, (char*)&mseconds, sizeof(mseconds));
 }
 
-void linx::SocketBase::SetRecvBufSize(int size) noexcept
+void Linx::SocketBase::SetRecvBufSize(int size) noexcept
 {
 	::setsockopt(Sock, SOL_SOCKET, SO_RCVBUF, (char*)&size, sizeof(size));
 }
 
-void linx::SocketBase::SetSendBufSize(int size) noexcept
+void Linx::SocketBase::SetSendBufSize(int size) noexcept
 {
 	::setsockopt(Sock, SOL_SOCKET, SO_SNDBUF, (char*)&size, sizeof(size));
 }

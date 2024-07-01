@@ -39,51 +39,60 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Framework\Containers\RingBuffer.cpp">
+    <ClCompile Include="Linx\Containers\RingBuffer.cpp">
       <Filter>源文件\Containers</Filter>
     </ClCompile>
-    <ClCompile Include="Framework\IO\Network\Base\SocketBase.cpp">
+    <ClCompile Include="Linx\IO\Network\Base\SocketBase.cpp">
       <Filter>源文件\IO\Network\Base</Filter>
     </ClCompile>
-    <ClCompile Include="Framework\IO\Network\TcpClientSocket.cpp">
+    <ClCompile Include="Linx\IO\Network\TcpClientSocket.cpp">
       <Filter>源文件\IO\Network</Filter>
     </ClCompile>
-    <ClCompile Include="Framework\IO\Network\TcpServerSocket.cpp">
+    <ClCompile Include="Linx\IO\Network\TcpServerSocket.cpp">
       <Filter>源文件\IO\Network</Filter>
     </ClCompile>
-    <ClCompile Include="Framework\IO\Network\Base\TcpSocket.cpp">
+    <ClCompile Include="Linx\IO\Network\Base\TcpSocket.cpp">
       <Filter>源文件\IO\Network\Base</Filter>
     </ClCompile>
-    <ClCompile Include="Framework\IO\Network\TestNetwork.cpp">
+    <ClCompile Include="Linx\IO\Network\TestNetwork.cpp">
       <Filter>源文件\IO\Network</Filter>
     </ClCompile>
-    <ClCompile Include="Framework\Containers\TestRingBuffer.cpp">
+    <ClCompile Include="Linx\Containers\TestRingBuffer.cpp">
       <Filter>源文件\Containers</Filter>
     </ClCompile>
-    <ClCompile Include="Framework\IO\Network\UdpSocket.cpp">
+    <ClCompile Include="Linx\IO\Network\UdpSocket.cpp">
       <Filter>源文件\IO\Network</Filter>
+    </ClCompile>
+    <ClCompile Include="Linx\Math\MathUtils.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Framework\Containers\RingBuffer.h">
+    <ClInclude Include="Linx\Containers\RingBuffer.h">
       <Filter>头文件\Containers</Filter>
     </ClInclude>
-    <ClInclude Include="Framework\IO\Network\Base\SocketBase.h">
+    <ClInclude Include="Linx\IO\Network\Base\SocketBase.h">
       <Filter>头文件\IO\Network\Base</Filter>
     </ClInclude>
-    <ClInclude Include="Framework\IO\Network\TcpClientSocket.h">
+    <ClInclude Include="Linx\IO\Network\TcpClientSocket.h">
       <Filter>头文件\IO\Network</Filter>
     </ClInclude>
-    <ClInclude Include="Framework\IO\Network\TcpServerSocket.h">
+    <ClInclude Include="Linx\IO\Network\TcpServerSocket.h">
       <Filter>头文件\IO\Network</Filter>
     </ClInclude>
-    <ClInclude Include="Framework\IO\Network\Base\TcpSocket.h">
+    <ClInclude Include="Linx\IO\Network\Base\TcpSocket.h">
       <Filter>头文件\IO\Network\Base</Filter>
     </ClInclude>
-    <ClInclude Include="Framework\IO\Network\UdpSocket.h">
+    <ClInclude Include="Linx\IO\Network\UdpSocket.h">
       <Filter>头文件\IO\Network</Filter>
     </ClInclude>
-    <ClInclude Include="Framework\TestConfig.h">
+    <ClInclude Include="Linx\TestConfig.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Linx\Math\MathUtils.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Linx\Utils\Debug.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

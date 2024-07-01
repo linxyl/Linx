@@ -1,6 +1,6 @@
 #include "TcpSocket.h"
 
-using namespace linx;
+using namespace Linx;
 
 TcpSocket::TcpSocket()
 {

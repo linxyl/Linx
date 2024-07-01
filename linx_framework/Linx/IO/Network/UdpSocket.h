@@ -2,7 +2,7 @@
 
 #include "Base/SocketBase.h"
 
-namespace linx
+namespace Linx
 {
 	class UdpSocket : public SocketBase
 	{

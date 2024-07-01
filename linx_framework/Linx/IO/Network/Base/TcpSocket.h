@@ -2,7 +2,7 @@
 
 #include "SocketBase.h"
 
-namespace linx
+namespace Linx
 {
 	/**
 	 * A base class of tcp socket

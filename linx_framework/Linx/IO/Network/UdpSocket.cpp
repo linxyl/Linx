@@ -1,6 +1,6 @@
 #include "UdpSocket.h"
 
-using namespace linx;
+using namespace Linx;
 
 UdpSocket::UdpSocket()
 {

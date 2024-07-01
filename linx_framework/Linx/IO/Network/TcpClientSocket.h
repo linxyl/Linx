@@ -2,7 +2,7 @@
 
 #include "Base/TcpSocket.h"
 
-namespace linx
+namespace Linx
 {
 	/**
 	 * A tcp client socket used to connect to the tcp server

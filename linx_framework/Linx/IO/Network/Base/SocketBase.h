@@ -7,7 +7,7 @@
 #include <arpa/inet.h>
 #endif
 
-namespace linx
+namespace Linx
 {
 	/**
 	 * A base class of the socket class

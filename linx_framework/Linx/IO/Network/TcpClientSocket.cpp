@@ -9,7 +9,7 @@
 
 #include "TcpClientSocket.h"
 
-using namespace linx;
+using namespace Linx;
 
 TcpClientSocket::TcpClientSocket()
 {

@@ -1,11 +1,15 @@
 #include "TestConfig.h"
 #ifdef RING_BUFFER
 #include <vector>
+#include <queue>
+#include <stack>
 #include <iostream>
+
 #include "RingBuffer.h"
+#include "Utils/Debug.h"
 
 using namespace std;
-using namespace linx;
+using namespace Linx;
 
 void TestConstruct();
 void TestOperator();
@@ -13,6 +17,8 @@ void TestReadWrite();
 
 int main()
 {
+	vector<int>v;
+	auto it = v.begin();
 	TestConstruct();
 	TestOperator();
 	TestReadWrite();
@@ -37,23 +43,13 @@ void TestOperator()
 	short arr[3]{ 0,1,2 };
 	RB1.Write(arr, 3);
 
-	cout << "RB1:\n";
-	for (const auto it: RB1)
-	{
-		cout << it << ' ';
-	}
-	cout << endl;
+	DebugContainerEx(RB1);
 
 	// Copy RB1 to RB2.
 	RingBuffer<short> RB2;
 	RB2 = RB1;
 
-	cout << "RB2:\n";
-	for (const auto it: RB2)
-	{
-		cout << it << ' ';
-	}
-	cout << endl;
+	DebugContainerEx(RB2);
 
 	// Test const operator.
 	RB2[1] = 4;
@@ -77,17 +73,17 @@ void TestReadWrite()
 	RB1.Write(arr1, 3);
 	RB1.Read(arr2, 4);
 
-	cout << "arr2:\n";
-	for (const auto it: arr2)
-	{
-		cout << it << ' ';
-	}
-	cout << endl;
+	DebugContainerEx(arr2);
 
 	// Write arr2 to RB1.
 	RB1.Write(arr2, 3);
+
+	DebugContainerEx(RB1);
+
 	// Write RB1 to RB2.
 	RB2.Write(RB1, 4);
+
+	DebugContainerEx(RB2);
 
 	// Modify RB2.
 	RB2[0] = 6;
@@ -96,11 +92,6 @@ void TestReadWrite()
 	// Read from RB2 to RB1.
 	RB2.Read(RB1, 3);
 
-	cout << "RB1:\n";
-	for (const auto it: RB1)
-	{
-		cout << it << ' ';
-	}
-	cout << endl;
+	DebugContainerEx(RB1);
 }
 #endif

@@ -3,7 +3,7 @@
 #include <set>
 #include "Base/TcpSocket.h"
 
-namespace linx
+namespace Linx
 {
 	/**
 	 * Listen for connections from tcp clients and transfer data
