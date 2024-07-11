@@ -45,7 +45,7 @@ namespace Linx
 	template<class Type, class Alloc>
 	class RingBufferConstIterator : public std::_Iterator_base 
 	{
-		template<class Type, class Alloc>
+		template<class RingBufferType, class RingBufferAlloc>
 		friend class RingBuffer;
 
 	public:
@@ -493,8 +493,19 @@ namespace Linx
 		ERingBufferWriteMode::Mode WriteMode;
 
 	public:
-		inline iterator begin() const noexcept { return Head; }
-		inline iterator end() const noexcept { return Rear; }
+		inline iterator begin() noexcept { return Head; }
+		inline const_iterator begin() const noexcept { return Head; }
+		inline iterator end() noexcept { return Rear; }
+		inline const_iterator end() const noexcept { return Rear; }
+		inline reverse_iterator rbegin() noexcept { return reverse_iterator(end); }
+		inline const_reverse_iterator rbegin() const noexcept { return const_reverse_iterator(end); }
+		inline reverse_iterator rend() noexcept { return reverse_iterator(begin()); }
+		inline const_reverse_iterator rend() const noexcept { return const_reverse_iterator(begin()); }
+		inline const_iterator cbegin() const noexcept { return begin(); }
+		inline const_iterator cend() const noexcept { return end(); }
+		inline const_reverse_iterator crbegin() const noexcept { return rbegin(); }
+		inline const_reverse_iterator crend() const noexcept { return rend(); }
+
 
 	private:
 		size_type ReadImpl(value_type* DstPtr, size_type Len) noexcept;

@@ -3,7 +3,7 @@
 #ifdef _WIN32
 #include <windows.h>
 #pragma comment(lib, "ws2_32.lib")
-#elif __linux__
+#else
 #include <arpa/inet.h>
 #endif
 
@@ -17,7 +17,7 @@ namespace Linx
 	public:
 #ifdef _WIN32
 		using socket_type = SOCKET;
-#elif __linux__
+#else
 		using socket_type = int;
 #endif
 

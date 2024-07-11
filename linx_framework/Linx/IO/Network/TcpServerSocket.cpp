@@ -32,7 +32,7 @@ bool TcpServerSocket::Accept(bool bSwitchClient) noexcept
 {
 #ifdef _WIN32
 	int len = sizeof(TargetAddr);
-#elif __linux__
+#else
 	socklen_t len = sizeof(TargetAddr);
 #endif
 
@@ -63,7 +63,7 @@ void TcpServerSocket::CloseClient(socket_type ClientSocket) noexcept
 	{
 #ifdef _WIN32
 		closesocket(ClientSocket);
-#elif __linux__
+#else
 		close(ClientSocket);
 #endif
 		ClientSockets.erase(ClientSocket);
@@ -80,7 +80,7 @@ void TcpServerSocket::Close() noexcept
 		{
 	#ifdef _WIN32
 			closesocket(TargetSock);
-	#elif __linux__
+	#else
 			close(TargetSock);
 	#endif
 		}

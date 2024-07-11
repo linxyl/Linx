@@ -1,6 +1,6 @@
 #ifdef _WIN32
 #include <winsock2.h>  
-#elif __linux__
+#else
 #include <unistd.h>
 #include <fcntl.h>
 #include <errno.h>
@@ -51,7 +51,7 @@ bool TcpClientSocket::Connect() noexcept
 	}
 
 	return true;
-#elif __linux__
+#else
 	int flags = fcntl(Sock, F_GETFL, 0);
 	if(-1 == flags)
 	{

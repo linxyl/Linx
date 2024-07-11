@@ -16,7 +16,7 @@ SocketBase::SocketBase()
 	if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0) {
 		throw "WSAStartup failed\n";
 	}
-#elif __linux__
+#else
 	signal(SIGPIPE, SIG_IGN);
 #endif
 }
@@ -51,7 +51,7 @@ void SocketBase::Close() noexcept
 	{
 #ifdef _WIN32
 		closesocket(Sock);
-#elif __linux__
+#else
 		close(Sock);
 #endif
 		Sock = 0;
@@ -82,7 +82,7 @@ unsigned int SocketBase::GetLastError() noexcept
 {
 #ifdef _WIN32
 	return WSAGetLastError();
-#elif __linux__
+#else
 	return errno;
 #endif
 }

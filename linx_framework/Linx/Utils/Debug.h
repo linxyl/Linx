@@ -5,7 +5,6 @@
 
 /**
  * Output the value of each element in the container.
- * 
  * @param Cols		How many elements are output per line.
  */
 template<class ContainerType>

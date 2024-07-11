@@ -15,7 +15,7 @@ int UdpSocket::Recv(char* buf, size_t bufsize) noexcept
 {
 #ifdef _WIN32
 	int addr_len = sizeof(TargetAddr);
-#elif __linux__
+#else
 	socklen_t addr_len = sizeof(TargetAddr);
 #endif
 	int ret = recvfrom(Sock, buf, bufsize, 0, (sockaddr*)&TargetAddr, &addr_len);
