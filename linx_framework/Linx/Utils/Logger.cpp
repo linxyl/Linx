@@ -36,6 +36,7 @@ int LoggerBuf::sync()
 	if (CurrentLevel < LogLevel)
 	{
 		str(""); // Clear stream
+		Unlock();
 		return 0;
 	}
 	assert(IsOpen());
@@ -64,6 +65,7 @@ int LoggerBuf::sync()
 
 	str(""); // Clear stream
 
+	Unlock();
 	return 0;
 }
 

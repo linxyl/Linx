@@ -72,6 +72,18 @@
     <ClCompile Include="Linx\System\Time.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Linx\FunctionLibrary\StringLibrary.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Linx\FunctionLibrary\TestString.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Linx\Utils\TestLogger.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Linx\LinxCore.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Linx\Containers\RingBuffer.h">
@@ -114,6 +126,15 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Linx\Utils\Singleton.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Linx\FunctionLibrary\StringLibrary.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Linx\Config.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Linx\LinxCore.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

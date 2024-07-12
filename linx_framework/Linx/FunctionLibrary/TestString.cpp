@@ -1,5 +1,5 @@
 #include "Linx/TestConfig.h"
-#ifdef STRING
+#ifdef TEST_STRING
 #include <iostream>
 #include "StringLibrary.h"
 

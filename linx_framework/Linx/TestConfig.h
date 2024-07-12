@@ -1,6 +1,6 @@
 #pragma once
 
-//#define RING_BUFFER
-//#define NETWORK
-#define LOGGER
-//#define STRING
+//#define TEST_RING_BUFFER
+//#define TEST_NETWORK
+#define TEST_LOGGER
+//#define TEST_STRING

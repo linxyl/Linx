@@ -1,5 +1,5 @@
 #include "Linx/TestConfig.h"
-#ifdef NETWORK
+#ifdef TEST_NETWORK
 #include <thread>
 #include <iostream>
 #include <mutex>

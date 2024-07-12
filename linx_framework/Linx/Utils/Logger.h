@@ -2,16 +2,23 @@
 
 #include <fstream>
 #include <sstream>
+#if _HAS_CXX20 || __cplusplus >= 202000L
+#include <syncstream>
+#else // _HAS_CXX20
+#include <mutex>
+#endif // _HAS_CXX20
 
 #include "Linx/Utils/Singleton.h"
 
 namespace Linx
 {
-#define Debug	*(Singleton<Logger>::Instance()) << Debugf << __FILE__ << ": " << __LINE__ << ": "
-#define Info	*(Singleton<Logger>::Instance()) << Infof << __FILE__ << ": " << __LINE__ << ": "
-#define Warning	*(Singleton<Logger>::Instance()) << Warningf << __FILE__ << ": " << __LINE__ << ": "
-#define Error	*(Singleton<Logger>::Instance()) << Errorf << __FILE__ << ": " << __LINE__ << ": "
-#define Fatal	*(Singleton<Logger>::Instance()) << Fatalf << __FILE__ << ": " << __LINE__ << ": "
+
+#define LOG			Singleton<Logger>::Instance()->Lock()
+#define LOG_DEBUG	Singleton<Logger>::Instance()->Lock() << Debugf << __FILE__ << ": " << __LINE__ << ": "
+#define LOG_INFO	Singleton<Logger>::Instance()->Lock() << Infof << __FILE__ << ": " << __LINE__ << ": "
+#define LOG_WARN	Singleton<Logger>::Instance()->Lock() << Warnf << __FILE__ << ": " << __LINE__ << ": "
+#define LOG_ERROR	Singleton<Logger>::Instance()->Lock() << Errorf << __FILE__ << ": " << __LINE__ << ": "
+#define LOG_FATAL	Singleton<Logger>::Instance()->Lock() << Fatalf << __FILE__ << ": " << __LINE__ << ": "
 
 	/** Level of the information recorded in the log */
 	namespace ELogLevel {
@@ -19,7 +26,7 @@ namespace Linx
 		{
 			LevelDebug = 0,
 			LevelInfo,
-			LevelWarning,
+			LevelWarn,
 			LevelError,
 			LevelFatal,
 		};
@@ -39,6 +46,16 @@ namespace Linx
 		/** Returns whether the log file is open. */
 		inline bool IsOpen() const noexcept { return File.is_open(); }
 
+		/** Set the log output level. */
+		inline void SetCurrentLevel(ELogLevel::Type InLevel) noexcept {
+			CurrentLevel = InLevel;
+		}
+
+		/** Lock prevents multi thread contention. */
+		inline void Lock() { Mutex.lock(); }
+		inline void Unlock() { Mutex.unlock(); }
+
+	public:
 		std::string Filename;
 
 		bool bPrintable = true;
@@ -46,8 +63,6 @@ namespace Linx
 		size_t SplitSize = 0;
 
 		long long SplitMilliSeconds = 0;
-
-		ELogLevel::Type CurrentLevel = ELogLevel::LevelDebug;
 
 		ELogLevel::Type LogLevel = ELogLevel::LevelDebug;
 
@@ -64,7 +79,11 @@ namespace Linx
 
 		long long LastMilliSeconds;
 
+		ELogLevel::Type CurrentLevel = ELogLevel::LevelDebug;
+
 		std::ofstream File;
+
+		std::mutex Mutex;
 	};
 
 	/**
@@ -94,8 +113,12 @@ namespace Linx
 		/** Returns whether the log file is open. */
 		inline bool IsOpen() const noexcept { return Buf.IsOpen(); }
 
+		/** Lock prevents multi thread contention. Should not be used! */
+		inline Logger& Lock() { Buf.Lock(); return *this; }
+		inline Logger& Unlock() { Buf.Unlock(); return *this; }
+
 		/** Set the log output level. */
-		inline void SetCurrentLevel(ELogLevel::Type InLevel) noexcept { Buf.CurrentLevel = InLevel; }
+		inline void SetCurrentLevel(ELogLevel::Type InLevel) noexcept { Buf.SetCurrentLevel(InLevel); }
 
 		/** Set the log output level. */
 		inline void SetLogLevel(ELogLevel::Type InLevel) noexcept { Buf.LogLevel = InLevel; }
@@ -154,10 +177,10 @@ namespace Linx
 	}
 
 	template <class Elem, class Traits>
-	std::basic_ostream<Elem, Traits>& Warningf(std::basic_ostream<Elem, Traits>& Ostr)
+	std::basic_ostream<Elem, Traits>& Warnf(std::basic_ostream<Elem, Traits>& Ostr)
 	{
-		static_cast<Logger*>(&Ostr)->SetCurrentLevel(ELogLevel::LevelWarning);
-		Ostr << "Warning: ";
+		static_cast<Logger*>(&Ostr)->SetCurrentLevel(ELogLevel::LevelWarn);
+		Ostr << "Warn: ";
 		return Ostr;
 	}
 

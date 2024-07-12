@@ -1,5 +1,5 @@
 #include "Linx/TestConfig.h"
-#ifdef RING_BUFFER
+#ifdef TEST_RING_BUFFER
 #include <vector>
 #include <queue>
 #include <stack>
