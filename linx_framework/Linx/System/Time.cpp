@@ -5,7 +5,7 @@
 #include <sstream>
 #include <iomanip>
 
-#include "StringLibrary.h"
+#include "Linx/FunctionLibrary/StringLibrary.h"
 
 using namespace Linx;
 using namespace std;
@@ -80,7 +80,7 @@ std::string Linx::GetTimeString(std::string Format)
     }
 	if ((Pos = Format.find("%s", 0)) != std::string::npos)
     {
-		sprintf(tmp, "%03u", Time.MilliSecond);
+		sprintf(tmp, "%03lld", Time.MilliSecond);
         Format.replace(Pos, sizeof("%s") - 1, tmp);
     }
 

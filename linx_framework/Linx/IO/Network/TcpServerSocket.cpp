@@ -76,12 +76,12 @@ void TcpServerSocket::Close() noexcept
 
 	for (auto it : ClientSockets)
 	{
-		if (TargetSock)
+		if (it)
 		{
 	#ifdef _WIN32
-			closesocket(TargetSock);
+			closesocket(it);
 	#else
-			close(TargetSock);
+			close(it);
 	#endif
 		}
 	}

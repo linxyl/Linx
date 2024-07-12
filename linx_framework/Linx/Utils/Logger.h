@@ -3,7 +3,7 @@
 #include <fstream>
 #include <sstream>
 
-#include "Utils/Singleton.h"
+#include "Linx/Utils/Singleton.h"
 
 namespace Linx
 {

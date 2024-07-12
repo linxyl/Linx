@@ -1,4 +1,4 @@
-#include "TestConfig.h"
+#include "Linx/TestConfig.h"
 #ifdef NETWORK
 #include <thread>
 #include <iostream>

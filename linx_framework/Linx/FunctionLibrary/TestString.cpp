@@ -1,4 +1,4 @@
-#include "TestConfig.h"
+#include "Linx/TestConfig.h"
 #ifdef STRING
 #include <iostream>
 #include "StringLibrary.h"

@@ -4,8 +4,8 @@
 
 #include <iostream>
 
-#include "System/Time.h"
-#include "Utils/Template.h"
+#include "Linx/System/Time.h"
+#include "Linx/Utils/Template.h"
 
 using namespace Linx;
 using namespace std;
@@ -15,11 +15,15 @@ LoggerBuf* LoggerBuf::Open()
 	WrittenLen = 0;
 	LastMilliSeconds = GetTotalMilliSeconds();
 
-	File.open(Filename + GetTimeString(".%Y-%m-%d_%H-%M-%S.log"), ios_base::app | ios_base::out, ios_base::_Default_open_prot);
+	File.open(Filename + GetTimeString(".%Y-%m-%d_%H-%M-%S.log"), ios_base::app | ios_base::out);
 	if (File.is_open())
+	{
 		return this;
+	}
 	else
+	{
 		return nullptr;
+	}
 }
 
 void LoggerBuf::Close() noexcept
@@ -31,7 +35,7 @@ int LoggerBuf::sync()
 {
 	if (CurrentLevel < LogLevel)
 	{
-		swap(LoggerBuf()); // Clear stream
+		str(""); // Clear stream
 		return 0;
 	}
 	assert(IsOpen());
@@ -47,7 +51,6 @@ int LoggerBuf::sync()
 
 	// Log rotate
 
-	auto& s = str();
 	WrittenLen += (Time.size() + str().size());
 	if (SplitSize > 0 && WrittenLen >= SplitSize)
 	{
@@ -59,7 +62,7 @@ int LoggerBuf::sync()
 		Rotate();
 	}
 
-	swap(LoggerBuf()); // Clear stream
+	str(""); // Clear stream
 
 	return 0;
 }

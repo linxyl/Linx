@@ -1,4 +1,4 @@
-#include "TestConfig.h"
+#include "Linx/TestConfig.h"
 #ifdef RING_BUFFER
 #include <vector>
 #include <queue>
@@ -6,7 +6,7 @@
 #include <iostream>
 
 #include "RingBuffer.h"
-#include "Utils/Debug.h"
+#include "Linx/Utils/Debug.h"
 
 using namespace std;
 using namespace Linx;
@@ -18,7 +18,6 @@ void TestReadWrite();
 int main()
 {
 	vector<int>v;
-	auto it = v.begin();
 	TestConstruct();
 	TestOperator();
 	TestReadWrite();
@@ -58,6 +57,7 @@ void TestOperator()
 	const RingBuffer<short> RB3(4);
 	//RB3[3] = 2; // Not allowed.
 	short a = RB3[3]; // Call const function.
+	(void)a;
 }
 
 void TestReadWrite()

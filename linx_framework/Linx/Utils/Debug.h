@@ -22,15 +22,15 @@ void DebugContainer(ContainerType& Container, size_t Cols = 8)
 
 		if (++Count % Cols == 0)
 		{
-			std::cout << endl;
+			std::cout << std::endl;
 		}
 	}
-	std::cout << endl;
+	std::cout << std::endl;
 }
 
 /** Same as DebugContainer, buf print container name. */
 #define DebugContainerEx(Container, ...)\
 {\
 	std::cout << #Container":" << endl;\
-	DebugContainer(Container, __VA_ARGS__);\
+	DebugContainer(Container, ##__VA_ARGS__);\
 }

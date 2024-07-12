@@ -21,7 +21,8 @@
   <ItemGroup>
     <ClCompile Include="Linx\Containers\RingBuffer.cpp" />
     <ClCompile Include="Linx\Containers\TestRingBuffer.cpp" />
-    <ClCompile Include="Linx\StringLibrary.cpp" />
+    <ClCompile Include="Linx\FunctionLibrary\StringLibrary.cpp" />
+    <ClCompile Include="Linx\FunctionLibrary\TestString.cpp" />
     <ClCompile Include="Linx\IO\Network\Base\SocketBase.cpp" />
     <ClCompile Include="Linx\IO\Network\Base\TcpSocket.cpp" />
     <ClCompile Include="Linx\IO\Network\TcpClientSocket.cpp" />
@@ -30,19 +31,18 @@
     <ClCompile Include="Linx\IO\Network\UdpSocket.cpp" />
     <ClCompile Include="Linx\Math\MathUtils.cpp" />
     <ClCompile Include="Linx\System\Time.cpp" />
-    <ClCompile Include="Linx\TestString.cpp" />
     <ClCompile Include="Linx\Utils\Logger.cpp" />
-    <ClCompile Include="Linx\TestLogger.cpp" />
+    <ClCompile Include="Linx\Utils\TestLogger.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Linx\Containers\RingBuffer.h" />
+    <ClInclude Include="Linx\FunctionLibrary\StringLibrary.h" />
     <ClInclude Include="Linx\IO\Network\Base\SocketBase.h" />
     <ClInclude Include="Linx\IO\Network\Base\TcpSocket.h" />
     <ClInclude Include="Linx\IO\Network\TcpClientSocket.h" />
     <ClInclude Include="Linx\IO\Network\TcpServerSocket.h" />
     <ClInclude Include="Linx\IO\Network\UdpSocket.h" />
     <ClInclude Include="Linx\Math\MathUtils.h" />
-    <ClInclude Include="Linx\StringLibrary.h" />
     <ClInclude Include="Linx\System\Time.h" />
     <ClInclude Include="Linx\TestConfig.h" />
     <ClInclude Include="Linx\Utils\Debug.h" />
@@ -107,8 +107,8 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>false</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Users\linx\Desktop\函数库\c++\linx_framework\linx_framework\Linx;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpp14</LanguageStandard>
+      <AdditionalIncludeDirectories>C:\Users\linx\Desktop\函数库\c++\linx_framework\linx_framework;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

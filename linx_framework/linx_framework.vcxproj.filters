@@ -69,16 +69,7 @@
     <ClCompile Include="Linx\Utils\Logger.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Linx\TestLogger.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="Linx\System\Time.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Linx\StringLibrary.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Linx\TestString.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -120,9 +111,6 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Linx\Utils\Template.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Linx\StringLibrary.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Linx\Utils\Singleton.h">

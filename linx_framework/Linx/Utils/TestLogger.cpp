@@ -1,6 +1,6 @@
-#include "TestConfig.h"
+#include "Linx/TestConfig.h"
 #ifdef LOGGER
-#include "Utils/Logger.h"
+#include "Logger.h"
 #include <iostream>
 
 using namespace std;

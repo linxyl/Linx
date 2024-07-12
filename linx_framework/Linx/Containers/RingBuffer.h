@@ -1,10 +1,11 @@
 #pragma once
 
 #include <stdint.h>
-#include <xutility>
-#include <xmemory>
+#include <string.h>
 
-#include "Math/MathUtils.h"
+#include <memory>
+
+#include "Linx/Math/MathUtils.h"
 
 namespace Linx
 {	
@@ -37,22 +38,25 @@ namespace Linx
 		};
 	}
 
+	template<class Type, class Alloc = std::allocator<Type>>
+	class RingBuffer;
+
 	/**
 	 * Points to elements in RingBuffer.
 	 * RingBuffer must be specified in the constructor.
 	 * Iterators of different RingBuffers cannot be compared.
 	 */
 	template<class Type, class Alloc>
-	class RingBufferConstIterator : public std::_Iterator_base 
+	class RingBufferConstIterator
 	{
 		template<class RingBufferType, class RingBufferAlloc>
 		friend class RingBuffer;
 
 	public:
 		using iterator_category = std::random_access_iterator_tag;
-		using value_type        = typename Type;
-		using difference_type   = typename std::ptrdiff_t;
-		using pointer           = typename Type*;
+		using value_type        = Type;
+		using difference_type   = std::ptrdiff_t;
+		using pointer           = Type*;
 		using reference         = const value_type&;
 
 		/** RingBuffer's size_type */
@@ -64,7 +68,7 @@ namespace Linx
 		inline size_type GetOffset() const noexcept { return Offset; }
 
 	public:
-		inline RingBufferConstIterator(RingBuffer<Type, Alloc>* InPtr) noexcept : 
+		inline RingBufferConstIterator(RingBuffer<Type, Alloc>* InPtr) noexcept :
 			RB(InPtr),
 			Offset(),
 			Cycle()
@@ -209,14 +213,14 @@ namespace Linx
 		}
 
 	protected:
+		/** Indicates which RingBuffer is pointed to */
+		RingBuffer<Type, Alloc>* RB;
+
 		/** The offset of the element in the RingBuffer */
 		size_type Offset;
 
 		/** Indicates this in which cycle */
 		uint8_t Cycle;
-
-		/** Indicates which RingBuffer is pointed to */
-		RingBuffer<Type, Alloc>* RB;
 	};
 
 	/**
@@ -231,9 +235,9 @@ namespace Linx
 
 	public:
 		using iterator_category = std::random_access_iterator_tag;
-		using value_type        = typename Type;
-		using difference_type   = typename std::ptrdiff_t;
-		using pointer           = typename Type*;
+		using value_type        = Type;
+		using difference_type   = std::ptrdiff_t;
+		using pointer           = Type*;
 		using reference         = value_type&;
 
 		/** RingBuffer's size_type */
@@ -244,18 +248,18 @@ namespace Linx
 			Super(InPtr)
 		{}
 
-		inline reference operator*() const noexcept { return RB->pBuffer[Offset]; }
+		inline reference operator*() const noexcept { return Super::RB->pBuffer[Super::Offset]; }
 
-		inline pointer operator->() const noexcept { return RB->pBuffer; }
+		inline pointer operator->() const noexcept { return Super::RB->pBuffer; }
 
 		inline RingBufferIterator& operator++() noexcept
 		{
-			size_type Temp = (Offset + 1) & RB->OffsetMask;
-			if (Temp <= Offset)
+			size_type Temp = (Super::Offset + 1) & Super::RB->OffsetMask;
+			if (Temp <= Super::Offset)
 			{
-				++Cycle;
+				++Super::Cycle;
 			}
-			Offset = Temp;
+			Super::Offset = Temp;
 
 			return *this;
 		}
@@ -269,12 +273,12 @@ namespace Linx
 
 		inline RingBufferIterator& operator--() noexcept
 		{
-			size_type Temp = (Offset - 1) & RB->OffsetMask;
-			if (Temp >= Offset)
+			size_type Temp = (Super::Offset - 1) & Super::RB->OffsetMask;
+			if (Temp >= Super::Offset)
 			{
-				--Cycle;
+				--Super::Cycle;
 			}
-			Offset = Temp;
+			Super::Offset = Temp;
 
 			return *this;
 		}
@@ -288,22 +292,22 @@ namespace Linx
 
 		inline RingBufferIterator& operator+=(const difference_type Off) noexcept
 		{
-			size_type Temp = (Offset + Off) & RB->OffsetMask;
+			size_type Temp = (Super::Offset + Off) & Super::RB->OffsetMask;
 			if (Off >= 0)
 			{
-				if (Temp <= Offset)
+				if (Temp <= Super::Offset)
 				{
-					++Cycle;
+					++Super::Cycle;
 				}
 			}
 			else
 			{
-				if (Temp >= Offset)
+				if (Temp >= Super::Offset)
 				{
-					--Cycle;
+					--Super::Cycle;
 				}
 			}
-			Offset = Temp;
+			Super::Offset = Temp;
 
 			return *this;
 		}
@@ -336,15 +340,15 @@ namespace Linx
 
 		inline difference_type operator-(const RingBufferIterator& Right) const noexcept
 		{
-			if (Cycle == Right.Cycle + 1)
+			if (Super::Cycle == Right.Super::Cycle + 1)
 			{
-				return Offset - Right.Offset + RB->MaxLen;
+				return Super::Offset - Right.Super::Offset + Super::RB->MaxLen;
 			}
-			if (Cycle + 1 == Right.Cycle)
+			if (Super::Cycle + 1 == Right.Super::Cycle)
 			{
-				return Offset - Right.Offset - RB->MaxLen;
+				return Super::Offset - Right.Super::Offset - Super::RB->MaxLen;
 			}
-			return Offset - Right.Offset;
+			return Super::Offset - Right.Super::Offset;
 		}
 
 		inline reference operator[](const difference_type Off) const noexcept
@@ -354,7 +358,7 @@ namespace Linx
 
 		inline bool operator==(const RingBufferIterator& Right) const noexcept
 		{
-			return (Offset == Right.Offset) && (Cycle == Right.Cycle);
+			return (Super::Offset == Right.Super::Offset) && (Super::Cycle == Right.Super::Cycle);
 		}
 
 		bool operator!=(const RingBufferIterator& Right) const noexcept
@@ -364,12 +368,12 @@ namespace Linx
 
 		bool operator<(const RingBufferIterator& Right) const noexcept
 		{
-			return (Cycle + 1 == Right.Cycle) || (Offset < Right.Offset);
+			return (Super::Cycle + 1 == Right.Super::Cycle) || (Super::Offset < Right.Super::Offset);
 		}
 
 		bool operator>(const RingBufferIterator& Right) const noexcept
 		{
-			return (Cycle == Right.Cycle + 1) || (Offset > Right.Offset);
+			return (Super::Cycle == Right.Super::Cycle + 1) || (Super::Offset > Right.Super::Offset);
 		}
 
 		bool operator<=(const RingBufferIterator& Right) const noexcept
@@ -389,19 +393,19 @@ namespace Linx
 	 * The element is inserted at the rear and popped at the head.
 	 * The allocated memory size will be aligned to a power of 2.
 	 */
-	template<class Type, class Alloc = std::allocator<Type>> 
+	template<class Type, class Alloc>
 	class RingBuffer
 	{
-	public: 
+	public:
 		using value_type		= Type;
 		using allocator_type	= Alloc;
-		using pointer			= typename Type*;
-		using const_pointer		= typename const Type*;
+		using pointer			= Type*;
+		using const_pointer		= const Type*;
 		using reference			= Type&;
 		using const_reference	= const Type&;
 		using size_type			= size_t;
 		using difference_type	= ptrdiff_t;
-		
+
 		using iterator               = RingBufferIterator<Type, Alloc>;
 		using const_iterator         = RingBufferConstIterator<Type, Alloc>;
 		using reverse_iterator       = std::reverse_iterator<iterator>;
@@ -439,9 +443,9 @@ namespace Linx
 
 		/**
 		 * Reallocate the size of RingBuffer.
-		 * 
+		 *
 		 * @note The size will be aligned to a power of 2.
-		 * @return The size of the actual allocation. 
+		 * @return The size of the actual allocation.
 		 */
 		size_type ReallocBuffer(size_type Size) noexcept;
 
@@ -521,7 +525,7 @@ namespace Linx
 	/*                       Function definition                            */
 	/************************************************************************/
 
-	template<class Type, class Alloc> 
+	template<class Type, class Alloc>
 	RingBuffer<Type, Alloc>::RingBuffer() noexcept :
 		pBuffer(nullptr),
 		MaxLen(0),
@@ -532,15 +536,16 @@ namespace Linx
 	{
 	}
 
-	template<class Type, class Alloc> 
+	template<class Type, class Alloc>
 	RingBuffer<Type, Alloc>::RingBuffer(size_type Len) noexcept:
 		RingBuffer()
 	{
 		ReallocBuffer(Len);
 	}
 
-	template<class Type, class Alloc> 
+	template<class Type, class Alloc>
 	RingBuffer<Type, Alloc>::RingBuffer(const RingBuffer& RB) noexcept :
+		pBuffer(nullptr),
 		Head(this),
 		Rear(this)
 	{
@@ -549,16 +554,17 @@ namespace Linx
 		CopyPart(RB);
 	}
 
-	template<class Type, class Alloc> 
+	template<class Type, class Alloc>
 	RingBuffer<Type, Alloc>::RingBuffer(RingBuffer&& RB) noexcept :
 		Head(this),
 		Rear(this)
 	{
 		CopyPart(RB);
+		pBuffer = RB.pBuffer;
 		RB.pBuffer = nullptr;
 	}
 
-	template<class Type, class Alloc> 
+	template<class Type, class Alloc>
 	RingBuffer<Type, Alloc>::~RingBuffer()
 	{
 		if (pBuffer)
@@ -781,13 +787,13 @@ namespace Linx
 	}
 
 	template<class Type, class Alloc>
-	typename Type& RingBuffer<Type, Alloc>::operator[](difference_type Pos) noexcept
+	Type& RingBuffer<Type, Alloc>::operator[](difference_type Pos) noexcept
 	{
 		return Head[Pos];
 	}
 
 	template<class Type, class Alloc>
-	const typename Type& RingBuffer<Type, Alloc>::operator[](difference_type Pos) const noexcept
+	const Type& RingBuffer<Type, Alloc>::operator[](difference_type Pos) const noexcept
 	{
 		return Head[Pos];
 	}
