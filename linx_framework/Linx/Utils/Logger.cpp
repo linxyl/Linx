@@ -44,11 +44,9 @@ int LoggerBuf::sync()
 	std::string Time = GetTimeString("[%Y-%m-%d %H:%M:%S.%s] ");
 	if (bPrintable)
 	{
-		cout << Time << str();
-		cout.flush();
+		cout << Time << str() << flush;
 	}
-	File << Time << str();
-	File.flush();
+	File << Time << str() << flush;
 
 	// Log rotate
 
@@ -88,8 +86,10 @@ void Logger::Open(const std::string& InFilename)
 	Buf.Filename = InFilename;
 	if (!Buf.Open())
 	{
+		setstate(ios_base::failbit);
 		throw std::logic_error("Open log file failed: " + string(InFilename));
 	}
+	setstate(ios_base::goodbit);
 }
 
 void Logger::Close() noexcept

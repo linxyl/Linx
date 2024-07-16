@@ -1,6 +1,6 @@
 #include "Linx/TestConfig.h"
 #ifdef TEST_LOGGER
-#include "Logger.h"
+#include "Linx/LinxCore.h"
 #include <iostream>
 #include <thread>
 
@@ -24,12 +24,8 @@ void f2()
 
 int main()
 {
-	auto Log = Singleton<Logger>::Instance();
-	Log->Open("test");
-	Log->SetLogLevel(ELogLevel::LevelWarn);
-	Log->SetSplitBySeconds(3);
-	//Log->SetSplitBySizeK(300);
-
+	Init();
+	
 #define TEST_LOGGER_THREAD
 #ifdef TEST_LOGGER_THREAD
 	thread t1(f1);

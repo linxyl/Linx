@@ -2,11 +2,7 @@
 
 #include <fstream>
 #include <sstream>
-#if _HAS_CXX20 || __cplusplus >= 202000L
-#include <syncstream>
-#else // _HAS_CXX20
 #include <mutex>
-#endif // _HAS_CXX20
 
 #include "Linx/Utils/Singleton.h"
 
@@ -14,11 +10,11 @@ namespace Linx
 {
 
 #define LOG			Singleton<Logger>::Instance()->Lock()
-#define LOG_DEBUG	Singleton<Logger>::Instance()->Lock() << Debugf << __FILE__ << ": " << __LINE__ << ": "
-#define LOG_INFO	Singleton<Logger>::Instance()->Lock() << Infof << __FILE__ << ": " << __LINE__ << ": "
-#define LOG_WARN	Singleton<Logger>::Instance()->Lock() << Warnf << __FILE__ << ": " << __LINE__ << ": "
-#define LOG_ERROR	Singleton<Logger>::Instance()->Lock() << Errorf << __FILE__ << ": " << __LINE__ << ": "
-#define LOG_FATAL	Singleton<Logger>::Instance()->Lock() << Fatalf << __FILE__ << ": " << __LINE__ << ": "
+#define LOG_DEBUG	Singleton<Logger>::Instance()->Lock() << DebugM << __FILE__ << ": " << __LINE__ << ": "
+#define LOG_INFO	Singleton<Logger>::Instance()->Lock() << InfoM << __FILE__ << ": " << __LINE__ << ": "
+#define LOG_WARN	Singleton<Logger>::Instance()->Lock() << WarnM << __FILE__ << ": " << __LINE__ << ": "
+#define LOG_ERROR	Singleton<Logger>::Instance()->Lock() << ErrorM << __FILE__ << ": " << __LINE__ << ": "
+#define LOG_FATAL	Singleton<Logger>::Instance()->Lock() << FatalM << __FILE__ << ": " << __LINE__ << ": "
 
 	/** Level of the information recorded in the log */
 	namespace ELogLevel {
@@ -161,7 +157,7 @@ namespace Linx
 	};
 
 	template <class Elem, class Traits>
-	std::basic_ostream<Elem, Traits>& Debugf(std::basic_ostream<Elem, Traits>& Ostr)
+	std::basic_ostream<Elem, Traits>& DebugM(std::basic_ostream<Elem, Traits>& Ostr)
 	{
 		static_cast<Logger*>(&Ostr)->SetCurrentLevel(ELogLevel::LevelDebug);
 		Ostr << "Debug: ";
@@ -169,7 +165,7 @@ namespace Linx
 	}
 
 	template <class Elem, class Traits>
-	std::basic_ostream<Elem, Traits>& Infof(std::basic_ostream<Elem, Traits>& Ostr)
+	std::basic_ostream<Elem, Traits>& InfoM(std::basic_ostream<Elem, Traits>& Ostr)
 	{
 		static_cast<Logger*>(&Ostr)->SetCurrentLevel(ELogLevel::LevelInfo);
 		Ostr << "Info: ";
@@ -177,7 +173,7 @@ namespace Linx
 	}
 
 	template <class Elem, class Traits>
-	std::basic_ostream<Elem, Traits>& Warnf(std::basic_ostream<Elem, Traits>& Ostr)
+	std::basic_ostream<Elem, Traits>& WarnM(std::basic_ostream<Elem, Traits>& Ostr)
 	{
 		static_cast<Logger*>(&Ostr)->SetCurrentLevel(ELogLevel::LevelWarn);
 		Ostr << "Warn: ";
@@ -185,7 +181,7 @@ namespace Linx
 	}
 
 	template <class Elem, class Traits>
-	std::basic_ostream<Elem, Traits>& Errorf(std::basic_ostream<Elem, Traits>& Ostr)
+	std::basic_ostream<Elem, Traits>& ErrorM(std::basic_ostream<Elem, Traits>& Ostr)
 	{
 		static_cast<Logger*>(&Ostr)->SetCurrentLevel(ELogLevel::LevelError);
 		Ostr << "Error: ";
@@ -193,7 +189,7 @@ namespace Linx
 	}
 
 	template <class Elem, class Traits>
-	std::basic_ostream<Elem, Traits>& Fatalf(std::basic_ostream<Elem, Traits>& Ostr)
+	std::basic_ostream<Elem, Traits>& FatalM(std::basic_ostream<Elem, Traits>& Ostr)
 	{
 		static_cast<Logger*>(&Ostr)->SetCurrentLevel(ELogLevel::LevelFatal);
 		Ostr << "Fatal: ";

@@ -44,6 +44,12 @@ namespace Linx
 		 */
 		virtual int Send(const char* buf, size_t bufsize) noexcept = 0;
 
+		/** Same as Recv. */
+		inline int Read(char* buf, size_t bufsize) noexcept { Recv(buf, bufsize); }
+
+		/** Sample as Send. */
+		inline int Write(char* buf, size_t bufsize) noexcept { Send(buf, bufsize); }
+
 		/** Close this socket */
 		virtual void Close() noexcept;
 
