@@ -81,7 +81,7 @@
     <ClCompile Include="Linx\Utils\TestLogger.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Linx\LinxCore.cpp">
+    <ClCompile Include="Linx\Core.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -134,7 +134,7 @@
     <ClInclude Include="Linx\Config.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Linx\LinxCore.h">
+    <ClInclude Include="Linx\Core.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

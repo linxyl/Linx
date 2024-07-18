@@ -1,8 +1,8 @@
-#include "LinxCore.h"
+#include "Core.h"
 #include "Linx/Utils/Logger.h"
 #include "Linx/Utils/Singleton.h"
 
-void Linx::Init()
+void Linx::LinxInit()
 {
 	auto LogInst = Singleton<Logger>::Instance();
 	LogInst->Open("test");

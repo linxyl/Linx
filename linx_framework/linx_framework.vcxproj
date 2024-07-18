@@ -29,7 +29,7 @@
     <ClCompile Include="Linx\IO\Network\TcpServerSocket.cpp" />
     <ClCompile Include="Linx\IO\Network\TestNetwork.cpp" />
     <ClCompile Include="Linx\IO\Network\UdpSocket.cpp" />
-    <ClCompile Include="Linx\LinxCore.cpp" />
+    <ClCompile Include="Linx\Core.cpp" />
     <ClCompile Include="Linx\Math\MathUtils.cpp" />
     <ClCompile Include="Linx\System\Time.cpp" />
     <ClCompile Include="Linx\Utils\Logger.cpp" />
@@ -44,7 +44,7 @@
     <ClInclude Include="Linx\IO\Network\TcpClientSocket.h" />
     <ClInclude Include="Linx\IO\Network\TcpServerSocket.h" />
     <ClInclude Include="Linx\IO\Network\UdpSocket.h" />
-    <ClInclude Include="Linx\LinxCore.h" />
+    <ClInclude Include="Linx\Core.h" />
     <ClInclude Include="Linx\Math\MathUtils.h" />
     <ClInclude Include="Linx\System\Time.h" />
     <ClInclude Include="Linx\TestConfig.h" />
@@ -111,7 +111,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>false</SDLCheck>
       <AdditionalIncludeDirectories>C:\Users\linx\Desktop\函数库\c++\linx_framework\linx_framework;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>Default</LanguageStandard>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

@@ -1,6 +1,6 @@
 #include "Linx/TestConfig.h"
 #ifdef TEST_LOGGER
-#include "Linx/LinxCore.h"
+#include "Linx/Core.h"
 #include <iostream>
 #include <thread>
 
@@ -24,9 +24,9 @@ void f2()
 
 int main()
 {
-	Init();
+	LinxInit();
 	
-#define TEST_LOGGER_THREAD
+//#define TEST_LOGGER_THREAD
 #ifdef TEST_LOGGER_THREAD
 	thread t1(f1);
 	thread t2(f2);

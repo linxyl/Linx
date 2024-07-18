@@ -4,5 +4,5 @@
 
 namespace Linx
 {
-	void Init();
+	void LinxInit();
 }
