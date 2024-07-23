@@ -84,6 +84,15 @@
     <ClCompile Include="Linx\Core.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Linx\IO\File.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Linx\IO\TestFile.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Linx\IO\Uart.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Linx\Containers\RingBuffer.h">
@@ -135,6 +144,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Linx\Core.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Linx\IO\File.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Linx\IO\Uart.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

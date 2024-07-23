@@ -64,6 +64,12 @@ int LoggerBuf::FlushBuffer()
 
 	assert(IsOpen());
 
+	// Log rotate
+	if (ShouldRotate())
+	{
+		Rotate();
+	}
+
 	int Count = pptr() - pbase();
 	std::string Time = GetTimeString("[%Y-%m-%d %H:%M:%S.%s] ");
 	
@@ -86,12 +92,6 @@ int LoggerBuf::FlushBuffer()
 	fflush(File);
 
 	WrittenLen += (Time.size() + Count);
-
-	// Log rotate
-	if (ShouldRotate())
-	{
-		Rotate();
-	}
 
 	ClearBuffer();
 	return 0;
@@ -136,12 +136,7 @@ void Logger::Open(const std::string& InFilename)
 	if (!Buf.Open())
 	{
 		setstate(ios_base::failbit);
-		throw std::logic_error("Open log file failed: " + string(InFilename));
+		return;
 	}
 	setstate(ios_base::goodbit);
-}
-
-void Logger::Close() noexcept
-{
-	Buf.Close();
 }

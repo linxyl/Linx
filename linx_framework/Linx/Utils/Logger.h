@@ -77,10 +77,10 @@ namespace Linx
 		long long SplitMilliSeconds = 0;
 
 	protected:
-		// Begin std::stringbuf Interface.
+		// Begin std::streambuf Interface.
 		virtual int_type overflow(int_type c);
 		virtual int sync() override;
-		// End std::stringbuf Interface.
+		// End std::streambuf Interface.
 
 	private:
 		/** Flush the buffer to the file. */
@@ -125,7 +125,6 @@ namespace Linx
 	public:
 		using Super = std::ostream;
 		using MyBuf = LoggerBuf;
-		using MyIos = std::ios;
 
 	public:
 		Logger() : Super(std::addressof(Buf)) {}
@@ -138,7 +137,7 @@ namespace Linx
 		void Open(const std::string& InFilename);
 
 		/** Close the log file. */
-		void Close() noexcept;
+		void Close() noexcept { Buf.Close(); }
 
 		/** Returns whether the log file is open. */
 		inline bool IsOpen() const noexcept { return Buf.IsOpen(); }
