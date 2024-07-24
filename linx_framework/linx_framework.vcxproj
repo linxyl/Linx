@@ -36,6 +36,7 @@
     <ClCompile Include="Linx\IO\Uart.cpp" />
     <ClCompile Include="Linx\Math\MathUtils.cpp" />
     <ClCompile Include="Linx\System\Time.cpp" />
+    <ClCompile Include="Linx\Thread\Lock\TestLock.cpp" />
     <ClCompile Include="Linx\Utils\Logger.cpp" />
     <ClCompile Include="Linx\Utils\TestLogger.cpp" />
   </ItemGroup>
@@ -54,10 +55,11 @@
     <ClInclude Include="Linx\Math\MathUtils.h" />
     <ClInclude Include="Linx\System\Time.h" />
     <ClInclude Include="Linx\TestConfig.h" />
+    <ClInclude Include="Linx\Thread\Lock\Mutex.h" />
     <ClInclude Include="Linx\Utils\Debug.h" />
     <ClInclude Include="Linx\Utils\Logger.h" />
     <ClInclude Include="Linx\Utils\Singleton.h" />
-    <ClInclude Include="Linx\Utils\Template.h" />
+    <ClInclude Include="Linx\Utils\MacroUtils.h" />
     <ClInclude Include="Linx\Utils\TypeTraits.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

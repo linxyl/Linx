@@ -5,4 +5,5 @@
 //#define TEST_STRING
 //#define TEST_NETWORK
 //#define TEST_FILE
-#define TEST_UART
+//#define TEST_UART
+#define TEST_LOCK

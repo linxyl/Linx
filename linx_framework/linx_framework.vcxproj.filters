@@ -96,6 +96,9 @@
     <ClCompile Include="Linx\IO\TestUart.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Linx\Thread\Lock\TestLock.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Linx\Containers\RingBuffer.h">
@@ -134,7 +137,7 @@
     <ClInclude Include="Linx\Utils\TypeTraits.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Linx\Utils\Template.h">
+    <ClInclude Include="Linx\Utils\MacroUtils.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Linx\Utils\Singleton.h">
@@ -153,6 +156,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Linx\IO\Uart.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Linx\Thread\Lock\Mutex.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
