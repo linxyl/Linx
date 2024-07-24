@@ -3,6 +3,9 @@
 #include <type_traits>
 #include <iostream>
 
+/** Print the source filename and the line number. */
+#define DEBUG_LINE std::cout << "File: " << __FILE__ << "  Line: " << __LINE__ << endl;
+
 /**
  * Output the value of each element in the container.
  * @param Cols		How many elements are output per line.

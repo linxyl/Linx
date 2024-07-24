@@ -32,6 +32,7 @@
     <ClCompile Include="Linx\IO\Network\UdpSocket.cpp" />
     <ClCompile Include="Linx\Core.cpp" />
     <ClCompile Include="Linx\IO\TestFile.cpp" />
+    <ClCompile Include="Linx\IO\TestUart.cpp" />
     <ClCompile Include="Linx\IO\Uart.cpp" />
     <ClCompile Include="Linx\Math\MathUtils.cpp" />
     <ClCompile Include="Linx\System\Time.cpp" />
@@ -123,7 +124,8 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <SDLCheck>true</SDLCheck>
+      <SDLCheck>false</SDLCheck>
+      <AdditionalIncludeDirectories>C:\Users\linx\Desktop\函数库\c++\linx_framework\linx_framework;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

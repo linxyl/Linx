@@ -1,7 +1,6 @@
 #include "Linx/TestConfig.h"
 #ifdef TEST_FILE
 #include "Linx/IO/File.h"
-#include <thread>
 
 using namespace std;
 using namespace Linx;

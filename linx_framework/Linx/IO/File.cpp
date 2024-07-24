@@ -117,7 +117,7 @@ std::streamsize File::Read(char* Ptr, std::streamsize Count)
 
 }
 
-std::streamsize File::Write(char* Ptr, std::streamsize Count)
+std::streamsize File::Write(const char* Ptr, std::streamsize Count)
 {
 	if (Count < 0)
 	{

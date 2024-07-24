@@ -98,7 +98,7 @@ namespace Linx
 
 		std::streamsize Read(char* Ptr, std::streamsize Count);
 
-		std::streamsize Write(char* Ptr, std::streamsize Count);
+		std::streamsize Write(const char* Ptr, std::streamsize Count);
 
 	public:
 
