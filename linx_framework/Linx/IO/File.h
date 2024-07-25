@@ -13,7 +13,7 @@ namespace Linx
 		using Super = std::filebuf;
 
 		FileBuf() { ; }
-		~FileBuf() { sync(); }
+		virtual ~FileBuf() override { sync(); }
 
 	public:
 		/** 
@@ -82,6 +82,8 @@ namespace Linx
 
 		/** Open the file. */
 		explicit File(const std::string& InFilename, std::ios_base::openmode Mode = ios_base::out);
+
+		virtual ~File() override { Close(); }
 
 	public:
 		/** 

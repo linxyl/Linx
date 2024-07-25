@@ -35,10 +35,13 @@
     <ClCompile Include="Linx\IO\TestUart.cpp" />
     <ClCompile Include="Linx\IO\Uart.cpp" />
     <ClCompile Include="Linx\Math\MathUtils.cpp" />
+    <ClCompile Include="Linx\Protocol\Ini.cpp" />
     <ClCompile Include="Linx\System\Time.cpp" />
     <ClCompile Include="Linx\Thread\Lock\TestLock.cpp" />
     <ClCompile Include="Linx\Utils\Logger.cpp" />
     <ClCompile Include="Linx\Utils\TestLogger.cpp" />
+    <ClCompile Include="Linx\Utils\TestVariableString.cpp" />
+    <ClCompile Include="Linx\Utils\VariableString.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Linx\Config.h" />
@@ -53,6 +56,7 @@
     <ClInclude Include="Linx\Core.h" />
     <ClInclude Include="Linx\IO\Uart.h" />
     <ClInclude Include="Linx\Math\MathUtils.h" />
+    <ClInclude Include="Linx\Protocol\Ini.h" />
     <ClInclude Include="Linx\System\Time.h" />
     <ClInclude Include="Linx\TestConfig.h" />
     <ClInclude Include="Linx\Thread\Lock\Mutex.h" />
@@ -61,6 +65,7 @@
     <ClInclude Include="Linx\Utils\Singleton.h" />
     <ClInclude Include="Linx\Utils\MacroUtils.h" />
     <ClInclude Include="Linx\Utils\TypeTraits.h" />
+    <ClInclude Include="Linx\Utils\VariableString.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B7D61B23-DEE9-46AF-B612-E41F90B8EFFC}</ProjectGuid>
@@ -118,7 +123,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>false</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Users\linx\Desktop\函数库\c++\linx_framework\linx_framework;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\visual studio project\Linx\linx_framework;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>Default</LanguageStandard>
     </ClCompile>
   </ItemDefinitionGroup>

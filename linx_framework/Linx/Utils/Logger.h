@@ -35,7 +35,7 @@ namespace Linx
 		constexpr static size_t BufSize = 512;
 
 		LoggerBuf();
-		~LoggerBuf() { sync(); }
+		virtual ~LoggerBuf() override { sync(); }
 
 	public:
 		/** Open the log file. */
@@ -131,6 +131,8 @@ namespace Linx
 
 		/** Open the log file. */
 		explicit Logger(const std::string& InFilename, ELogLevel::Type InLevel = ELogLevel::LevelDebug);
+
+		virtual ~Logger()override { Close(); }
 
 	public:
 		/** Open the log file. */

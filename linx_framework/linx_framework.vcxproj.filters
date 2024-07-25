@@ -99,6 +99,15 @@
     <ClCompile Include="Linx\Thread\Lock\TestLock.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Linx\Protocol\Ini.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Linx\Utils\VariableString.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Linx\Utils\TestVariableString.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Linx\Containers\RingBuffer.h">
@@ -159,6 +168,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Linx\Thread\Lock\Mutex.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Linx\Protocol\Ini.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Linx\Utils\VariableString.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
