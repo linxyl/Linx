@@ -42,10 +42,10 @@ namespace Linx
 		LoggerBuf* Open();
 
 		/** Close the log file. */
-		inline void Close() noexcept { fclose(File); }
+		inline void Close() noexcept { fclose(FileStream); }
 
 		/** Returns whether the log file is open. */
-		inline bool IsOpen() const noexcept { return File; }
+		inline bool IsOpen() const noexcept { return FileStream; }
 
 		/** Set the level of the log itself. */
 		inline void SetLogLevel(ELogLevel::Type InLevel) noexcept { LogLevel = InLevel; }
@@ -91,7 +91,7 @@ namespace Linx
 		ELogLevel::Type LogLevel = ELogLevel::LevelDebug;
 		ELogLevel::Type CurrentLevel = ELogLevel::LevelDebug;
 
-		FILE* File;
+		FILE* FileStream;
 
 		std::mutex Mutex;
 

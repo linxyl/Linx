@@ -1,11 +1,11 @@
 #include "Linx/TestConfig.h"
 #ifdef TEST_FILE
-#include "Linx/IO/File.h"
+#include "Linx/IO/FileStream.h"
 
 using namespace std;
 using namespace Linx;
 
-File f("test_%Y-%m-%d_%H-%M-%S.txt");
+FileStream f("test_%Y-%m-%d_%H-%M-%S.txt");
 
 int main()
 {

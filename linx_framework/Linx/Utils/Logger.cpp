@@ -19,8 +19,8 @@ LoggerBuf* LoggerBuf::Open()
 	WrittenLen = 0;
 	LastMilliSeconds = GetTotalMilliSeconds();
 
-	File = fopen((MainFilename + GetTimeString(".%Y-%m-%d_%H-%M-%S.log")).c_str(), "a");
-	if(File)
+	FileStream = fopen((MainFilename + GetTimeString(".%Y-%m-%d_%H-%M-%S.log")).c_str(), "a");
+	if(FileStream)
 	{
 		return this;
 	}
@@ -81,15 +81,15 @@ int LoggerBuf::FlushBuffer()
 	}
 
 	// Write to file
-	if (Time.size() != fwrite(Time.c_str(), sizeof(decltype(Time)::size_type), Time.size(), File))
+	if (Time.size() != fwrite(Time.c_str(), sizeof(decltype(Time)::size_type), Time.size(), FileStream))
 	{
 		return char_traits<char>::eof();
 	}
-	if ((size_t)Count != fwrite(Buffer, sizeof(Buffer[0]), Count, File))
+	if ((size_t)Count != fwrite(Buffer, sizeof(Buffer[0]), Count, FileStream))
 	{
 		return char_traits<char>::eof();
 	}
-	fflush(File);
+	fflush(FileStream);
 
 	WrittenLen += (Time.size() + Count);
 

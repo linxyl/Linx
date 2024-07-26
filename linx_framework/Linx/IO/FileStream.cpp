@@ -1,4 +1,4 @@
-#include "Linx/IO/File.h"
+#include "Linx/IO/FileStream.h"
 
 #include <iostream>
 
@@ -23,7 +23,10 @@ int FileBuf::sync()
 
 int FileBuf::FlushBuffer()
 {
-	assert(IsOpen());
+	if (!IsOpen())
+	{
+		return -1;
+	}
 
 	if (ShouldRotate())
 	{
@@ -69,13 +72,13 @@ std::streamsize FileBuf::xsputn(const char* Ptr, std::streamsize Count)
 	return Size;
 }
 
-File::File(const string& InFilename, std::ios_base::openmode Mode) :
+FileStream::FileStream(const string& InFilename, std::ios_base::openmode Mode) :
 	Super(addressof(Buf))
 {
-	Open(InFilename);
+	Open(InFilename, Mode);
 }
 
-bool File::Open(const std::string& InFilename, std::ios_base::openmode Mode)
+bool FileStream::Open(const std::string& InFilename, std::ios_base::openmode Mode)
 {
 	Buf.Filename = InFilename;
 	Buf.Mode = Mode;
@@ -88,7 +91,7 @@ bool File::Open(const std::string& InFilename, std::ios_base::openmode Mode)
 	return true;
 }
 
-std::streamsize File::Read(char* Ptr, std::streamsize Count)
+std::streamsize FileStream::Read(char* Ptr, std::streamsize Count)
 {
 	if (Count < 0)
 	{
@@ -116,7 +119,7 @@ std::streamsize File::Read(char* Ptr, std::streamsize Count)
 
 }
 
-std::streamsize File::Write(const char* Ptr, std::streamsize Count)
+std::streamsize FileStream::Write(const char* Ptr, std::streamsize Count)
 {
 	if (Count < 0)
 	{

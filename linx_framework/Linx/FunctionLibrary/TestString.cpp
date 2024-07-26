@@ -13,6 +13,14 @@ int main()
 	Replace(str, "String", "LString");
 	cout << str << endl;
 
+	str = " 123\n";
+	Trim(str);
+	cout << str << endl;
+
+	str = " te\n st\t";
+	TrimAll(str);
+	cout << str << endl;
+
 	getchar();
 }
 #endif

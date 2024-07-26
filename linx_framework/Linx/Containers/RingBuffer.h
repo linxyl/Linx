@@ -549,6 +549,11 @@ namespace Linx
 		Head(this),
 		Rear(this)
 	{
+		if (this == &RB)
+		{
+			return;
+		}
+
 		ReallocBuffer(RB.MaxLen);
 		memcpy(pBuffer, RB.pBuffer, value_size * MaxLen);
 		CopyPart(RB);
@@ -779,6 +784,11 @@ namespace Linx
 	template<class Type, class Alloc>
 	RingBuffer<Type, Alloc>& RingBuffer<Type, Alloc>::operator=(const RingBuffer& RB) noexcept
 	{
+		if (this == &RB)
+		{
+			return;
+		}
+
 		ReallocBuffer(RB.MaxLen);
 		memcpy(pBuffer, RB.pBuffer, value_size * MaxLen);
 		CopyPart(RB);

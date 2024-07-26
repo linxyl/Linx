@@ -84,7 +84,7 @@
     <ClCompile Include="Linx\Core.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Linx\IO\File.cpp">
+    <ClCompile Include="Linx\IO\FileStream.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Linx\IO\TestFile.cpp">
@@ -106,6 +106,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Linx\Utils\TestVariableString.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Linx\Protocol\TestIni.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -161,7 +164,7 @@
     <ClInclude Include="Linx\Core.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Linx\IO\File.h">
+    <ClInclude Include="Linx\IO\FileStream.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Linx\IO\Uart.h">

@@ -12,4 +12,10 @@ namespace Linx
 	 * @return The reference to the replaced string.
 	 */
 	std::string& Replace(std::string& Target, const std::string& Old, const std::string& New);
+
+	/** Remove whitespace on both sides. */
+	std::string& Trim(std::string& Str);
+
+	/** Remove all whitespace. */
+	std::string& TrimAll(std::string& Str);
 }

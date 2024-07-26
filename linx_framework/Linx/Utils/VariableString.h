@@ -14,11 +14,16 @@ namespace Linx
 	public:
 		VariableString() = default;
 
-		template<typename T>
-		inline VariableString(T Val) { *this = Val; }
+
+		template<typename T, typename = std::enable_if_t<
+			std::is_integral_v<T> ||
+			std::is_same_v<T, char*> ||
+			std::is_same_v<T, const char*>>>
+		inline VariableString(const T Val) { *this = Val; }
+		inline VariableString(const std::string& Val) { *this = Val; }
 
 	public:
-		template<typename T>
+		template<typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
 		inline VariableString& operator=(T Val) { Str = std::to_string(Val); return *this; }
 		inline VariableString& operator=(const char* Val) noexcept { Str = Val; return *this; }
 		inline VariableString& operator=(const std::string& Val) noexcept { Str = Val; return *this; }

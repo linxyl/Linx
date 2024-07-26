@@ -52,7 +52,7 @@ namespace Linx
 	private:
 
 		/************************************************************************/
-		/*                          File rotate                               */
+		/*                          FileStream rotate                               */
 		/************************************************************************/
 
 		/** When the file reaches certain conditions, another file is created. */
@@ -71,26 +71,26 @@ namespace Linx
 	/**
 	 * A file stream that can rotate depending on time or size.
 	 */
-	class File : public std::iostream
+	class FileStream : public std::iostream
 	{
 	public:
 		using Super = std::iostream;
 		using MyBuf = FileBuf;
 
 	public:
-		File() : Super(std::addressof(Buf)) {}
+		FileStream() : Super(std::addressof(Buf)) {}
 
 		/** Open the file. */
-		explicit File(const std::string& InFilename, std::ios_base::openmode Mode = ios_base::out);
+		explicit FileStream(const std::string& InFilename, std::ios_base::openmode Mode = ios_base::in | ios_base::out);
 
-		virtual ~File() override { Close(); }
+		virtual ~FileStream() override { Close(); }
 
 	public:
 		/** 
 		 * Open the file.
 		 * @param InFilename	Filename format.	%Y=year, %m=month, %d=day, %H=hour, %M=minute, %S=second, %s=millisecond.
 		 */
-		bool Open(const std::string& InFilename, std::ios_base::openmode Mode = ios_base::out);
+		bool Open(const std::string& InFilename, std::ios_base::openmode Mode = ios_base::in | ios_base::out);
 
 		/** Close the file. */
 		void Close() noexcept { Buf.Close(); }

@@ -23,7 +23,7 @@
     <ClCompile Include="Linx\Containers\TestRingBuffer.cpp" />
     <ClCompile Include="Linx\FunctionLibrary\StringLibrary.cpp" />
     <ClCompile Include="Linx\FunctionLibrary\TestString.cpp" />
-    <ClCompile Include="Linx\IO\File.cpp" />
+    <ClCompile Include="Linx\IO\FileStream.cpp" />
     <ClCompile Include="Linx\IO\Network\Base\SocketBase.cpp" />
     <ClCompile Include="Linx\IO\Network\Base\TcpSocket.cpp" />
     <ClCompile Include="Linx\IO\Network\TcpClientSocket.cpp" />
@@ -36,6 +36,7 @@
     <ClCompile Include="Linx\IO\Uart.cpp" />
     <ClCompile Include="Linx\Math\MathUtils.cpp" />
     <ClCompile Include="Linx\Protocol\Ini.cpp" />
+    <ClCompile Include="Linx\Protocol\TestIni.cpp" />
     <ClCompile Include="Linx\System\Time.cpp" />
     <ClCompile Include="Linx\Thread\Lock\TestLock.cpp" />
     <ClCompile Include="Linx\Utils\Logger.cpp" />
@@ -47,7 +48,7 @@
     <ClInclude Include="Linx\Config.h" />
     <ClInclude Include="Linx\Containers\RingBuffer.h" />
     <ClInclude Include="Linx\FunctionLibrary\StringLibrary.h" />
-    <ClInclude Include="Linx\IO\File.h" />
+    <ClInclude Include="Linx\IO\FileStream.h" />
     <ClInclude Include="Linx\IO\Network\Base\SocketBase.h" />
     <ClInclude Include="Linx\IO\Network\Base\TcpSocket.h" />
     <ClInclude Include="Linx\IO\Network\TcpClientSocket.h" />
