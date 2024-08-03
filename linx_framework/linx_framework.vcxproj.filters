@@ -96,9 +96,6 @@
     <ClCompile Include="Linx\IO\TestUart.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Linx\Thread\Lock\TestLock.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="Linx\Protocol\Ini.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -109,6 +106,21 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Linx\Protocol\TestIni.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Linx\Thread\Thread.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Linx\Thread\TestThread.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Linx\Thread\ThreadPool.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Linx\Thread\Task.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Linx\Thread\SyncQueue.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -170,13 +182,25 @@
     <ClInclude Include="Linx\IO\Uart.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Linx\Thread\Lock\Mutex.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Linx\Protocol\Ini.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Linx\Utils\VariableString.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Linx\Thread\Thread.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Linx\Thread\ThreadPool.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Linx\Thread\Task.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Linx\Thread\SyncQueue.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Linx\Thread\Lock\SpinLock.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

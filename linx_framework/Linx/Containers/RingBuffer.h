@@ -786,7 +786,7 @@ namespace Linx
 	{
 		if (this == &RB)
 		{
-			return;
+			return *this;
 		}
 
 		ReallocBuffer(RB.MaxLen);

@@ -1,10 +1,10 @@
 #pragma once
 
 #include <cassert>
-#include <mutex>
 #include <ostream>
 
 #include "Linx/Utils/Singleton.h"
+#include "Linx/Thread/Lock/SpinLock.h"
 
 namespace Linx
 {
@@ -60,8 +60,8 @@ namespace Linx
 		inline ELogLevel::Type GetCurrentLevel() const noexcept { return CurrentLevel; }
 
 		/** Lock prevents multi thread contention. */
-		inline void Lock() { Mutex.lock(); }
-		inline void Unlock() { Mutex.unlock(); }
+		inline void Lock() { LockInst.lock(); }
+		inline void Unlock() { LockInst.unlock(); }
 
 	public:
 		/** The main part of the log file name, excluding the time */
@@ -93,7 +93,7 @@ namespace Linx
 
 		FILE* FileStream;
 
-		std::mutex Mutex;
+		Spinlock LockInst;
 
 		char Buffer[BufSize];
 

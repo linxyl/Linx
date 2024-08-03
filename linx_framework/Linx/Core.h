@@ -1,6 +1,8 @@
 #pragma once
 
-#ifndef _WIN32
+#ifdef _WIN32
+#include <windows.h>
+#else
 #include <unistd.h>
 #endif
 
@@ -10,7 +12,9 @@ namespace Linx
 {
 	void LinxInit();
 
-#ifndef _WIN32
-	inline void Sleep(int n) { usleep(n * 1000); }
+#ifdef _WIN32
+	inline void Sleep(int Milliseconds) { ::Sleep(Milliseconds); }
+#else
+	inline void Sleep(int Milliseconds) { usleep(Milliseconds * 1000); }
 #endif
 }

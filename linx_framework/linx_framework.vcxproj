@@ -38,11 +38,15 @@
     <ClCompile Include="Linx\Protocol\Ini.cpp" />
     <ClCompile Include="Linx\Protocol\TestIni.cpp" />
     <ClCompile Include="Linx\System\Time.cpp" />
-    <ClCompile Include="Linx\Thread\Lock\TestLock.cpp" />
+    <ClCompile Include="Linx\Thread\Task.cpp" />
+    <ClCompile Include="Linx\Thread\TestThread.cpp" />
     <ClCompile Include="Linx\Utils\Logger.cpp" />
     <ClCompile Include="Linx\Utils\TestLogger.cpp" />
     <ClCompile Include="Linx\Utils\TestVariableString.cpp" />
     <ClCompile Include="Linx\Utils\VariableString.cpp" />
+    <ClCompile Include="Linx\Thread\Thread.cpp" />
+    <ClCompile Include="Linx\Thread\ThreadPool.cpp" />
+    <ClCompile Include="Linx\Thread\SyncQueue.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Linx\Config.h" />
@@ -60,13 +64,17 @@
     <ClInclude Include="Linx\Protocol\Ini.h" />
     <ClInclude Include="Linx\System\Time.h" />
     <ClInclude Include="Linx\TestConfig.h" />
-    <ClInclude Include="Linx\Thread\Lock\Mutex.h" />
+    <ClInclude Include="Linx\Thread\Lock\SpinLock.h" />
+    <ClInclude Include="Linx\Thread\Task.h" />
     <ClInclude Include="Linx\Utils\Debug.h" />
     <ClInclude Include="Linx\Utils\Logger.h" />
     <ClInclude Include="Linx\Utils\Singleton.h" />
     <ClInclude Include="Linx\Utils\MacroUtils.h" />
     <ClInclude Include="Linx\Utils\TypeTraits.h" />
     <ClInclude Include="Linx\Utils\VariableString.h" />
+    <ClInclude Include="Linx\Thread\Thread.h" />
+    <ClInclude Include="Linx\Thread\ThreadPool.h" />
+    <ClInclude Include="Linx\Thread\SyncQueue.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B7D61B23-DEE9-46AF-B612-E41F90B8EFFC}</ProjectGuid>

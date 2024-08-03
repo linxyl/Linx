@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "StringLibrary.h"
 
 using namespace std;
