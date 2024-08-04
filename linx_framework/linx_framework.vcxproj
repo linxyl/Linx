@@ -34,6 +34,7 @@
     <ClCompile Include="Linx\IO\TestFile.cpp" />
     <ClCompile Include="Linx\IO\TestUart.cpp" />
     <ClCompile Include="Linx\IO\Uart.cpp" />
+    <ClCompile Include="Linx\Math\DSP\TestFT.cpp" />
     <ClCompile Include="Linx\Math\MathUtils.cpp" />
     <ClCompile Include="Linx\Protocol\Ini.cpp" />
     <ClCompile Include="Linx\Protocol\TestIni.cpp" />
@@ -60,6 +61,7 @@
     <ClInclude Include="Linx\IO\Network\UdpSocket.h" />
     <ClInclude Include="Linx\Core.h" />
     <ClInclude Include="Linx\IO\Uart.h" />
+    <ClInclude Include="Linx\Math\DSP\FT.h" />
     <ClInclude Include="Linx\Math\MathUtils.h" />
     <ClInclude Include="Linx\Protocol\Ini.h" />
     <ClInclude Include="Linx\System\Time.h" />

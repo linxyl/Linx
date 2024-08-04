@@ -123,6 +123,9 @@
     <ClCompile Include="Linx\Thread\SyncQueue.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Linx\Math\DSP\TestFT.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Linx\Containers\RingBuffer.h">
@@ -201,6 +204,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Linx\Thread\Lock\SpinLock.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Linx\Math\DSP\FT.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
