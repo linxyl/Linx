@@ -1,13 +1,21 @@
+#include <iostream>
 #include "UdpSocket.h"
 
 using namespace Linx;
 
 UdpSocket::UdpSocket()
 {
+	Init();
+}
+
+void UdpSocket::Init()
+{
+	Super::Init();
+
 	Sock = socket(AF_INET, SOCK_DGRAM, 0);
 	if(Sock < 0)
 	{
-		throw "Create socket failed\n";
+		throw std::logic_error("Create socket failed\n");
 	}
 }
 

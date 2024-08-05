@@ -7,14 +7,10 @@
 #include "TcpClientSocket.h"
 #include "TcpServerSocket.h"
 #include "UdpSocket.h"
+#include "Linx/Core.h"
 
 using namespace std;
 using namespace Linx;
-
-#ifdef __linux__
-#include <unistd.h>
-	__inline__ void Sleep(int x) { usleep(1000 * x); }
-#endif
 
 void TestTcpClient();
 void TestTcpServer();

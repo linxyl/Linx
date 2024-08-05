@@ -8,14 +8,10 @@ using namespace Linx;
 
 TcpServerSocket::TcpServerSocket()
 {
+	Init();
+
 	pServerSock = &Sock;
 	pClientSock = &TargetSock;
-
-	int optval = 1;  
-	if (setsockopt(Sock, SOL_SOCKET, SO_REUSEADDR, (char*)&optval, sizeof(optval)) < 0)
-	{  
-		throw "setsockopt failed\n";
-	}
 }
 
 bool TcpServerSocket::Listen(size_t Num) noexcept
@@ -67,6 +63,17 @@ void TcpServerSocket::CloseClient(socket_type ClientSocket) noexcept
 		close(ClientSocket);
 #endif
 		ClientSockets.erase(ClientSocket);
+	}
+}
+
+void TcpServerSocket::Init()
+{
+	Super::Init();
+
+	int optval = 1;  
+	if (setsockopt(Sock, SOL_SOCKET, SO_REUSEADDR, (char*)&optval, sizeof(optval)) < 0)
+	{  
+		throw "setsockopt failed\n";
 	}
 }
 

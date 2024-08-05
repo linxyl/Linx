@@ -1,13 +1,16 @@
+#include <iostream>
 #include "TcpSocket.h"
 
 using namespace Linx;
 
-TcpSocket::TcpSocket()
+void TcpSocket::Init()
 {
+	Super::Init();
+
 	Sock = socket(AF_INET, SOCK_STREAM, 0);
 	if(Sock < 0)
 	{
-		throw "Create socket failed\n";
+		throw std::logic_error("Create socket failed\n");
 	}
 }
 

@@ -13,6 +13,8 @@ using namespace Linx;
 
 TcpClientSocket::TcpClientSocket()
 {
+	Init();
+
 	pServerSock = &TargetSock;
 	pClientSock = &Sock;
 }

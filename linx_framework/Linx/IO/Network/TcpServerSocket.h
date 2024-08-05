@@ -32,6 +32,7 @@ namespace Linx
 		void CloseClient(socket_type ClientSocket) noexcept;
 
 		// Begin SocketBase Interface.
+		virtual void Init() override;
 		virtual void Close() noexcept override;
 		// End SocketBase Interface.
 

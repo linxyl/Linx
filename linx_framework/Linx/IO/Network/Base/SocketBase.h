@@ -26,6 +26,12 @@ namespace Linx
 		virtual ~SocketBase();
 
 	public:
+		/** Initialize and create socket. */
+		virtual void Init() {};
+
+		/** Close this socket */
+		virtual void Close() noexcept;
+
 		/** Set the IP and port of the target address to communicate with. */
 		virtual void SetTargetAddr(const char* IP, int Port) noexcept;
 
@@ -49,9 +55,6 @@ namespace Linx
 
 		/** Sample as Send. */
 		inline int Write(char* buf, size_t bufsize) noexcept { return Send(buf, bufsize); }
-
-		/** Close this socket */
-		virtual void Close() noexcept;
 
 	public:
 		/** Set the timeout period for receiving. */

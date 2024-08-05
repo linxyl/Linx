@@ -12,10 +12,11 @@ namespace Linx
 		using Super = SocketBase;
 
 	public:
-		TcpSocket();
+		TcpSocket() = default;
 
 	public:
 		// Begin SocketBase Interface.
+		virtual void Init() override;
 		virtual int Recv(char* buf, size_t bufsize) noexcept override;
 		virtual int Send(const char* buf, size_t bufsize) noexcept override;
 		// End SocketBase Interface.
