@@ -21,7 +21,7 @@ namespace Linx
 
 		/**
 		 * Whether to switch the target of the communication upon successful acceptance.
-		 * @param bSwitch	Whether s
+		 * @param bSwitch	Whether switch target client socket.
 		 */
 		bool Accept(bool bSwitchClient = true) noexcept;
 

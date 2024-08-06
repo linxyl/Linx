@@ -1,5 +1,5 @@
 #include "Linx/TestConfig.h"
-#ifdef TEST_FILE
+#ifdef TEST_FILE_STREAM
 #include "Linx/IO/FileStream.h"
 
 using namespace std;

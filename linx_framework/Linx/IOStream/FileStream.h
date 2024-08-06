@@ -3,7 +3,7 @@
 #include <cassert>
 #include <fstream>
 
-#include "Linx/Utils/Singleton.h"
+#include "StreambufBase.h"
 
 namespace Linx
 {
@@ -40,10 +40,10 @@ namespace Linx
 		long long SplitMilliSeconds = 0;
 
 	protected:
-		// Begin std::filebuf Interface.
-		std::streamsize xsputn(const char* Ptr, std::streamsize Count) override;
+		// Begin std::basic_streambuf Interface.
+		virtual std::streamsize xsputn(const char* Ptr, std::streamsize Count) override;
 		virtual int sync() override;
-		// End std::filebuf Interface.
+		// End std::basic_streambuf Interface.
 
 	private:
 		/** Flush the buffer to the file. */

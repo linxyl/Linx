@@ -63,7 +63,7 @@
     <ClCompile Include="Linx\IO\Network\UdpSocket.cpp">
       <Filter>源文件\IO\Network</Filter>
     </ClCompile>
-    <ClCompile Include="Linx\Math\MathUtils.cpp">
+    <ClCompile Include="Linx\Math\MathLibrary.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Linx\Utils\Logger.cpp">
@@ -82,12 +82,6 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Linx\Core.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Linx\IO\FileStream.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Linx\IO\TestFile.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Linx\IO\Uart.cpp">
@@ -126,6 +120,15 @@
     <ClCompile Include="Linx\Math\DSP\TestFT.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Linx\IOStream\FileStream.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Linx\IOStream\Network\TestNetworkStream.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Linx\IOStream\TestFileStream.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Linx\Containers\RingBuffer.h">
@@ -149,7 +152,7 @@
     <ClInclude Include="Linx\TestConfig.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Linx\Math\MathUtils.h">
+    <ClInclude Include="Linx\Math\MathLibrary.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Linx\Utils\Debug.h">
@@ -179,9 +182,6 @@
     <ClInclude Include="Linx\Core.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Linx\IO\FileStream.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Linx\IO\Uart.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -207,6 +207,33 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Linx\Math\DSP\FT.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Linx\IOStream\FileStream.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Linx\IOStream\Network\TcpClientStream.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Linx\IOStream\Network\TcpServerStream.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Linx\IOStream\Network\UdpStream.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Linx\IOStream\StreambufBase.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Linx\IO\Network\ITcpServerSocket.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Linx\IO\Network\Base\ISocketBase.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Linx\IO\Network\ITcpClientSocket.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Linx\IO\Network\IUdpSocket.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

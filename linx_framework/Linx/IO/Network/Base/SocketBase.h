@@ -54,7 +54,7 @@ namespace Linx
 		inline int Read(char* buf, size_t bufsize) noexcept { return Recv(buf, bufsize); }
 
 		/** Sample as Send. */
-		inline int Write(char* buf, size_t bufsize) noexcept { return Send(buf, bufsize); }
+		inline int Write(const char* buf, size_t bufsize) noexcept { return Send(buf, bufsize); }
 
 	public:
 		/** Set the timeout period for receiving. */

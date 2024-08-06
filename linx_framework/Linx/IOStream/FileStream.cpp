@@ -1,4 +1,4 @@
-#include "Linx/IO/FileStream.h"
+#include "FileStream.h"
 
 #include <iostream>
 
@@ -116,7 +116,6 @@ std::streamsize FileStream::Read(char* Ptr, std::streamsize Count)
 	setstate(State);
 
 	return Res;
-
 }
 
 std::streamsize FileStream::Write(const char* Ptr, std::streamsize Count)

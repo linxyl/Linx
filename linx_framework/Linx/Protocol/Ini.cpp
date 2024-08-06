@@ -1,7 +1,7 @@
 #include <iostream>
 #include "Linx/Protocol/Ini.h"
 #include "Linx/FunctionLibrary/StringLibrary.h"
-#include "Linx/IO/FileStream.h"
+#include "Linx/IOStream/FileStream.h"
 
 using namespace std;
 

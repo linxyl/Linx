@@ -1,17 +1,29 @@
 #pragma once
 
 #include <type_traits>
+#include <algorithm>
 
 #define PI	3.14159265358979323846
 
 namespace Linx
 {
+	template<typename T1, typename T2, typename T3>
+	constexpr std::common_type_t<T1, T2, T3> Clamp(T1 Val, T2 Min, T3 Max) noexcept
+	{
+		return std::max(Min, std::min(Val, Max));
+	}
+
+	constexpr float Lerp(float A, float B, float Alpha) noexcept
+	{
+		return A * (1 - Alpha) + B * Alpha;
+	}
+
 	/**
 	 * Takes the smallest power of two greater or equal than the input number.
 	 * For example, input 3 returns 4, input 10 returns 16, and input 32 returns 32.
 	 */
 	template<typename Type, typename Enable = std::enable_if_t<std::is_integral_v<Type>>>
-	constexpr Type NextHigherPowerOfTwo(Type n)
+	constexpr Type NextHigherPowerOfTwo(Type n) noexcept
 	{
 		if ((n & (n - 1)) == 0)
 			return n;
@@ -34,7 +46,7 @@ namespace Linx
 	 * @param Num	Target number.
 	 * @param Width	Width of number.
 	 */
-	constexpr size_t Rader(size_t Num, size_t Width)
+	constexpr size_t Rader(size_t Num, size_t Width) noexcept
 	{
 		size_t k = Width >> 1;
 		while (Num >= k)

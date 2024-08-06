@@ -23,7 +23,8 @@
     <ClCompile Include="Linx\Containers\TestRingBuffer.cpp" />
     <ClCompile Include="Linx\FunctionLibrary\StringLibrary.cpp" />
     <ClCompile Include="Linx\FunctionLibrary\TestString.cpp" />
-    <ClCompile Include="Linx\IO\FileStream.cpp" />
+    <ClCompile Include="Linx\IOStream\FileStream.cpp" />
+    <ClCompile Include="Linx\IOStream\Network\TestNetworkStream.cpp" />
     <ClCompile Include="Linx\IO\Network\Base\SocketBase.cpp" />
     <ClCompile Include="Linx\IO\Network\Base\TcpSocket.cpp" />
     <ClCompile Include="Linx\IO\Network\TcpClientSocket.cpp" />
@@ -31,11 +32,11 @@
     <ClCompile Include="Linx\IO\Network\TestNetwork.cpp" />
     <ClCompile Include="Linx\IO\Network\UdpSocket.cpp" />
     <ClCompile Include="Linx\Core.cpp" />
-    <ClCompile Include="Linx\IO\TestFile.cpp" />
+    <ClCompile Include="Linx\IOStream\TestFileStream.cpp" />
     <ClCompile Include="Linx\IO\TestUart.cpp" />
     <ClCompile Include="Linx\IO\Uart.cpp" />
     <ClCompile Include="Linx\Math\DSP\TestFT.cpp" />
-    <ClCompile Include="Linx\Math\MathUtils.cpp" />
+    <ClCompile Include="Linx\Math\MathLibrary.cpp" />
     <ClCompile Include="Linx\Protocol\Ini.cpp" />
     <ClCompile Include="Linx\Protocol\TestIni.cpp" />
     <ClCompile Include="Linx\System\Time.cpp" />
@@ -53,16 +54,24 @@
     <ClInclude Include="Linx\Config.h" />
     <ClInclude Include="Linx\Containers\RingBuffer.h" />
     <ClInclude Include="Linx\FunctionLibrary\StringLibrary.h" />
-    <ClInclude Include="Linx\IO\FileStream.h" />
+    <ClInclude Include="Linx\IOStream\FileStream.h" />
+    <ClInclude Include="Linx\IOStream\Network\TcpClientStream.h" />
+    <ClInclude Include="Linx\IOStream\Network\TcpServerStream.h" />
+    <ClInclude Include="Linx\IOStream\Network\UdpStream.h" />
+    <ClInclude Include="Linx\IOStream\StreambufBase.h" />
+    <ClInclude Include="Linx\IO\Network\Base\ISocketBase.h" />
     <ClInclude Include="Linx\IO\Network\Base\SocketBase.h" />
     <ClInclude Include="Linx\IO\Network\Base\TcpSocket.h" />
+    <ClInclude Include="Linx\IO\Network\ITcpClientSocket.h" />
+    <ClInclude Include="Linx\IO\Network\ITcpServerSocket.h" />
+    <ClInclude Include="Linx\IO\Network\IUdpSocket.h" />
     <ClInclude Include="Linx\IO\Network\TcpClientSocket.h" />
     <ClInclude Include="Linx\IO\Network\TcpServerSocket.h" />
     <ClInclude Include="Linx\IO\Network\UdpSocket.h" />
     <ClInclude Include="Linx\Core.h" />
     <ClInclude Include="Linx\IO\Uart.h" />
     <ClInclude Include="Linx\Math\DSP\FT.h" />
-    <ClInclude Include="Linx\Math\MathUtils.h" />
+    <ClInclude Include="Linx\Math\MathLibrary.h" />
     <ClInclude Include="Linx\Protocol\Ini.h" />
     <ClInclude Include="Linx\System\Time.h" />
     <ClInclude Include="Linx\TestConfig.h" />
@@ -143,7 +152,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>false</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Users\linx\Desktop\函数库\c++\Linx\linx_framework;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

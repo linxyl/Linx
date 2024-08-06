@@ -5,7 +5,7 @@
 
 #include <memory>
 
-#include "Linx/Math/MathUtils.h"
+#include "Linx/Math/MathLibrary.h"
 
 namespace Linx
 {	
