@@ -1,6 +1,6 @@
 #include "Linx/TestConfig.h"
 #ifdef TEST_FILE_STREAM
-#include "Linx/IO/FileStream.h"
+#include "FileStream.h"
 
 using namespace std;
 using namespace Linx;

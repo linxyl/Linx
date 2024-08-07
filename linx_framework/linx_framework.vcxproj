@@ -25,6 +25,7 @@
     <ClCompile Include="Linx\FunctionLibrary\TestString.cpp" />
     <ClCompile Include="Linx\IOStream\FileStream.cpp" />
     <ClCompile Include="Linx\IOStream\Network\TestNetworkStream.cpp" />
+    <ClCompile Include="Linx\IO\File.cpp" />
     <ClCompile Include="Linx\IO\Network\Base\SocketBase.cpp" />
     <ClCompile Include="Linx\IO\Network\Base\TcpSocket.cpp" />
     <ClCompile Include="Linx\IO\Network\TcpClientSocket.cpp" />
@@ -33,6 +34,7 @@
     <ClCompile Include="Linx\IO\Network\UdpSocket.cpp" />
     <ClCompile Include="Linx\Core.cpp" />
     <ClCompile Include="Linx\IOStream\TestFileStream.cpp" />
+    <ClCompile Include="Linx\IO\TestFile.cpp" />
     <ClCompile Include="Linx\IO\TestUart.cpp" />
     <ClCompile Include="Linx\IO\Uart.cpp" />
     <ClCompile Include="Linx\Math\DSP\TestFT.cpp" />
@@ -59,6 +61,7 @@
     <ClInclude Include="Linx\IOStream\Network\TcpServerStream.h" />
     <ClInclude Include="Linx\IOStream\Network\UdpStream.h" />
     <ClInclude Include="Linx\IOStream\StreambufBase.h" />
+    <ClInclude Include="Linx\IO\File.h" />
     <ClInclude Include="Linx\IO\Network\Base\ISocketBase.h" />
     <ClInclude Include="Linx\IO\Network\Base\SocketBase.h" />
     <ClInclude Include="Linx\IO\Network\Base\TcpSocket.h" />
