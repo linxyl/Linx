@@ -40,7 +40,8 @@ namespace Linx
 		inline IniFile(const std::string& InFilename) { Open(InFilename); }
 
 	public:
-		inline void Open(const std::string& InFilename) {
+		inline void Open(const std::string& InFilename)
+		{
 			Filename = InFilename;
 		}
 

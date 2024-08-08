@@ -245,5 +245,11 @@
     <ClInclude Include="Linx\IO\IFile.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Linx\IO\IUart.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Linx\IOStream\UartStream.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

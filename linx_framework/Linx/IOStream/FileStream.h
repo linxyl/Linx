@@ -29,15 +29,13 @@ namespace Linx
 		 */
 		inline FileStream(const char* InFilename, uint32_t InFlag = 
 			EFileFlag::ERead | EFileFlag::EWrite | EFileFlag::ECreate | EFileFlag::EOpen) noexcept :
-			std::iostream(&Buf),
-			IFile(Buf.IO)
+			FileStream()
 		{
 			Buf.IO.Open(InFilename, InFlag);
 		};
 		inline FileStream(const std::string& InFilename, uint32_t InFlag = 
 			EFileFlag::ERead | EFileFlag::EWrite | EFileFlag::ECreate | EFileFlag::EOpen) noexcept :
-			std::iostream(&Buf),
-			IFile(Buf.IO)
+			FileStream()
 		{
 			Buf.IO.Open(InFilename, InFlag);
 		};
