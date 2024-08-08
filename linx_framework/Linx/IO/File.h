@@ -47,16 +47,23 @@ namespace Linx
 #endif
 
 	public:
-		File() noexcept {};
-
+		File() noexcept = default;
 		/** 
 		 * Open the file.
 		 * @param InFilename	Filename format.
 		 *						%Y=year, %m=month, %d=day, %H=hour, %M=minute, %S=second, %s=millisecond.
 		 * @param InFlag		File properties, should be the value after EFileFlag is performed '|' operated.
 		 */
-		inline File(const char* InFilename, uint32_t InFlag) noexcept { Open(InFilename, InFlag); }
-		inline File(const std::string& InFilename, uint32_t InFlag) noexcept { Open(InFilename, InFlag); }
+		inline File(const char* InFilename, uint32_t InFlag = 
+			EFileFlag::ERead | EFileFlag::EWrite | EFileFlag::ECreate | EFileFlag::EOpen) noexcept
+		{
+			Open(InFilename, InFlag);
+		}
+		inline File(const std::string& InFilename, uint32_t InFlag =
+			EFileFlag::ERead | EFileFlag::EWrite | EFileFlag::ECreate | EFileFlag::EOpen) noexcept
+		{
+			Open(InFilename, InFlag);
+		}
 
 		inline ~File() noexcept { Close(); }
 
@@ -76,8 +83,10 @@ namespace Linx
 		 * @param InFlag		File properties, should be the value after EFileFlag is performed '|' operated.
 		 * @return whether the file is opened.
 		 */
-		bool Open(const char* InFilename, uint32_t InFlag) noexcept;
-		bool Open(const std::string& InFilename, uint32_t InFlag) noexcept;
+		bool Open(const char* InFilename, uint32_t InFlag = 
+			EFileFlag::ERead | EFileFlag::EWrite | EFileFlag::ECreate | EFileFlag::EOpen) noexcept;
+		bool Open(const std::string& InFilename, uint32_t InFlag = 
+			EFileFlag::ERead | EFileFlag::EWrite | EFileFlag::ECreate | EFileFlag::EOpen) noexcept;
 
 		/** Returns whether the file is opened. */
 		bool IsOpen() const noexcept;

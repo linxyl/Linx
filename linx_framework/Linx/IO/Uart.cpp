@@ -103,8 +103,11 @@ bool Linx::Uart::Open(const char* PortName, UartConfig InConfig)
 
 void Uart::Close()
 {
-	CloseHandle(hCom);
-	hCom = (HANDLE)-1;
+	if (INVALID_HANDLE_VALUE != hCom)
+	{
+		CloseHandle(hCom);
+		hCom = INVALID_HANDLE_VALUE;
+	}
 }
 
 size_t Uart::Read(void* Buf, size_t Size)

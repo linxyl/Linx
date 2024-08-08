@@ -120,9 +120,6 @@
     <ClCompile Include="Linx\Math\DSP\TestFT.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Linx\IOStream\FileStream.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="Linx\IOStream\Network\TestNetworkStream.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -243,6 +240,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Linx\IO\File.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Linx\IO\IFile.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

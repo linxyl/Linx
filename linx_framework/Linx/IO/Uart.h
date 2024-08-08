@@ -166,7 +166,7 @@ namespace Linx
 	public:
 		Uart() {};
 
-		/** Open uart. */
+		/** Open Uart. */
 		Uart(const char* PortName, UartConfig InConfig = UartConfig());
 		inline Uart(const std::string& PortName, UartConfig InConfig = UartConfig()) :
 			Uart(PortName.c_str(), InConfig)
@@ -175,20 +175,20 @@ namespace Linx
 		virtual ~Uart() { Close(); }
 
 	public:
-		/** Open uart. */
+		/** Open Uart. */
 		bool Open(const char* PortName, UartConfig InConfig = UartConfig());
 		inline bool Open(const std::string& PortName, UartConfig InConfig = UartConfig())
 		{
 			return Open(PortName.c_str(), InConfig);
 		}
 
-		/** Close uart. */
+		/** Close Uart. */
 		void Close();
 
-		/** Read data from uart. */
+		/** Read data from Uart. */
 		size_t Read(void* Buf, size_t Size);
 
-		/** Write data to uart. */
+		/** Write data to Uart. */
 		size_t Write(void* Buf, size_t Size);
 
 		/**
@@ -197,10 +197,10 @@ namespace Linx
 		 */
 		bool SetBufSize(uint32_t ReadSize, uint32_t WriteSize) const;
 
-		/** Returns the uart configuration. */
+		/** Returns the Uart configuration. */
 		inline UartConfig GetConfig() const noexcept { return Config; }
 
-		/** Returns all available uart names. */
+		/** Returns all available Uart names. */
 		static std::vector<std::string> GetAllUartNames();
 
 	public:

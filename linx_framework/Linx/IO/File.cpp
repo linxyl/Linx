@@ -32,6 +32,9 @@ bool Linx::File::Open() noexcept
 
 	Handle = CreateFile(GetTimeString(Filename).c_str(), AccessMode, 0, nullptr, CreateMode, FILE_ATTRIBUTE_NORMAL, 0);
 
+	WrittenLen = 0;
+	LastMilliSeconds = GetTotalMilliSeconds();
+
 	return Handle != INVALID_HANDLE_VALUE;
 }
 

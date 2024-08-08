@@ -23,7 +23,6 @@
     <ClCompile Include="Linx\Containers\TestRingBuffer.cpp" />
     <ClCompile Include="Linx\FunctionLibrary\StringLibrary.cpp" />
     <ClCompile Include="Linx\FunctionLibrary\TestString.cpp" />
-    <ClCompile Include="Linx\IOStream\FileStream.cpp" />
     <ClCompile Include="Linx\IOStream\Network\TestNetworkStream.cpp" />
     <ClCompile Include="Linx\IO\File.cpp" />
     <ClCompile Include="Linx\IO\Network\Base\SocketBase.cpp" />
@@ -62,6 +61,7 @@
     <ClInclude Include="Linx\IOStream\Network\UdpStream.h" />
     <ClInclude Include="Linx\IOStream\StreambufBase.h" />
     <ClInclude Include="Linx\IO\File.h" />
+    <ClInclude Include="Linx\IO\IFile.h" />
     <ClInclude Include="Linx\IO\Network\Base\ISocketBase.h" />
     <ClInclude Include="Linx\IO\Network\Base\SocketBase.h" />
     <ClInclude Include="Linx\IO\Network\Base\TcpSocket.h" />

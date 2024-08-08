@@ -36,7 +36,8 @@ namespace Linx
 	};
 
 	template<class IOType>
-	StreambufBase<IOType>::StreambufBase()
+	StreambufBase<IOType>::StreambufBase() :
+		IO()
 	{
 		// One character less to let the BufSize-th character cause a call of overflow()
 		setg(ReadBuf + ReserveSize, ReadBuf + ReserveSize, ReadBuf + ReserveSize);
