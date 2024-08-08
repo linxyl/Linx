@@ -433,6 +433,8 @@ namespace Linx
 	public:
 		/** Read data from RingBuffer to DstPtr memory */
 		size_type Read(Type* DstPtr, size_type Len) noexcept;
+		/** Get the pointer of the reading location. */
+		size_type Read(Type** DstPtr, size_type Len) noexcept;
 		/** Read data from this RingBuffer to DstRingBuffer. */
 		size_type Read(RingBuffer<Type, Alloc>& DstRingBuffer, size_type Len) noexcept;
 
@@ -606,6 +608,18 @@ namespace Linx
 				break;
 			}
 		}
+
+		return Ret;
+	}
+
+	template<class Type, class Alloc>
+	typename RingBuffer<Type, Alloc>::size_type Linx::RingBuffer<Type, Alloc>::Read(Type** DstPtr, size_type Len) noexcept
+	{
+		size_type RemainingSize = MaxLen - Head.GetOffset();
+		size_type Ret = std::min(RemainingSize, GetDataLen());
+
+		*DstPtr = Head.GetPtr();
+		Head += Ret;
 
 		return Ret;
 	}
