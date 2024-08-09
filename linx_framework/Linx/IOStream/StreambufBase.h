@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string.h>
 #include <iostream>
 
 namespace Linx
@@ -70,7 +71,7 @@ namespace Linx
 		}
 
 		int NumPutback = gptr() - eback();
-		if (NumPutback > ReserveSize)
+		if (NumPutback > (int)ReserveSize)
 		{
 			NumPutback = ReserveSize;
 		}

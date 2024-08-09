@@ -43,7 +43,7 @@ namespace Linx
 	public:
 #ifndef _WIN32
 		using HANDLE = int;
-		static constexpr INVALID_HANDLE_VALUE = -1;
+		static constexpr int INVALID_HANDLE_VALUE = -1;
 #endif
 
 	public:
@@ -101,13 +101,13 @@ namespace Linx
 		long Write(const void* Buf, size_t BufSize) noexcept;
 
 		/** Sets the offset of the pointer from the start of the file. */
-		size_t SeekBegin(long Offset) const noexcept;
+		long SeekBegin(long Offset) const noexcept;
 
 		/** Sets the offset of the pointer from the current location of the file. */
-		size_t SeekCurrent(long Offset) const noexcept;
+		long SeekCurrent(long Offset) const noexcept;
 
 		/** Sets the offset of the pointer from the end of the file. */
-		size_t SeekEnd(long Offset) const noexcept;
+		long SeekEnd(long Offset) const noexcept;
 
 	public:
 

@@ -17,7 +17,6 @@ void TestReadWrite();
 
 int main()
 {
-	vector<int>v;
 	TestConstruct();
 	TestOperator();
 	TestReadWrite();
