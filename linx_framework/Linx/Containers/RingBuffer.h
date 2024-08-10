@@ -442,6 +442,12 @@ namespace Linx
 		size_type Write(const Type* SrcPtr, size_type Len) noexcept;
 		/** Write data from SrcRingBuffer to this RingBuffer. */
 		size_type Write(RingBuffer<Type, Alloc>& SrcRingBuffer, size_type Len) noexcept;
+		/**
+		 * Use custom functions to write RingBuffer.
+		 * @param Func	A function with arguments of Type (Type*, size_t).
+		 */
+		template<typename FuncType>
+		size_type Write(FuncType&& Func, size_type Len);
 
 		/**
 		 * Reallocate the size of RingBuffer.
@@ -519,6 +525,8 @@ namespace Linx
 
 		size_type WriteImpl(const value_type* SrcPtr, size_type Len) noexcept;
 		size_type WriteImpl(RingBuffer& SrcRingBuffer, size_type Len) noexcept;
+		template<typename FuncType>
+		size_type WriteImpl(FuncType&& Func, size_type Len) noexcept;
 
 		void CopyPart(const RingBuffer& RB) noexcept;
 	};
@@ -779,6 +787,67 @@ namespace Linx
 	}
 
 	template<class Type, class Alloc>
+	template<typename FuncType>
+	typename RingBuffer<Type, Alloc>::size_type Linx::RingBuffer<Type, Alloc>::Write(FuncType&& Func, size_type Len)
+	{
+		size_type Ret = 0;
+		size_type TransLen = 0;
+
+		if (Len <= 0)
+		{
+			return Ret;
+		}
+
+		if (SrcRingBuffer.GetDataLen() >= Len)
+		{
+			TransLen = Len;
+		}
+		else
+		{
+			switch (SrcRingBuffer.ReadMode)
+			{
+			case ERingBufferReadMode::ReadNothing:
+				TransLen = 0;
+				break;
+			case ERingBufferReadMode::ReadAll:
+				TransLen = SrcRingBuffer.GetDataLen();
+				break;
+			default:
+				TransLen = 0;
+				break;
+			}
+		}
+
+		bool bCoverFlag = false;
+		if (GetRemainLen() < TransLen)
+		{
+			switch (WriteMode)
+			{
+			case ERingBufferWriteMode::WriteNothing:
+				TransLen = 0;
+				break;
+			case ERingBufferWriteMode::Cover:
+				bCoverFlag = true;
+				break;
+			case ERingBufferWriteMode::Fill:
+				TransLen = GetRemainLen();
+				break;
+			default:
+				TransLen = 0;
+				break;
+			}
+		}
+
+		Ret = WriteImpl(Func, TransLen);
+		if (bCoverFlag)
+		{
+			Head = Rear;
+		}
+
+		return Ret;
+	}
+
+	template<class Type, class Alloc>
 	typename RingBuffer<Type, Alloc>::size_type RingBuffer<Type, Alloc>::ReallocBuffer(size_type Size) noexcept
 	{
 		Size = NextHigherPowerOfTwo(Size);
@@ -940,6 +1009,30 @@ namespace Linx
 		}
 
 		SrcRingBuffer.Head += Len;
+		Rear += Len;
+
+		return Len;
+	}
+
+	template<class Type, class Alloc>
+	template<typename FuncType>
+	typename RingBuffer<Type, Alloc>::size_type Linx::RingBuffer<Type, Alloc>::WriteImpl(FuncType&& Func, size_type Len) noexcept
+	{
+		if (Len <= 0)
+		{
+			return 0;
+		}
+
+		if (Rear.Offset + Len < MaxLen)
+		{
+			Func(Rear.GetPtr(), Len);
+		}
+		else
+		{
+			Func(Rear.GetPtr(), MaxLen - Rear.Offset);
+			Func(pBuffer, Rear.Offset + Len - MaxLen);
+		}
+
 		Rear += Len;
 
 		return Len;
