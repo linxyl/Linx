@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Linx\Allocator\TestFileAllocator.cpp" />
+    <ClCompile Include="Linx\Allocator\TestVirtualAllocator.cpp" />
     <ClCompile Include="Linx\Containers\RingBuffer.cpp" />
     <ClCompile Include="Linx\Containers\TestRingBuffer.cpp" />
     <ClCompile Include="Linx\FunctionLibrary\StringLibrary.cpp" />
@@ -52,6 +54,8 @@
     <ClCompile Include="Linx\Thread\SyncQueue.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Linx\Allocator\FileAllocator.h" />
+    <ClInclude Include="Linx\Allocator\VirtualAllocator.h" />
     <ClInclude Include="Linx\Config.h" />
     <ClInclude Include="Linx\Containers\RingBuffer.h" />
     <ClInclude Include="Linx\FunctionLibrary\StringLibrary.h" />
@@ -115,7 +119,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>NotSet</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -158,6 +162,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>false</SDLCheck>
       <AdditionalIncludeDirectories>$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp14</LanguageStandard>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
