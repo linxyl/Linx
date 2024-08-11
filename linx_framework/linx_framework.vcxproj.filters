@@ -132,6 +132,12 @@
     <ClCompile Include="Linx\IO\TestFile.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Linx\Allocator\TestVirtualAllocator.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Linx\Allocator\TestFileAllocator.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Linx\Containers\RingBuffer.h">
@@ -249,6 +255,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Linx\IOStream\UartStream.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Linx\Allocator\VirtualAllocator.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Linx\Allocator\FileAllocator.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

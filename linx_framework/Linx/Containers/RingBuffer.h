@@ -791,57 +791,31 @@ namespace Linx
 	typename RingBuffer<Type, Alloc>::size_type Linx::RingBuffer<Type, Alloc>::Write(FuncType&& Func, size_type Len)
 	{
 		size_type Ret = 0;
-		size_type TransLen = 0;
 
 		if (Len <= 0)
 		{
 			return Ret;
 		}
 
-		if (SrcRingBuffer.GetDataLen() >= Len)
+		if (GetRemainLen() >= Len)
 		{
-			TransLen = Len;
+			Ret = WriteImpl(Func, Len);
 		}
 		else
-		{
-			switch (SrcRingBuffer.ReadMode)
-			{
-			case ERingBufferReadMode::ReadNothing:
-				TransLen = 0;
-				break;
-			case ERingBufferReadMode::ReadAll:
-				TransLen = SrcRingBuffer.GetDataLen();
-				break;
-			default:
-				TransLen = 0;
-				break;
-			}
-		}
-
-		bool bCoverFlag = false;
-		if (GetRemainLen() < TransLen)
 		{
 			switch (WriteMode)
 			{
 			case ERingBufferWriteMode::WriteNothing:
-				TransLen = 0;
 				break;
 			case ERingBufferWriteMode::Cover:
-				bCoverFlag = true;
+				Ret = WriteImpl(Func, Len);
 				break;
 			case ERingBufferWriteMode::Fill:
-				TransLen = GetRemainLen();
+				Ret = WriteImpl(Func, GetRemainLen());
 				break;
 			default:
-				TransLen = 0;
 				break;
 			}
-		}
-
-		Ret = WriteImpl(Func, TransLen);
-		if (bCoverFlag)
-		{
-			Head = Rear;
 		}
 
 		return Ret;
