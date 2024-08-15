@@ -8,14 +8,6 @@
 
 namespace Linx
 {
-	struct HandleDeleter {
-		void operator()(HANDLE h) const noexcept {
-			if (h != INVALID_HANDLE_VALUE && h != nullptr) {
-				CloseHandle(h);
-			}
-		}
-	};
-
 	template<typename Type>
 	class FileAllocator
 	{
@@ -30,6 +22,7 @@ namespace Linx
 
 	public:
 		constexpr FileAllocator() noexcept = default;
+		constexpr FileAllocator(const char* InFilename) noexcept { Open(InFilename); }
 		constexpr FileAllocator(const std::string& InFilename) noexcept { Open(InFilename); }
 		template <class Other>
 		constexpr FileAllocator(const FileAllocator<Other>& InAllocator) noexcept
@@ -40,51 +33,52 @@ namespace Linx
 
 		inline Type* allocate(const size_t Count)
 		{
-			if (INVALID_HANDLE_VALUE == reinterpret_cast<HANDLE>(hFile.get()))
-			{
-				return nullptr;
-			}
+			++AllocCount;
 
-			HANDLE TempMapFile = CreateFileMapping(
+			SetFilePointer(reinterpret_cast<HANDLE>(hFile.get()), Count, NULL, FILE_BEGIN);
+			SetEndOfFile(reinterpret_cast<HANDLE>(hFile.get())); 
+
+			CloseHandle(hMapFile);
+			hMapFile = CreateFileMapping(
 				reinterpret_cast<HANDLE>(hFile.get()),
 				NULL,
 				PAGE_READWRITE,
 				0,
-				GetFileSize(reinterpret_cast<HANDLE>(hFile.get()), NULL),
+				Count,
 				NULL);
 
-			if (NULL == TempMapFile)
+			if (NULL == hMapFile)
 			{
-				Close();
 				return nullptr;
 			}
 
-			void* Ptr = MapViewOfFile(TempMapFile, FILE_MAP_WRITE | FILE_MAP_READ, 0, 0, 0);
+			UnmapViewOfFile(Ptr);
+			Ptr = MapViewOfFile(hMapFile, FILE_MAP_WRITE | FILE_MAP_READ, 0, 0, 0);
 			if (!Ptr)
 			{
-				Close();
 				return nullptr;
 			}
-
-			hMapFile = std::shared_ptr<void>(TempMapFile, HandleDeleter());
 
 			return (Type*)Ptr;
 		}
 
 		inline void deallocate(Type* const Ptr, const size_t Count)
 		{
-			UnmapViewOfFile(Ptr);
-			Close();
+			--AllocCount;
+
+			if (0 == AllocCount)
+			{
+				UnmapViewOfFile(Ptr);
+				CloseHandle(hMapFile);
+			}
 		}
 
 		inline std::shared_ptr<void> GetFile() const noexcept { return hFile; }
-		inline std::shared_ptr<void> GetMapFile() const noexcept { return hMapFile; }
+		inline HANDLE GetMapFile() const noexcept { return hMapFile; }
 
 	private:
 		inline bool Open(const char* InFilename) noexcept
 		{
-			Close();
-
 			HANDLE TempFile = CreateFile(
 				InFilename,
 				GENERIC_WRITE | GENERIC_READ,
@@ -95,23 +89,26 @@ namespace Linx
 				NULL
 			);
 
-			if (TempFile != INVALID_HANDLE_VALUE)
+			if (TempFile == INVALID_HANDLE_VALUE)
 			{
 				return false;
 			}
 
-			hFile = std::shared_ptr<void>(TempFile, HandleDeleter());
+			hFile = std::shared_ptr<void>(TempFile, [](HANDLE h){
+				if (h != INVALID_HANDLE_VALUE && h != nullptr)
+					CloseHandle(h);
+				}
+			);
 
 			return true;
 		}
 		inline bool Open(const std::string& InFilename) noexcept { return Open(InFilename.c_str()); }
 
-		void Close()
-		{
-		}
-
 	private:
 		std::shared_ptr<void> hFile;
-		std::shared_ptr<void> hMapFile;
+		HANDLE hMapFile = NULL;
+		void* Ptr = nullptr;
+
+		size_t AllocCount = 0;
 	};
 }

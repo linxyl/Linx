@@ -10,9 +10,9 @@ int main()
 {
 	FileAllocator<char> a("test.txt");
 	vector<char, FileAllocator<char>> v(a);
+	v.push_back('a');
+	v.push_back('c');
 	v.push_back('6');
-	v.push_back('j');
-	v.resize(16);
 
 	getchar();
 }
