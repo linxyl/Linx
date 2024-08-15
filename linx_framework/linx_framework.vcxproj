@@ -87,6 +87,7 @@
     <ClInclude Include="Linx\Thread\Lock\SpinLock.h" />
     <ClInclude Include="Linx\Thread\Task.h" />
     <ClInclude Include="Linx\Utils\Debug.h" />
+    <ClInclude Include="Linx\Utils\HandleWrapper.h" />
     <ClInclude Include="Linx\Utils\Logger.h" />
     <ClInclude Include="Linx\Utils\Singleton.h" />
     <ClInclude Include="Linx\Utils\MacroUtils.h" />
