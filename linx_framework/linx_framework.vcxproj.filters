@@ -263,5 +263,8 @@
     <ClInclude Include="Linx\Allocator\FileAllocator.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Linx\Utils\HandleWrapper.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

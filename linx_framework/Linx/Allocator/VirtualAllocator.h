@@ -25,12 +25,19 @@ namespace Linx
 		constexpr VirtualAllocator() noexcept {}
 		constexpr VirtualAllocator(const VirtualAllocator&) noexcept = default;
 		template <class Other>
-		constexpr VirtualAllocator(const VirtualAllocator<Other>&) noexcept {}
+		constexpr VirtualAllocator(const VirtualAllocator<Other>& InAllocator) noexcept :
+			bValid(false)
+		{}
 		inline ~VirtualAllocator() = default;
 		inline VirtualAllocator& operator=(const VirtualAllocator&) = default;
 
 		inline Type* allocate(const size_t Count)
 		{
+			if (!bValid)
+			{
+				return new Type[Count];
+			}
+
 #ifdef _WIN32
 			return (Type*)VirtualAlloc(
 				NULL,
@@ -52,6 +59,12 @@ namespace Linx
 
 		inline void deallocate(Type* const Ptr, const size_t Count)
 		{
+			if (!bValid)
+			{
+				delete[] Ptr;
+				return;
+			}
+
 			if (Ptr)
 			{
 #ifdef _WIN32
@@ -61,5 +74,8 @@ namespace Linx
 #endif
 			}
 		}
+
+	private:
+		bool bValid = true;
 	};
 }

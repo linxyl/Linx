@@ -2,9 +2,12 @@
 
 #include <string>
 #include <memory>
-#ifdef _WIN32
-#include <windows.h>
+#ifndef _WIN32
+#include <fcntl.h>
+#include <sys/mman.h>
+#include <sys/stat.h>
 #endif
+#include "Linx/Utils/HandleWrapper.h"
 
 namespace Linx
 {
@@ -19,32 +22,40 @@ namespace Linx
 		using const_reference = const Type&;
 		using size_type = size_t;
 		using difference_type = std::ptrdiff_t;
+#ifndef _WIN32
+		using HANDLE = int;
+#endif
 
 	public:
 		constexpr FileAllocator() noexcept = default;
 		constexpr FileAllocator(const char* InFilename) noexcept { Open(InFilename); }
 		constexpr FileAllocator(const std::string& InFilename) noexcept { Open(InFilename); }
 		template <class Other>
-		constexpr FileAllocator(const FileAllocator<Other>& InAllocator) noexcept
-		{
-			hFile = InAllocator.GetFile();
-			hMapFile = InAllocator.GetMapFile();
-		}
+		constexpr FileAllocator(const FileAllocator<Other>& InAllocator) noexcept :
+			bValid(false),
+			hFile(InAllocator.GetFile()),
+			hMapFile(InAllocator.GetMapFile())
+		{}
 
 		inline Type* allocate(const size_t Count)
 		{
 			++AllocCount;
+			if (!bValid)
+			{
+				return new Type[Count];
+			}
 
-			SetFilePointer(reinterpret_cast<HANDLE>(hFile.get()), Count, NULL, FILE_BEGIN);
-			SetEndOfFile(reinterpret_cast<HANDLE>(hFile.get())); 
+#ifdef _WIN32
+			SetFilePointer(hFile.get()->Get(), Count * sizeof(value_type), NULL, FILE_BEGIN);
+			SetEndOfFile(hFile.get()->Get());
 
-			CloseHandle(hMapFile);
+			hLastMapFile = hMapFile;
 			hMapFile = CreateFileMapping(
-				reinterpret_cast<HANDLE>(hFile.get()),
+				hFile.get()->Get(),
 				NULL,
 				PAGE_READWRITE,
 				0,
-				Count,
+				Count * sizeof(value_type),
 				NULL);
 
 			if (NULL == hMapFile)
@@ -52,7 +63,7 @@ namespace Linx
 				return nullptr;
 			}
 
-			UnmapViewOfFile(Ptr);
+			LastPtr = Ptr;
 			Ptr = MapViewOfFile(hMapFile, FILE_MAP_WRITE | FILE_MAP_READ, 0, 0, 0);
 			if (!Ptr)
 			{
@@ -60,25 +71,64 @@ namespace Linx
 			}
 
 			return (Type*)Ptr;
+#else
+			if (ftruncate(hFile.get()->Get(), Count * TypeSize) == -1)
+			{
+				return nullptr;
+			}
+
+			struct stat sb;
+			if (fstat((intptr_t)(hFile.get()->Get()), &sb) == -1)
+			{
+				return nullptr;
+			}
+
+			void* Ptr = mmap(0, Count * TypeSize, PROT_READ | PROT_WRITE, MAP_SHARED, hFile.get()->Get(), 0);
+			if (Ptr == MAP_FAILED)
+			{
+				return nullptr;
+			}
+
+			return (Type*)Ptr;
+#endif
 		}
 
-		inline void deallocate(Type* const Ptr, const size_t Count)
+		inline void deallocate(Type* const InPtr, const size_t Count)
 		{
 			--AllocCount;
+			if (!bValid)
+			{
+				delete[] InPtr;
+				return;
+			}
+
+#ifdef _WIN32
+			UnmapViewOfFile(LastPtr);
+			CloseHandle(hLastMapFile);
+#else
+			munmap(LastPtr, Count * TypeSize);
+			close(hLastMapFile);
+#endif
 
 			if (0 == AllocCount)
 			{
+#ifdef _WIN32
 				UnmapViewOfFile(Ptr);
 				CloseHandle(hMapFile);
+#else
+				munmap(Ptr, Count * TypeSize);
+				close(hMapFile);
+#endif
 			}
 		}
 
-		inline std::shared_ptr<void> GetFile() const noexcept { return hFile; }
+		inline std::shared_ptr<HandleWrapper> GetFile() const noexcept { return hFile; }
 		inline HANDLE GetMapFile() const noexcept { return hMapFile; }
 
 	private:
-		inline bool Open(const char* InFilename) noexcept
+		bool Open(const char* InFilename) noexcept
 		{
+#ifdef _WIN32
 			HANDLE TempFile = CreateFile(
 				InFilename,
 				GENERIC_WRITE | GENERIC_READ,
@@ -88,27 +138,32 @@ namespace Linx
 				FILE_ATTRIBUTE_NORMAL,
 				NULL
 			);
-
 			if (TempFile == INVALID_HANDLE_VALUE)
 			{
 				return false;
 			}
+#else
+			HANDLE TempFile = open(InFilename, O_RDWR | O_CREAT, 0666);
+			if (TempFile == -1)
+			{
+				return false;
+			}
+#endif
 
-			hFile = std::shared_ptr<void>(TempFile, [](HANDLE h){
-				if (h != INVALID_HANDLE_VALUE && h != nullptr)
-					CloseHandle(h);
-				}
-			);
-
+			hFile = std::make_shared<HandleWrapper>(TempFile);
 			return true;
 		}
 		inline bool Open(const std::string& InFilename) noexcept { return Open(InFilename.c_str()); }
 
 	private:
-		std::shared_ptr<void> hFile;
+		std::shared_ptr<HandleWrapper> hFile;
 		HANDLE hMapFile = NULL;
+		HANDLE hLastMapFile = NULL;
 		void* Ptr = nullptr;
+		void* LastPtr = nullptr;
 
 		size_t AllocCount = 0;
+
+		bool bValid = true;
 	};
 }
