@@ -36,7 +36,7 @@ namespace Linx
 		virtual void SetTargetAddr(const char* IP, int Port) noexcept;
 
 		/** Select a port to receive remote message. */
-		virtual bool Bind(int Port) noexcept;
+		bool Bind(int Port) noexcept;
 
 		/**
 		 * Receive data from remote address.

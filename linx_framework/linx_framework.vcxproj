@@ -84,6 +84,7 @@
     <ClInclude Include="Linx\Protocol\Ini.h" />
     <ClInclude Include="Linx\System\Time.h" />
     <ClInclude Include="Linx\TestConfig.h" />
+    <ClInclude Include="Linx\Thread\Lock\NoLock.h" />
     <ClInclude Include="Linx\Thread\Lock\SpinLock.h" />
     <ClInclude Include="Linx\Thread\Task.h" />
     <ClInclude Include="Linx\Utils\Debug.h" />
