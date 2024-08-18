@@ -17,7 +17,6 @@ void TestReadWrite();
 
 int main()
 {
-	thread
 	TestConstruct();
 	TestOperator();
 	TestReadWrite();

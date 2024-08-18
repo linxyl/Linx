@@ -4,6 +4,7 @@
 #include <string.h>
 
 #include <memory>
+#include <mutex>
 
 #include "Linx/Math/MathLibrary.h"
 
@@ -38,7 +39,7 @@ namespace Linx
 		};
 	}
 
-	template<class Type, class Alloc = std::allocator<Type>>
+	template<class Type, class Alloc, class LockType>
 	class RingBuffer;
 
 	/**
@@ -46,10 +47,10 @@ namespace Linx
 	 * RingBuffer must be specified in the constructor.
 	 * Iterators of different RingBuffers cannot be compared.
 	 */
-	template<class Type, class Alloc>
+	template<class Type, class Alloc, class LockType>
 	class RingBufferConstIterator
 	{
-		template<class RingBufferType, class RingBufferAlloc>
+		template<class RingBufferType, class RingBufferAlloc, class RingBufferLockType>
 		friend class RingBuffer;
 
 	public:
@@ -68,7 +69,7 @@ namespace Linx
 		inline size_type GetOffset() const noexcept { return Offset; }
 
 	public:
-		inline RingBufferConstIterator(RingBuffer<Type, Alloc>* InPtr) noexcept :
+		inline RingBufferConstIterator(RingBuffer<Type, Alloc, LockType>* InPtr) noexcept :
 			RB(InPtr),
 			Offset(),
 			Cycle()
@@ -214,7 +215,7 @@ namespace Linx
 
 	protected:
 		/** Indicates which RingBuffer is pointed to */
-		RingBuffer<Type, Alloc>* RB;
+		RingBuffer<Type, Alloc, LockType>* RB;
 
 		/** The offset of the element in the RingBuffer */
 		size_type Offset;
@@ -228,10 +229,10 @@ namespace Linx
 	 * RingBuffer must be specified in the constructor.
 	 * Iterators of different RingBuffers cannot be compared.
 	 */
-	template<class Type, class Alloc>
-	class RingBufferIterator : public RingBufferConstIterator<Type, Alloc>
+	template<class Type, class Alloc, class LockType>
+	class RingBufferIterator : public RingBufferConstIterator<Type, Alloc, LockType>
 	{
-		using Super = RingBufferConstIterator<Type, Alloc>;
+		using Super = RingBufferConstIterator<Type, Alloc, LockType>;
 
 	public:
 		using iterator_category = std::random_access_iterator_tag;
@@ -244,7 +245,7 @@ namespace Linx
 		using size_type			= size_t;
 
 	public:
-		inline RingBufferIterator(RingBuffer<Type, Alloc>* InPtr) noexcept:
+		inline RingBufferIterator(RingBuffer<Type, Alloc, LockType>* InPtr) noexcept:
 			Super(InPtr)
 		{}
 
@@ -389,11 +390,11 @@ namespace Linx
 
 
 	/**
-	 * A fast ring buffer that has a head and a rear.
+	 * A thread-safe RingBuffer that has a head and a rear.
 	 * The element is inserted at the rear and popped at the head.
 	 * The allocated memory size will be aligned to a power of 2.
 	 */
-	template<class Type, class Alloc>
+	template<class Type, class Alloc = std::allocator<Type>, class LockType = std::mutex>
 	class RingBuffer
 	{
 	public:
@@ -406,8 +407,8 @@ namespace Linx
 		using size_type			= size_t;
 		using difference_type	= ptrdiff_t;
 
-		using iterator               = RingBufferIterator<Type, Alloc>;
-		using const_iterator         = RingBufferConstIterator<Type, Alloc>;
+		using iterator               = RingBufferIterator<Type, Alloc, LockType>;
+		using const_iterator         = RingBufferConstIterator<Type, Alloc, LockType>;
 		using reverse_iterator       = std::reverse_iterator<iterator>;
 		using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 
@@ -436,12 +437,12 @@ namespace Linx
 		/** Get the pointer of the reading location. */
 		size_type Read(Type** DstPtr, size_type Len) noexcept;
 		/** Read data from this RingBuffer to DstRingBuffer. */
-		size_type Read(RingBuffer<Type, Alloc>& DstRingBuffer, size_type Len) noexcept;
+		size_type Read(RingBuffer<Type, Alloc, LockType>& DstRingBuffer, size_type Len) noexcept;
 
 		/** Write data from SrcPtr memory to RingBuffer. */
 		size_type Write(const Type* SrcPtr, size_type Len) noexcept;
 		/** Write data from SrcRingBuffer to this RingBuffer. */
-		size_type Write(RingBuffer<Type, Alloc>& SrcRingBuffer, size_type Len) noexcept;
+		size_type Write(RingBuffer<Type, Alloc, LockType>& SrcRingBuffer, size_type Len) noexcept;
 		/**
 		 * Use custom functions to write RingBuffer.
 		 * @param Func	A function with arguments of Type (Type*, size_t).
@@ -475,6 +476,8 @@ namespace Linx
 
 		/** Used to allocate the buffer */
 		allocator_type Allocator;
+
+		mutable LockType Lock;
 
 	public:
 		/** Returns data length. */
@@ -535,8 +538,8 @@ namespace Linx
 	/*                       Function definition                            */
 	/************************************************************************/
 
-	template<class Type, class Alloc>
-	RingBuffer<Type, Alloc>::RingBuffer() noexcept :
+	template<class Type, class Alloc, class LockType>
+	RingBuffer<Type, Alloc, LockType>::RingBuffer() noexcept :
 		pBuffer(nullptr),
 		MaxLen(0),
 		Head(this),
@@ -546,42 +549,43 @@ namespace Linx
 	{
 	}
 
-	template<class Type, class Alloc>
-	RingBuffer<Type, Alloc>::RingBuffer(size_type Len) noexcept:
+	template<class Type, class Alloc, class LockType>
+	RingBuffer<Type, Alloc, LockType>::RingBuffer(size_type Len) noexcept:
 		RingBuffer()
 	{
 		ReallocBuffer(Len);
 	}
 
-	template<class Type, class Alloc>
-	RingBuffer<Type, Alloc>::RingBuffer(const RingBuffer& RB) noexcept :
+	template<class Type, class Alloc, class LockType>
+	RingBuffer<Type, Alloc, LockType>::RingBuffer(const RingBuffer& RB) noexcept :
 		pBuffer(nullptr),
 		Head(this),
 		Rear(this)
 	{
-		if (this == &RB)
-		{
-			return;
-		}
+		std::lock_guard<LockType> AutoLock(Lock);
 
 		ReallocBuffer(RB.MaxLen);
 		memcpy(pBuffer, RB.pBuffer, value_size * MaxLen);
 		CopyPart(RB);
 	}
 
-	template<class Type, class Alloc>
-	RingBuffer<Type, Alloc>::RingBuffer(RingBuffer&& RB) noexcept :
+	template<class Type, class Alloc, class LockType>
+	RingBuffer<Type, Alloc, LockType>::RingBuffer(RingBuffer&& RB) noexcept :
 		Head(this),
 		Rear(this)
 	{
+		std::lock_guard<LockType> AutoLock(Lock);
+
 		CopyPart(RB);
 		pBuffer = RB.pBuffer;
 		RB.pBuffer = nullptr;
 	}
 
-	template<class Type, class Alloc>
-	RingBuffer<Type, Alloc>::~RingBuffer()
+	template<class Type, class Alloc, class LockType>
+	RingBuffer<Type, Alloc, LockType>::~RingBuffer()
 	{
+		std::lock_guard<LockType> AutoLock(Lock);
+
 		if (pBuffer)
 		{
 			Allocator.deallocate(pBuffer, MaxLen);
@@ -589,8 +593,8 @@ namespace Linx
 		}
 	}
 
-	template<class Type, class Alloc>
-	typename RingBuffer<Type, Alloc>::size_type RingBuffer<Type, Alloc>::Read(Type* DstPtr, size_type Len) noexcept
+	template<class Type, class Alloc, class LockType>
+	typename RingBuffer<Type, Alloc, LockType>::size_type RingBuffer<Type, Alloc, LockType>::Read(Type* DstPtr, size_type Len) noexcept
 	{
 		size_type Ret = 0;
 
@@ -598,6 +602,8 @@ namespace Linx
 		{
 			return Ret;
 		}
+
+		std::lock_guard<LockType> AutoLock(Lock);
 
 		if (GetDataLen() >= Len)
 		{
@@ -620,9 +626,11 @@ namespace Linx
 		return Ret;
 	}
 
-	template<class Type, class Alloc>
-	typename RingBuffer<Type, Alloc>::size_type Linx::RingBuffer<Type, Alloc>::Read(Type** DstPtr, size_type Len) noexcept
+	template<class Type, class Alloc, class LockType>
+	typename RingBuffer<Type, Alloc, LockType>::size_type Linx::RingBuffer<Type, Alloc, LockType>::Read(Type** DstPtr, size_type Len) noexcept
 	{
+		std::lock_guard<LockType> AutoLock(Lock);
+
 		size_type RemainingSize = MaxLen - Head.GetOffset();
 		size_type Ret = std::min(RemainingSize, GetDataLen());
 
@@ -632,8 +640,8 @@ namespace Linx
 		return Ret;
 	}
 
-	template<class Type, class Alloc>
-	typename RingBuffer<Type, Alloc>::size_type RingBuffer<Type, Alloc>::Read(RingBuffer<Type, Alloc>& DstRingBuffer, size_type Len) noexcept
+	template<class Type, class Alloc, class LockType>
+	typename RingBuffer<Type, Alloc, LockType>::size_type RingBuffer<Type, Alloc, LockType>::Read(RingBuffer<Type, Alloc, LockType>& DstRingBuffer, size_type Len) noexcept
 	{
 		size_type Ret = 0;
 		size_type TransLen = 0;
@@ -642,6 +650,8 @@ namespace Linx
 		{
 			return Ret;
 		}
+
+		std::lock_guard<LockType> AutoLock(Lock);
 
 		if (GetDataLen() >= Len)
 		{
@@ -692,8 +702,8 @@ namespace Linx
 		return Ret;
 	}
 
-	template<class Type, class Alloc>
-	typename RingBuffer<Type, Alloc>::size_type RingBuffer<Type, Alloc>::Write(const Type* SrcPtr, size_type Len) noexcept
+	template<class Type, class Alloc, class LockType>
+	typename RingBuffer<Type, Alloc, LockType>::size_type RingBuffer<Type, Alloc, LockType>::Write(const Type* SrcPtr, size_type Len) noexcept
 	{
 		size_type Ret = 0;
 
@@ -701,6 +711,8 @@ namespace Linx
 		{
 			return Ret;
 		}
+
+		std::lock_guard<LockType> AutoLock(Lock);
 
 		if (GetRemainLen() >= Len)
 		{
@@ -726,8 +738,8 @@ namespace Linx
 		return Ret;
 	}
 
-	template<class Type, class Alloc>
-	typename RingBuffer<Type, Alloc>::size_type RingBuffer<Type, Alloc>::Write(RingBuffer<Type, Alloc>& SrcRingBuffer, size_type Len) noexcept
+	template<class Type, class Alloc, class LockType>
+	typename RingBuffer<Type, Alloc, LockType>::size_type RingBuffer<Type, Alloc, LockType>::Write(RingBuffer<Type, Alloc, LockType>& SrcRingBuffer, size_type Len) noexcept
 	{
 		size_type Ret = 0;
 		size_type TransLen = 0;
@@ -736,6 +748,8 @@ namespace Linx
 		{
 			return Ret;
 		}
+
+		std::lock_guard<LockType> AutoLock(Lock);
 
 		if (SrcRingBuffer.GetDataLen() >= Len)
 		{
@@ -786,9 +800,9 @@ namespace Linx
 		return Ret;
 	}
 
-	template<class Type, class Alloc>
+	template<class Type, class Alloc, class LockType>
 	template<typename FuncType>
-	typename RingBuffer<Type, Alloc>::size_type Linx::RingBuffer<Type, Alloc>::Write(FuncType&& Func, size_type Len)
+	typename RingBuffer<Type, Alloc, LockType>::size_type Linx::RingBuffer<Type, Alloc, LockType>::Write(FuncType&& Func, size_type Len)
 	{
 		size_type Ret = 0;
 
@@ -796,6 +810,8 @@ namespace Linx
 		{
 			return Ret;
 		}
+
+		std::lock_guard<LockType> AutoLock(Lock);
 
 		if (GetRemainLen() >= Len)
 		{
@@ -821,10 +837,10 @@ namespace Linx
 		return Ret;
 	}
 
-	template<class Type, class Alloc>
-	typename RingBuffer<Type, Alloc>::size_type RingBuffer<Type, Alloc>::ReallocBuffer(size_type Size) noexcept
+	template<class Type, class Alloc, class LockType>
+	typename RingBuffer<Type, Alloc, LockType>::size_type RingBuffer<Type, Alloc, LockType>::ReallocBuffer(size_type Size) noexcept
 	{
-		Size = NextHigherPowerOfTwo(Size);
+		Size = CeilToPowerOfTwo(Size);
 
 		if (pBuffer)
 		{
@@ -838,13 +854,15 @@ namespace Linx
 		return Size;
 	}
 
-	template<class Type, class Alloc>
-	RingBuffer<Type, Alloc>& RingBuffer<Type, Alloc>::operator=(const RingBuffer& RB) noexcept
+	template<class Type, class Alloc, class LockType>
+	RingBuffer<Type, Alloc, LockType>& RingBuffer<Type, Alloc, LockType>::operator=(const RingBuffer& RB) noexcept
 	{
 		if (this == &RB)
 		{
 			return *this;
 		}
+
+		std::lock_guard<LockType> AutoLock(Lock);
 
 		ReallocBuffer(RB.MaxLen);
 		memcpy(pBuffer, RB.pBuffer, value_size * MaxLen);
@@ -853,20 +871,24 @@ namespace Linx
 		return *this;
 	}
 
-	template<class Type, class Alloc>
-	Type& RingBuffer<Type, Alloc>::operator[](difference_type Pos) noexcept
+	template<class Type, class Alloc, class LockType>
+	Type& RingBuffer<Type, Alloc, LockType>::operator[](difference_type Pos) noexcept
 	{
+		std::lock_guard<LockType> AutoLock(Lock);
+
 		return Head[Pos];
 	}
 
-	template<class Type, class Alloc>
-	const Type& RingBuffer<Type, Alloc>::operator[](difference_type Pos) const noexcept
+	template<class Type, class Alloc, class LockType>
+	const Type& RingBuffer<Type, Alloc, LockType>::operator[](difference_type Pos) const noexcept
 	{
+		std::lock_guard<LockType> AutoLock(Lock);
+
 		return Head[Pos];
 	}
 
-	template<class Type, class Alloc>
-	typename RingBuffer<Type, Alloc>::size_type RingBuffer<Type, Alloc>::ReadImpl(value_type* DstPtr, size_type Len) noexcept
+	template<class Type, class Alloc, class LockType>
+	typename RingBuffer<Type, Alloc, LockType>::size_type RingBuffer<Type, Alloc, LockType>::ReadImpl(value_type* DstPtr, size_type Len) noexcept
 	{
 		if (Len <= 0)
 		{
@@ -888,8 +910,8 @@ namespace Linx
 		return Len;
 	}
 
-	template<class Type, class Alloc>
-	typename RingBuffer<Type, Alloc>::size_type RingBuffer<Type, Alloc>::ReadImpl(RingBuffer& DstRingBuffer, size_type Len) noexcept
+	template<class Type, class Alloc, class LockType>
+	typename RingBuffer<Type, Alloc, LockType>::size_type RingBuffer<Type, Alloc, LockType>::ReadImpl(RingBuffer& DstRingBuffer, size_type Len) noexcept
 	{
 		if (Len <= 0)
 		{
@@ -927,8 +949,8 @@ namespace Linx
 		return Len;
 	}
 
-	template<class Type, class Alloc>
-	typename RingBuffer<Type, Alloc>::size_type RingBuffer<Type, Alloc>::WriteImpl(const value_type* SrcPtr, size_type Len) noexcept
+	template<class Type, class Alloc, class LockType>
+	typename RingBuffer<Type, Alloc, LockType>::size_type RingBuffer<Type, Alloc, LockType>::WriteImpl(const value_type* SrcPtr, size_type Len) noexcept
 	{
 		if (Len <= 0)
 		{
@@ -950,8 +972,8 @@ namespace Linx
 		return Len;
 	}
 
-	template<class Type, class Alloc>
-	typename RingBuffer<Type, Alloc>::size_type RingBuffer<Type, Alloc>::WriteImpl(RingBuffer& SrcRingBuffer, size_type Len) noexcept
+	template<class Type, class Alloc, class LockType>
+	typename RingBuffer<Type, Alloc, LockType>::size_type RingBuffer<Type, Alloc, LockType>::WriteImpl(RingBuffer& SrcRingBuffer, size_type Len) noexcept
 	{
 		if (Len <= 0)
 		{
@@ -988,9 +1010,9 @@ namespace Linx
 		return Len;
 	}
 
-	template<class Type, class Alloc>
+	template<class Type, class Alloc, class LockType>
 	template<typename FuncType>
-	typename RingBuffer<Type, Alloc>::size_type Linx::RingBuffer<Type, Alloc>::WriteImpl(FuncType&& Func, size_type Len) noexcept
+	typename RingBuffer<Type, Alloc, LockType>::size_type Linx::RingBuffer<Type, Alloc, LockType>::WriteImpl(FuncType&& Func, size_type Len) noexcept
 	{
 		if (Len <= 0)
 		{
@@ -1012,8 +1034,8 @@ namespace Linx
 		return Len;
 	}
 
-	template<class Type, class Alloc>
-	void RingBuffer<Type, Alloc>::CopyPart(const RingBuffer& RB) noexcept
+	template<class Type, class Alloc, class LockType>
+	void RingBuffer<Type, Alloc, LockType>::CopyPart(const RingBuffer& RB) noexcept
 	{
 		Head.Offset = RB.Head.Offset;
 		Head.Cycle = RB.Head.Cycle;
