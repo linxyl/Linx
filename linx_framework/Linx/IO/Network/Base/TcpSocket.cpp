@@ -1,4 +1,7 @@
 #include <iostream>
+#ifdef _WIN32
+#include <WinSock2.h>
+#endif
 #include "TcpSocket.h"
 
 using namespace Linx;
@@ -16,7 +19,7 @@ void TcpSocket::Init()
 
 int TcpSocket::Recv(char* buf, size_t bufsize) noexcept
 {
-	int ret = recv(*pClientSock, buf, bufsize, 0);
+	int ret = recv(*pClientSock, buf, bufsize, bRecvAll ? MSG_WAITALL : 0);
 
 	return ret;
 }

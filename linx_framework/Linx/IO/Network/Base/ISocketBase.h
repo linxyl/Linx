@@ -59,6 +59,8 @@ namespace Linx
 		/** Set the size of the sending buffer. */
 		inline void SetSendBufSize(int size) noexcept { Socket.SetSendBufSize(size); }
 
+		inline void SetRecvAll(bool Val) noexcept { Socket.SetRecvAll(Val); }
+
 	public:
 		/** Get the number of the last error. */
 		inline unsigned int GetLastError() noexcept { return Socket.GetLastError(); }

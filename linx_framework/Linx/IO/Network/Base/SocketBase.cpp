@@ -9,7 +9,8 @@
 
 using namespace Linx;
 
-SocketBase::SocketBase()
+SocketBase::SocketBase() :
+	bRecvAll(0)
 {
 #ifdef _WIN32
 	WSADATA wsa;

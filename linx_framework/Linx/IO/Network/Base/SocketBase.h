@@ -1,5 +1,6 @@
 #pragma once
 
+#include <stdint.h>
 #ifdef _WIN32
 #include <windows.h>
 #pragma comment(lib, "ws2_32.lib")
@@ -69,6 +70,8 @@ namespace Linx
 		/** Set the size of the sending buffer. */
 		void SetSendBufSize(int size) noexcept;
 
+		inline void SetRecvAll(bool Val) noexcept { bRecvAll = Val; }
+
 	public:
 		/** Get the number of the last error. */
 		unsigned int GetLastError() noexcept;
@@ -83,5 +86,7 @@ namespace Linx
 		sockaddr_in Addr;
 		/** Stores the target socket information */
 		sockaddr_in TargetAddr;
+
+		uint8_t bRecvAll : 1;
 	};
 }
