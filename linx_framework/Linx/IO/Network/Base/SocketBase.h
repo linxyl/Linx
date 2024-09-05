@@ -3,7 +3,9 @@
 #include <stdint.h>
 #ifdef _WIN32
 #include <windows.h>
+#ifdef _MSC_VER
 #pragma comment(lib, "ws2_32.lib")
+#endif
 #else
 #include <arpa/inet.h>
 #endif
