@@ -480,10 +480,10 @@ namespace Linx
 		/** Used to mask the offset */
 		size_type OffsetMask;
 
-		/** Offset of the head position in the buffer */
+		/** Iterator pointing to the read position */
 		iterator Head;
 
-		/** Offset of the rear position in the buffer */
+		/** Iterator pointing to the write position */
 		iterator Rear;
 
 		/** Used to allocate the buffer */

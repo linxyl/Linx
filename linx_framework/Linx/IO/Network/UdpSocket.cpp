@@ -16,7 +16,7 @@ void UdpSocket::Init()
 	Super::Init();
 
 	Sock = socket(AF_INET, SOCK_DGRAM, 0);
-	if(Sock < 0)
+	if((int)Sock < 0)
 	{
 		throw std::logic_error("Create socket failed\n");
 	}

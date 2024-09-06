@@ -115,8 +115,12 @@ size_t Uart::Read(void* Buf, size_t Size)
 	if (Config.bSync)
 	{
 		DWORD wCount; 
-		BOOL bReadStat = ReadFile(hCom, Buf, Size, &wCount, NULL); 
+		BOOL bReadStat = ReadFile(hCom, Buf, Size, &wCount, NULL);
 
+		if (!bReadStat)
+		{
+			return 0;
+		}
 		return wCount;
 	}
 	else
@@ -133,7 +137,7 @@ size_t Uart::Read(void* Buf, size_t Size)
 		if (!comStat.cbInQue)
 			return 0; 
 									   
-		BOOL bReadStat = ReadFile(hCom, Buf, wCount, &wCount, &m_osRead); 
+		BOOL bReadStat = ReadFile(hCom, Buf, Size, &wCount, &m_osRead);
 
 		if (!bReadStat)
 		{
@@ -202,10 +206,9 @@ std::vector<std::string> Uart::GetAllUartNames()
 	HKEY hKey;
 	char portName[256], commName[256];
 	
-	if (ERROR_SUCCESS == ::RegOpenKeyEx(HKEY_LOCAL_MACHINE, "Hardware\\DeviceMap\\SerialComm", NULL, KEY_READ, &hKey))
+	if (ERROR_SUCCESS == ::RegOpenKeyEx(HKEY_LOCAL_MACHINE, "Hardware\\DeviceMap\\SerialComm", 0, KEY_READ, &hKey))
 	{
 		int i = 0;
-		int mm = 0;
 		DWORD  dwLong, dwSize;
 
 		while (1)
