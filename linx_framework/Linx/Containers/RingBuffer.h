@@ -333,7 +333,7 @@ namespace Linx
 	 * The element is inserted at the rear and popped at the head.
 	 * The allocated memory size will be aligned to a power of 2.
 	 */
-	template<class Type = char, class Alloc = std::allocator<Type>>
+	template<class Type, class Alloc = std::allocator<Type>>
 	class RingBuffer
 	{
 	public:
@@ -658,6 +658,7 @@ namespace Linx
 		}
 
 		auto DataLen = GetDataLen();
+
 		if (DataLen >= Len)
 		{
 			Ret = ReadImpl(Func, Len);
