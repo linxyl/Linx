@@ -954,12 +954,30 @@ namespace Linx
 
 		if (Head.GetOffset() + Len < MaxLen)
 		{
-			Func(Head.GetPtr(), Len);
+			if constexpr (std::is_void_v<decltype(Func(nullptr, 0))>)
+			{
+				Func(Head.GetPtr(), Len);
+			}
+			else
+			{
+				if (Func(Head.GetPtr(), Len) <= 0)
+					return 0;
+			}
 		}
 		else
 		{
-			Func(Head.GetPtr(), MaxLen - Head.GetOffset());
-			Func(pBuffer, Head.GetOffset() + Len - MaxLen);
+			if constexpr (std::is_void_v<decltype(Func(nullptr, 0))>)
+			{
+				Func(Head.GetPtr(), MaxLen - Head.GetOffset());
+				Func(pBuffer, Head.GetOffset() + Len - MaxLen);
+			}
+			else
+			{
+				if (Func(Head.GetPtr(), MaxLen - Head.GetOffset()) <= 0)
+					return 0;
+				if (Func(pBuffer, Head.GetOffset() + Len - MaxLen) <= 0)
+					return 0;
+			}
 		}
 
 		std::atomic_thread_fence(std::memory_order_release);
@@ -1052,12 +1070,30 @@ namespace Linx
 
 		if (Rear.GetOffset() + Len < MaxLen)
 		{
-			Func(Rear.GetPtr(), Len);
+			if constexpr (std::is_void_v<decltype(Func(nullptr, 0))>)
+			{
+				Func(Rear.GetPtr(), Len);
+			}
+			else
+			{
+				if (Func(Rear.GetPtr(), Len) <= 0)
+					return 0;
+			}
 		}
 		else
 		{
-			Func(Rear.GetPtr(), MaxLen - Rear.GetOffset());
-			Func(pBuffer, Rear.GetOffset() + Len - MaxLen);
+			if constexpr (std::is_void_v<decltype(Func(nullptr, 0))>)
+			{
+				Func(Rear.GetPtr(), MaxLen - Rear.GetOffset());
+				Func(pBuffer, Rear.GetOffset() + Len - MaxLen);
+			}
+			else
+			{
+				if (Func(Rear.GetPtr(), MaxLen - Rear.GetOffset()) <= 0)
+					return 0;
+				if (Func(pBuffer, Rear.GetOffset() + Len - MaxLen) <= 0)
+					return 0;
+			}
 		}
 
 		std::atomic_thread_fence(std::memory_order_release);
