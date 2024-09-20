@@ -53,11 +53,27 @@ namespace Linx
 		 */
 		virtual int Send(const char* buf, size_t bufsize) noexcept = 0;
 
-		/** Same as Recv. */
-		inline int Read(char* buf, size_t bufsize) noexcept { return Recv(buf, bufsize); }
+		/** Same as Recv, but returns 0 if failed. */
+		inline size_t Read(char* buf, size_t bufsize) noexcept
+		{
+			auto Ret = Recv(buf, bufsize);
+			if (Ret < 0)
+			{
+				return 0;
+			}
+			return Ret;
+		}
 
-		/** Sample as Send. */
-		inline int Write(const char* buf, size_t bufsize) noexcept { return Send(buf, bufsize); }
+		/** Sample as Send, but returns 0 if failed. */
+		inline size_t Write(const char* buf, size_t bufsize) noexcept
+		{
+			auto Ret = Send(buf, bufsize);
+			if (Ret < 0)
+			{
+				return 0;
+			}
+			return Ret;
+		}
 
 	public:
 		/** Set the timeout period for receiving. */
