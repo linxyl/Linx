@@ -66,14 +66,8 @@
     <ClInclude Include="Linx\IOStream\StreambufBase.h" />
     <ClInclude Include="Linx\IOStream\UartStream.h" />
     <ClInclude Include="Linx\IO\File.h" />
-    <ClInclude Include="Linx\IO\IFile.h" />
-    <ClInclude Include="Linx\IO\IUart.h" />
-    <ClInclude Include="Linx\IO\Network\Base\ISocketBase.h" />
     <ClInclude Include="Linx\IO\Network\Base\SocketBase.h" />
     <ClInclude Include="Linx\IO\Network\Base\TcpSocket.h" />
-    <ClInclude Include="Linx\IO\Network\ITcpClientSocket.h" />
-    <ClInclude Include="Linx\IO\Network\ITcpServerSocket.h" />
-    <ClInclude Include="Linx\IO\Network\IUdpSocket.h" />
     <ClInclude Include="Linx\IO\Network\TcpClientSocket.h" />
     <ClInclude Include="Linx\IO\Network\TcpServerSocket.h" />
     <ClInclude Include="Linx\IO\Network\UdpSocket.h" />

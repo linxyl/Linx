@@ -233,25 +233,7 @@
     <ClInclude Include="Linx\IOStream\StreambufBase.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Linx\IO\Network\ITcpServerSocket.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Linx\IO\Network\Base\ISocketBase.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Linx\IO\Network\ITcpClientSocket.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Linx\IO\Network\IUdpSocket.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Linx\IO\File.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Linx\IO\IFile.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Linx\IO\IUart.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Linx\IOStream\UartStream.h">

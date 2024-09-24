@@ -1,25 +1,20 @@
 #pragma once
 
 #include "Linx/IOStream/StreambufBase.h"
-#include "Linx/IO/Network/ITcpServerSocket.h"
+#include "Linx/IO/Network/TcpServerSocket.h"
 
 namespace Linx
 {
-	class TcpServerBuf : public StreambufBase<TcpServerSocket>
-	{
-		friend class TcpServerStream;
-	};
-
 	/**
 	 * A stream with TcpServerSocket function.
 	 */
-	class TcpServerStream : public std::iostream, public ITcpServerSocket
+	class TcpServerStream : public std::iostream, public TcpServerSocket
 	{
 	public:
-		TcpServerStream() : std::iostream(&Buf), ITcpServerSocket(Buf.IO)
+		TcpServerStream() : std::iostream(&Buf), Buf(this)
 		{};
 
 	protected:
-		TcpServerBuf Buf;
+		StreambufBase<TcpServerSocket> Buf;
 	};
 }

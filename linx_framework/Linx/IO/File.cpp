@@ -154,7 +154,7 @@ bool Linx::File::Open() noexcept
 	if(FileFlag & EFileFlag::EAppend)
 		Mode |= O_APPEND;
 
-    Handle = open(GetTimeString(Filename).c_str(), O_RDWR | O_CREAT, S_IRUSR | S_IWUSR);
+    Handle = open(GetTimeString(Filename).c_str(), O_RDWR | O_CREAT, 0666);
 
 	WrittenLen = 0;
 	LastMilliSeconds = GetTotalMilliSeconds();

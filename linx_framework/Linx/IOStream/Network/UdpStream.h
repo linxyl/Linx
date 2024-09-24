@@ -1,25 +1,20 @@
 #pragma once
 
 #include "Linx/IOStream/StreambufBase.h"
-#include "Linx/IO/Network/IUdpSocket.h"
+#include "Linx/IO/Network/UdpSocket.h"
 
 namespace Linx
 {
-	class UdpBuf : public StreambufBase<UdpSocket>
-	{
-		friend class UdpStream;
-	};
-
 	/**
 	 * A stream with UdpSocket function.
 	 */
-	class UdpStream : public std::iostream, public IUdpSocket
+	class UdpStream : public std::iostream, public UdpSocket
 	{
 	public:
-		UdpStream() : std::iostream(&Buf), IUdpSocket(Buf.IO)
+		UdpStream() : std::iostream(&Buf), Buf(this)
 		{};
 
 	protected:
-		UdpBuf Buf;
+		StreambufBase<UdpSocket> Buf;
 	};
 }

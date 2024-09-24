@@ -1,36 +1,26 @@
 #pragma once
 
 #include "Linx/IOStream/StreambufBase.h"
-#include "Linx/IO/IUart.h"
+#include "Linx/IO/Uart.h"
 
 namespace Linx
 {
-	class UartBuf : public StreambufBase<Uart>
-	{
-		friend class UartStream;
-	public:
-		UartBuf() : StreambufBase<Uart>() {};
-	};
-
 	/**
 	 * A file stream that can rotate depending on time or size.
 	 */
-	class UartStream : public std::iostream, public IUart
+	class UartStream : public std::iostream, public Uart
 	{
 	public:
-		UartStream() : std::iostream(&Buf), IUart(Buf.IO)
+		UartStream() : std::iostream(&Buf), Buf(this)
 		{};
-
-		/** Open Uart. */
-		inline UartStream(const char* PortName, UartConfig InConfig = UartConfig()) : UartStream()
-		{
-			Buf.IO.Open(PortName, InConfig);
-		}
-		inline UartStream(const std::string& PortName, UartConfig InConfig = UartConfig()) :
-			UartStream(PortName.c_str(), InConfig)
+		UartStream(const char* PortName, UartConfig InConfig = UartConfig())
+			:std::iostream(&Buf), Buf(this), Uart(PortName, InConfig)
+		{}
+		inline UartStream(const std::string& PortName, UartConfig InConfig = UartConfig())
+			:std::iostream(&Buf), Buf(this), Uart(PortName, InConfig)
 		{};
 
 	protected:
-		UartBuf Buf;
+		StreambufBase<Uart> Buf;
 	};
 }
