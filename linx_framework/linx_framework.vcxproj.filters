@@ -251,5 +251,8 @@
     <ClInclude Include="Linx\Thread\Lock\NoLock.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Linx\IO\IOBase.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

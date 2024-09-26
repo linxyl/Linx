@@ -7,6 +7,7 @@
 #include "TcpClientSocket.h"
 #include "TcpServerSocket.h"
 #include "UdpSocket.h"
+#include "Linx/IO/File.h"
 #include "Linx/Core.h"
 
 using namespace std;
@@ -39,14 +40,14 @@ void TestTcpClient()
 {
 	TcpClientSocket tcs;
 
-	while(!tcs.Connect("127.0.0.1", 5004))
+	while (!tcs.Connect("127.0.0.1", 5004))
 	{
 	}
 
 	////////////////////////////////////////
-	if(tcs.Send("123", 4) <= 0)
+	if (tcs.Send("123", 4) <= 0)
 	{
-		cout<<"tcs send failed\n";
+		cout << "tcs send failed\n";
 		return;
 	}
 	m.lock();
@@ -56,13 +57,21 @@ void TestTcpClient()
 
 	m.lock();
 	char buf[4];
-	if(tcs.Recv(buf, 4) <= 0)
+	if (tcs.Recv(buf, 4) <= 0)
 	{
-		cout<<"tcs recv failed\n";
+		cout << "tcs recv failed\n";
 		return;
 	}
+
 	cout << "tcs recv " << buf << endl;
 	m.unlock();
+
+	if (tcs.Recv(buf, 4) <= 0)
+	{
+		cout << "tcs recv file failed\n";
+		return;
+	}
+	cout << "tcs recv file: " << buf << endl;
 	///////////////////////////////////////
 
 	tcs.Close();
@@ -72,29 +81,29 @@ void TestTcpServer()
 {
 	TcpServerSocket tss;
 
-	if(!tss.Bind(5004))
+	if (!tss.Bind(5004))
 	{
-		cout<<"Bind failed\n";
+		cout << "Bind failed\n";
 		return;
 	}
 
-	if(!tss.Listen())
+	if (!tss.Listen())
 	{
-		cout<<"Listen failed\n";
+		cout << "Listen failed\n";
 		return;
 	}
-	
-	if(!tss.Accept())
+
+	if (!tss.Accept())
 	{
-		cout<<"Accept failed\n";
+		cout << "Accept failed\n";
 		return;
 	}
 	////////////////////////////////////////
 	m.lock();
 	char buf[4];
-	if(tss.Recv(buf, 4) <= 0)
+	if (tss.Recv(buf, 4) <= 0)
 	{
-		cout<<"tss recv failed\n";
+		cout << "tss recv failed\n";
 		return;
 	}
 	cout << "tss recv " << buf << endl;
@@ -102,13 +111,23 @@ void TestTcpServer()
 
 	Sleep(10);
 
-	if(tss.Send("456", 4) <= 0)
+	if (tss.Send("456", 4) <= 0)
 	{
-		cout<<"tss send failed\n";
+		cout << "tss send failed\n";
 		return;
 	}
 	m.lock();
 	cout << "tss send 456\n";
+	m.unlock();
+
+	File file("sendfile.txt");
+	m.lock();
+	if (tss.SendFile(file, 3) <= 0)
+	{
+		cout << "tss send file failed\n";
+		return;
+	}
+	cout << "tss send file: abc\n";
 	m.unlock();
 	///////////////////////////////////////
 

@@ -75,6 +75,9 @@ namespace Linx
 			return Ret;
 		}
 
+		/** Returns the socket. */
+		inline socket_type GetSocket() const noexcept { return Sock; }
+
 	public:
 		/** Set the timeout period for receiving. */
 		void SetRecvTimeout(int mseconds) noexcept;
@@ -88,6 +91,7 @@ namespace Linx
 		/** Set the size of the sending buffer. */
 		void SetSendBufSize(int size) noexcept;
 
+		/** Set whether to receive all the data of the requested length before returning. */
 		inline void SetRecvAll(bool Val) noexcept { bRecvAll = Val; }
 
 	public:

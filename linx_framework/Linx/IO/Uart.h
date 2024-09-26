@@ -10,6 +10,8 @@
 #include <vector>
 #include <string>
 
+#include "IOBase.h"
+
 namespace Linx
 {
 	namespace UartParam
@@ -157,12 +159,8 @@ namespace Linx
 		uint32_t WriteTotalTimeoutConstant = 0;		/* Constant in milliseconds.        */
 	};
 
-	class Uart
+	class Uart : public IOBase
 	{
-#ifndef _WIN32
-		using HANDLE = int;
-#endif
-
 	public:
 		Uart() {};
 
@@ -207,8 +205,6 @@ namespace Linx
 		UartTimeout Timeout;
 
 	private:
-		HANDLE hCom = (HANDLE) - 1;
-
 		UartConfig Config;
 	};
 }

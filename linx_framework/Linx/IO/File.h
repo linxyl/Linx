@@ -6,6 +6,8 @@
 #include <stdint.h>
 #include <string>
 
+#include "IOBase.h"
+
 namespace Linx
 {
 	/**
@@ -38,14 +40,8 @@ namespace Linx
 	/**
 	 * A file class that can rotate depending on time or size.
 	 */
-	class File
+	class File : public IOBase
 	{
-	public:
-#ifndef _WIN32
-		using HANDLE = int;
-		static constexpr int INVALID_HANDLE_VALUE = -1;
-#endif
-
 	public:
 		File() noexcept = default;
 		/**
@@ -109,8 +105,6 @@ namespace Linx
 		/** Sets the offset of the pointer from the end of the file. */
 		long SeekEnd(long Offset) const noexcept;
 
-		inline HANDLE GetHandle() const noexcept { return Handle; }
-
 	public:
 
 		/************************************************************************/
@@ -161,9 +155,5 @@ namespace Linx
 
 		/** The split time. If it is 0, not divided by time */
 		long long SplitMilliSeconds = 0;
-
-	private:
-		/** Handle of the file. */
-		HANDLE Handle = INVALID_HANDLE_VALUE;
 	};
 }
