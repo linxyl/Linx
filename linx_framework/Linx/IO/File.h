@@ -48,13 +48,13 @@ namespace Linx
 
 	public:
 		File() noexcept = default;
-		/** 
+		/**
 		 * Open the file.
 		 * @param InFilename	Filename format.
 		 *						%Y=year, %m=month, %d=day, %H=hour, %M=minute, %S=second, %s=millisecond.
 		 * @param InFlag		File properties, should be the value after EFileFlag is performed '|' operated.
 		 */
-		inline File(const char* InFilename, uint32_t InFlag = 
+		inline File(const char* InFilename, uint32_t InFlag =
 			EFileFlag::ERead | EFileFlag::EWrite | EFileFlag::ECreate | EFileFlag::EOpen) noexcept
 		{
 			Open(InFilename, InFlag);
@@ -76,16 +76,16 @@ namespace Linx
 		/** Open the file based on the stored file information. */
 		bool Open() noexcept;
 
-		/** 
+		/**
 		 * Open the file.
 		 * @param InFilename	Filename format.
 		 *						%Y=year, %m=month, %d=day, %H=hour, %M=minute, %S=second, %s=millisecond.
 		 * @param InFlag		File properties, should be the value after EFileFlag is performed '|' operated.
 		 * @return whether the file is opened.
 		 */
-		bool Open(const char* InFilename, uint32_t InFlag = 
+		bool Open(const char* InFilename, uint32_t InFlag =
 			EFileFlag::ERead | EFileFlag::EWrite | EFileFlag::ECreate | EFileFlag::EOpen) noexcept;
-		bool Open(const std::string& InFilename, uint32_t InFlag = 
+		bool Open(const std::string& InFilename, uint32_t InFlag =
 			EFileFlag::ERead | EFileFlag::EWrite | EFileFlag::ECreate | EFileFlag::EOpen) noexcept;
 
 		/** Returns whether the file is opened. */
@@ -109,6 +109,8 @@ namespace Linx
 		/** Sets the offset of the pointer from the end of the file. */
 		long SeekEnd(long Offset) const noexcept;
 
+		inline HANDLE GetHandle() const noexcept { return Handle; }
+
 	public:
 
 		/************************************************************************/
@@ -119,7 +121,7 @@ namespace Linx
 		inline void SetSplitByDay(size_t Days) noexcept { SplitMilliSeconds = Days * 24 * 60 * 60 * 1000; SplitSize = 0; }
 
 		/** Set the number of hours each file splits. */
-		inline void SetSplitByHour(size_t Hours) noexcept { SplitMilliSeconds =  Hours * 60 * 60 * 1000; SplitSize = 0; }
+		inline void SetSplitByHour(size_t Hours) noexcept { SplitMilliSeconds = Hours * 60 * 60 * 1000; SplitSize = 0; }
 
 		/** Set the number of minutes each file splits. */
 		inline void SetSplitByMinute(size_t Minutes) noexcept { SplitMilliSeconds = Minutes * 60 * 1000; SplitSize = 0; }

@@ -389,7 +389,11 @@ namespace Linx
 		 * @param Func	A function with arguments of Type (Type*, size_t).
 		 */
 		template<typename FuncType>
-		size_type Read(FuncType&& Func, size_type Len);
+		auto Read(FuncType&& Func, size_type Len)
+			-> std::conditional_t<
+			std::is_void_v<std::invoke_result_t<FuncType, pointer, size_type>>,
+			size_type,
+			std::invoke_result_t<FuncType, pointer, size_type>>;
 
 		/** Write data from SrcPtr memory to RingBuffer. */
 		size_type Write(const Type* SrcPtr, size_type Len) noexcept;
@@ -400,7 +404,11 @@ namespace Linx
 		 * @param Func	A function with arguments of Type (Type*, size_t).
 		 */
 		template<typename FuncType>
-		size_type Write(FuncType&& Func, size_type Len);
+		auto Write(FuncType&& Func, size_type Len)
+			-> std::conditional_t<
+			std::is_void_v<std::invoke_result_t<FuncType, pointer, size_type>>,
+			size_type,
+			std::invoke_result_t<FuncType, pointer, size_type>>;
 
 		/**
 		 * Reallocate the size of RingBuffer.
@@ -484,12 +492,20 @@ namespace Linx
 		size_type ReadImpl(value_type* DstPtr, size_type Len) noexcept;
 		size_type ReadImpl(RingBuffer& DstRingBuffer, size_type Len) noexcept;
 		template<typename FuncType>
-		size_type ReadImpl(FuncType&& Func, size_type Len) noexcept;
+		auto ReadImpl(FuncType&& Func, size_type Len) noexcept
+			-> std::conditional_t<
+			std::is_void_v<std::invoke_result_t<FuncType, pointer, size_type>>,
+			size_type,
+			std::invoke_result_t<FuncType, pointer, size_type>>;
 
 		size_type WriteImpl(const value_type* SrcPtr, size_type Len) noexcept;
 		size_type WriteImpl(RingBuffer& SrcRingBuffer, size_type Len) noexcept;
 		template<typename FuncType>
-		size_type WriteImpl(FuncType&& Func, size_type Len) noexcept;
+		auto WriteImpl(FuncType&& Func, size_type Len) noexcept
+			-> std::conditional_t<
+			std::is_void_v<std::invoke_result_t<FuncType, pointer, size_type>>,
+			size_type,
+			std::invoke_result_t<FuncType, pointer, size_type>>;
 
 		void CopyPart(const RingBuffer& RB) noexcept;
 
@@ -648,7 +664,11 @@ namespace Linx
 
 	template<class Type, class Alloc>
 	template<typename FuncType>
-	typename RingBuffer<Type, Alloc>::size_type Linx::RingBuffer<Type, Alloc>::Read(FuncType&& Func, size_type Len)
+	auto Linx::RingBuffer<Type, Alloc>::Read(FuncType&& Func, size_type Len)
+		->std::conditional_t<
+		std::is_void_v<std::invoke_result_t<FuncType, pointer, size_type>>,
+		size_type,
+		std::invoke_result_t<FuncType, pointer, size_type>>
 	{
 		size_type Ret = 0;
 
@@ -779,7 +799,11 @@ namespace Linx
 
 	template<class Type, class Alloc>
 	template<typename FuncType>
-	typename RingBuffer<Type, Alloc>::size_type Linx::RingBuffer<Type, Alloc>::Write(FuncType&& Func, size_type Len)
+	auto Linx::RingBuffer<Type, Alloc>::Write(FuncType&& Func, size_type Len)
+		->std::conditional_t<
+		std::is_void_v<std::invoke_result_t<FuncType, pointer, size_type>>,
+		size_type,
+		std::invoke_result_t<FuncType, pointer, size_type>>
 	{
 		size_type Ret = 0;
 
@@ -943,8 +967,17 @@ namespace Linx
 
 	template<class Type, class Alloc>
 	template<typename FuncType>
-	typename RingBuffer<Type, Alloc>::size_type Linx::RingBuffer<Type, Alloc>::ReadImpl(FuncType&& Func, size_type Len) noexcept
+	auto Linx::RingBuffer<Type, Alloc>::ReadImpl(FuncType&& Func, size_type Len) noexcept
+		-> std::conditional_t<
+		std::is_void_v<std::invoke_result_t<FuncType, pointer, size_type>>,
+		size_type,
+		std::invoke_result_t<FuncType, pointer, size_type>>
 	{
+		using RetType = std::conditional_t<
+			std::is_void_v<std::invoke_result_t<FuncType, pointer, size_type>>,
+			size_type,
+			std::invoke_result_t<FuncType, pointer, size_type>>;
+
 		if (Len <= 0)
 		{
 			return 0;
@@ -960,8 +993,9 @@ namespace Linx
 			}
 			else
 			{
-				if (Func(Head.GetPtr(), Len) <= 0)
-					return 0;
+				RetType Ret;
+				if ((Ret = Func(Head.GetPtr(), Len)) < 0)
+					return Ret;
 			}
 		}
 		else
@@ -973,10 +1007,11 @@ namespace Linx
 			}
 			else
 			{
-				if (Func(Head.GetPtr(), MaxLen - Head.GetOffset()) <= 0)
-					return 0;
-				if (Func(pBuffer, Head.GetOffset() + Len - MaxLen) <= 0)
-					return 0;
+				RetType Ret;
+				if ((Ret = Func(Head.GetPtr(), MaxLen - Head.GetOffset())) < 0)
+					return Ret;
+				if ((Ret = Func(pBuffer, Head.GetOffset() + Len - MaxLen)) < 0)
+					return Ret;
 			}
 		}
 
@@ -1059,8 +1094,17 @@ namespace Linx
 
 	template<class Type, class Alloc>
 	template<typename FuncType>
-	typename RingBuffer<Type, Alloc>::size_type Linx::RingBuffer<Type, Alloc>::WriteImpl(FuncType&& Func, size_type Len) noexcept
+	auto Linx::RingBuffer<Type, Alloc>::WriteImpl(FuncType&& Func, size_type Len) noexcept
+		-> std::conditional_t<
+		std::is_void_v<std::invoke_result_t<FuncType, pointer, size_type>>,
+		size_type,
+		std::invoke_result_t<FuncType, pointer, size_type>>
 	{
+		using RetType = std::conditional_t<
+			std::is_void_v<std::invoke_result_t<FuncType, pointer, size_type>>,
+			size_type,
+			std::invoke_result_t<FuncType, pointer, size_type>>;
+
 		if (Len <= 0)
 		{
 			return 0;
@@ -1076,8 +1120,9 @@ namespace Linx
 			}
 			else
 			{
-				if (Func(Rear.GetPtr(), Len) <= 0)
-					return 0;
+				RetType Ret;
+				if (Ret = Func(Rear.GetPtr(), Len) < 0)
+					return Ret;
 			}
 		}
 		else
@@ -1089,10 +1134,11 @@ namespace Linx
 			}
 			else
 			{
-				if (Func(Rear.GetPtr(), MaxLen - Rear.GetOffset()) <= 0)
-					return 0;
-				if (Func(pBuffer, Rear.GetOffset() + Len - MaxLen) <= 0)
-					return 0;
+				RetType Ret;
+				if (Ret = Func(Rear.GetPtr(), MaxLen - Rear.GetOffset()) < 0)
+					return Ret;
+				if (Ret = Func(pBuffer, Rear.GetOffset() + Len - MaxLen) < 0)
+					return Ret;
 			}
 		}
 
