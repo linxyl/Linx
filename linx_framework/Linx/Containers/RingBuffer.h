@@ -46,7 +46,6 @@ namespace Linx
 	/**
 	 * Points to elements in RingBuffer.
 	 * RingBuffer must be specified in the constructor.
-	 * Iterators of different RingBuffers cannot be compared.
 	 */
 	template<class Type, class Alloc>
 	class RingBufferConstIterator

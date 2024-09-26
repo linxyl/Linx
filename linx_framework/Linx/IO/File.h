@@ -105,6 +105,17 @@ namespace Linx
 		/** Sets the offset of the pointer from the end of the file. */
 		long SeekEnd(long Offset) const noexcept;
 
+		/**
+		 * Map a file to memory.
+		 * @param Size			The size to map.
+		 * @param Offset		Offset of the file map. Must be an integer multiple of the page of the MMU.
+		 * @param AccessMode	Read and write permissions. Should use EFileFlag.
+		 */
+		char* MemMap(size_t Size, size_t Offset = 0, uint32_t AccessMode = EFileFlag::ERead | EFileFlag::EWrite);
+
+		/** Unmap memory. */
+		void UnMemMap();
+
 	public:
 
 		/************************************************************************/
@@ -155,5 +166,14 @@ namespace Linx
 
 		/** The split time. If it is 0, not divided by time */
 		long long SplitMilliSeconds = 0;
+
+#ifdef _WIN32
+		/** Used map the memory */
+		HANDLE hFileMap = NULL;
+#else
+		size_t MapSize;
+#endif
+
+		char* pMemMap = nullptr;
 	};
 }

@@ -1,6 +1,8 @@
 #ifndef _WIN32
 #include <fcntl.h>
 #include <unistd.h>
+#include <sys/stat.h>
+#include <sys/mman.h>
 #endif
 #include "File.h"
 #include "Linx/System/Time.h"
@@ -36,7 +38,7 @@ bool Linx::File::Open() noexcept
 			CreateMode = OPEN_EXISTING;
 	}
 
-	Handle = CreateFile(GetTimeString(Filename).c_str(), AccessMode, 0, nullptr, CreateMode, FILE_ATTRIBUTE_NORMAL, 0);
+	Handle = CreateFile(GetTimeString(Filename).c_str(), AccessMode, FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr, CreateMode, FILE_ATTRIBUTE_NORMAL, 0);
 
 	WrittenLen = 0;
 	LastMilliSeconds = GetTotalMilliSeconds();
@@ -104,8 +106,69 @@ long Linx::File::SeekEnd(long Offset) const noexcept
 	return SetFilePointer(Handle, Offset, nullptr, FILE_END);
 }
 
+char* Linx::File::MemMap(size_t Size, size_t Offset, uint32_t AccessMode)
+{
+
+	DWORD Prot;
+	DWORD dwDesiredAccess = 0;
+	if (AccessMode & EFileFlag::ERead)
+	{
+		Prot = PAGE_READONLY;
+		dwDesiredAccess |= FILE_MAP_READ;
+	}
+	if (AccessMode & EFileFlag::EWrite)
+	{
+		Prot = PAGE_READWRITE;
+		dwDesiredAccess |= FILE_MAP_WRITE;
+	}
+
+	uint64_t MaximumSize = Size + Offset;
+	hFileMap = CreateFileMapping(Handle,
+		NULL,
+		Prot,  
+		MaximumSize >> 32,
+		MaximumSize,
+		NULL);
+
+	if (!hFileMap)
+	{
+		return nullptr;
+	}
+
+	pMemMap = (char*)MapViewOfFile(hFileMap,
+		dwDesiredAccess,
+		Offset >> 32,
+		Offset,
+		Size);
+
+	if (!pMemMap)
+	{
+		CloseHandle(hFileMap);
+		hFileMap = NULL;
+		return nullptr;
+	}
+	return pMemMap;
+}
+
+void Linx::File::UnMemMap()
+{
+	if (pMemMap)
+	{
+		UnmapViewOfFile(pMemMap);
+		pMemMap = nullptr;
+	}
+
+	if (hFileMap)
+	{
+		CloseHandle(hFileMap);
+		hFileMap = NULL;
+	}
+}
+
 void Linx::File::Close() noexcept
 {
+	UnMemMap();
+
 	if (INVALID_HANDLE_VALUE != Handle)
 	{
 		CloseHandle(Handle);
@@ -216,8 +279,43 @@ long Linx::File::SeekEnd(long Offset) const noexcept
 	return lseek(Handle, Offset, SEEK_END);
 }
 
+char* Linx::File::MemMap(size_t Size, size_t Offset, uint32_t AccessMode)
+{
+    struct stat sb;
+    if (fstat(Handle, &sb) == -1)
+    {
+        return nullptr;
+    }
+
+	int Prot = 0;
+	if (AccessMode & EFileFlag::ERead)
+	{
+		Prot |= PROT_READ;
+	}
+	if (AccessMode & EFileFlag::EWrite)
+	{
+		Prot |= PROT_WRITE;
+	}
+	
+    pMemMap = (char*)mmap(0, Size, Prot, MAP_SHARED, Handle, Offset);
+    if (pMemMap == MAP_FAILED)
+    {
+        return nullptr;
+    }
+
+    MapSize = Size;
+    return pMemMap;
+}
+
+void Linx::File::UnMemMap()
+{
+	munmap(pMemMap, MapSize);
+}
+
 void Linx::File::Close() noexcept
 {
+	UnMemMap();
+
 	if (INVALID_HANDLE_VALUE != Handle)
 	{
 		close(Handle);

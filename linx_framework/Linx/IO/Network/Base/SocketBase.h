@@ -21,6 +21,7 @@ namespace Linx
 #ifdef _WIN32
 		using socket_type = SOCKET;
 #else
+		using HANDLE = int;
 		using socket_type = int;
 #endif
 
