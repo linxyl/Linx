@@ -138,6 +138,12 @@
     <ClCompile Include="Linx\Allocator\TestFileAllocator.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Linx\System\TestMemInfo.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Linx\System\MemInfo.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Linx\Containers\RingBuffer.h">
@@ -252,6 +258,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Linx\IO\IOBase.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Linx\System\MemInfo.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

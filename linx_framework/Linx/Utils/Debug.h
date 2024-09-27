@@ -3,8 +3,11 @@
 #include <type_traits>
 #include <iostream>
 
+/** Print the variable name and its value. */
+#define DEBUG_VAR(var) std::cout << #var" : " << var << endl;
+
 /** Print the source filename and the line number. */
-#define DEBUG_LINE std::cout << "FileStream: " << __FILE__ << "  Line: " << __LINE__ << endl;
+#define DEBUG_LINE std::cout << "Filename: " << __FILE__ << "  Line: " << __LINE__ << endl;
 
 /**
  * Output the value of each element in the container.

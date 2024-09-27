@@ -42,6 +42,8 @@
     <ClCompile Include="Linx\Math\MathLibrary.cpp" />
     <ClCompile Include="Linx\Protocol\Ini.cpp" />
     <ClCompile Include="Linx\Protocol\TestIni.cpp" />
+    <ClCompile Include="Linx\System\MemInfo.cpp" />
+    <ClCompile Include="Linx\System\TestMemInfo.cpp" />
     <ClCompile Include="Linx\System\Time.cpp" />
     <ClCompile Include="Linx\Thread\Task.cpp" />
     <ClCompile Include="Linx\Thread\TestThread.cpp" />
@@ -77,6 +79,7 @@
     <ClInclude Include="Linx\Math\DSP\FT.h" />
     <ClInclude Include="Linx\Math\MathLibrary.h" />
     <ClInclude Include="Linx\Protocol\Ini.h" />
+    <ClInclude Include="Linx\System\MemInfo.h" />
     <ClInclude Include="Linx\System\Time.h" />
     <ClInclude Include="Linx\TestConfig.h" />
     <ClInclude Include="Linx\Thread\Lock\NoLock.h" />
@@ -149,8 +152,8 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>false</SDLCheck>
-      <AdditionalIncludeDirectories>E:\visual studio project\Linx\linx_framework;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <LanguageStandard>Default</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
