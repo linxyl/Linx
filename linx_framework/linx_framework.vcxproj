@@ -42,7 +42,9 @@
     <ClCompile Include="Linx\Math\MathLibrary.cpp" />
     <ClCompile Include="Linx\Protocol\Ini.cpp" />
     <ClCompile Include="Linx\Protocol\TestIni.cpp" />
+    <ClCompile Include="Linx\System\Disk.cpp" />
     <ClCompile Include="Linx\System\MemInfo.cpp" />
+    <ClCompile Include="Linx\System\TestDisk.cpp" />
     <ClCompile Include="Linx\System\TestMemInfo.cpp" />
     <ClCompile Include="Linx\System\Time.cpp" />
     <ClCompile Include="Linx\Thread\Task.cpp" />
@@ -79,6 +81,7 @@
     <ClInclude Include="Linx\Math\DSP\FT.h" />
     <ClInclude Include="Linx\Math\MathLibrary.h" />
     <ClInclude Include="Linx\Protocol\Ini.h" />
+    <ClInclude Include="Linx\System\Disk.h" />
     <ClInclude Include="Linx\System\MemInfo.h" />
     <ClInclude Include="Linx\System\Time.h" />
     <ClInclude Include="Linx\TestConfig.h" />

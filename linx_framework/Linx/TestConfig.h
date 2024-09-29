@@ -15,4 +15,5 @@
 //#define TEST_LOCK
 //#define TEST_VIRTUAL_ALLOCATOR
 //#define TEST_FILE_ALLOCATOR
-#define TEST_MEM_INFO
+//#define TEST_MEM_INFO
+#define TEST_DISK

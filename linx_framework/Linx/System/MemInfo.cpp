@@ -1,5 +1,6 @@
 #ifdef _WIN32
 #include <windows.h>
+#include <stdexcept>
 #else
 #include <fstream>
 #include <string>
@@ -7,7 +8,7 @@
 #include <exception>
 
 #include "MemInfo.h"
-#include<iostream>
+
 using namespace Linx;
 using namespace std;
 
