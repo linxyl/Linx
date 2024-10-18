@@ -40,6 +40,7 @@
     <ClCompile Include="Linx\IO\Uart.cpp" />
     <ClCompile Include="Linx\Math\DSP\TestFT.cpp" />
     <ClCompile Include="Linx\Math\MathLibrary.cpp" />
+    <ClCompile Include="Linx\Math\TestSort.cpp" />
     <ClCompile Include="Linx\Protocol\Ini.cpp" />
     <ClCompile Include="Linx\Protocol\TestIni.cpp" />
     <ClCompile Include="Linx\System\Disk.cpp" />
@@ -80,6 +81,7 @@
     <ClInclude Include="Linx\IO\Uart.h" />
     <ClInclude Include="Linx\Math\DSP\FT.h" />
     <ClInclude Include="Linx\Math\MathLibrary.h" />
+    <ClInclude Include="Linx\Math\Sort.h" />
     <ClInclude Include="Linx\Protocol\Ini.h" />
     <ClInclude Include="Linx\System\Disk.h" />
     <ClInclude Include="Linx\System\MemInfo.h" />

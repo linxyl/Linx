@@ -1,30 +1,150 @@
 #pragma once
 
-#include "type_traits"
+#include <functional>
 
 namespace Linx
 {
-	template<typename ItType>
-	void InsertionSort(ItType InBegin, ItType InEnd)
+	/************************************************************************/
+	/*							Insertion Sort                              */
+	/************************************************************************/
+
+	template<typename ItType, typename PredType>
+	void InsertionSort(ItType InFirst, ItType InLast, PredType Pred)
 	{
-		auto Size = InEnd - InBegin;
-		for (size_t i = 1; i < Size; i++)
+		auto Size = std::distance(InFirst, InLast);
+		for (long i = 1; i < Size; i++)
 		{
-			auto key = InBegin[i];
-			// Move elements of arr[0..i-1], that are greater than key,
-			// to one position ahead of their current position
-			size_t j = i - 1;
-			for (; j >= 0 && InBegin[j] > key; j--)
+			auto key = InFirst[i];
+			long j = i - 1;
+			for (; j >= 0 && Pred(key, InFirst[j]); --j)
 			{
-				InBegin[j + 1] = InBegin[j];
+				InFirst[j + 1] = InFirst[j];
 			}
-			InBegin[j + 1] = key;
+			InFirst[j + 1] = key;
 		}
 	}
 
 	template<typename ItType>
-	void InsertionSort(const ItType InBegin, const ItType InEnd, ItType OutBegin)
+	inline void InsertionSort(ItType InFirst, ItType InLast)
 	{
+		InsertionSort(InFirst, InLast, std::less<>{});
+	}
 
+	/************************************************************************/
+	/*							   Merge Sort                               */
+	/************************************************************************/
+
+	/** Merge two sorted sequences. */
+	template<typename ItType, typename PredType>
+	inline void Merge(ItType First, ItType Mid, ItType Last, PredType Pred)
+	{
+		auto length1 = std::distance(First, Mid);
+		auto length2 = std::distance(Mid, Last);
+
+		std::vector<typename std::iterator_traits<ItType>::value_type> Temp(length1 + length2);
+
+		auto it1 = First;
+		auto it2 = Mid;
+		auto it = Temp.begin();
+
+		while (it1 != Mid && it2 != Last)
+		{
+			if (Pred(*it1, *it2))
+			{
+				*it = *it1;
+				++it1;
+			}
+			else
+			{
+				*it = *it2;
+				++it2;
+			}
+			++it;
+		}
+
+		std::copy(it1, Mid, it);
+		std::copy(it2, Last, it);
+
+		std::copy(Temp.begin(), Temp.end(), First);
+	}
+
+	template<typename ItType>
+	inline void Merge(ItType First, ItType Mid, ItType Last)
+	{
+		Merge(First, Mid, Last, std::less<>{});
+	}
+
+	template<typename ItType, typename PredType>
+	void MergeSort(ItType InFirst, ItType InLast, PredType Pred)
+	{
+		auto Distance = std::distance(InFirst, InLast);
+		if (Distance <= 1)
+			return;
+
+		auto Mid = InFirst;
+		std::advance(Mid, Distance / 2);
+
+		MergeSort(InFirst, Mid, Pred);     // Sort the InFirst half.
+		MergeSort(Mid, InLast, Pred);      // Sort the second half.
+		Merge(InFirst, Mid, InLast, Pred);   // Merge two parts.
+	}
+
+	template<typename ItType>
+	inline void MergeSort(ItType InFirst, ItType InLast)
+	{
+		MergeSort(InFirst, InLast, std::less<>{});
+	}
+
+	/************************************************************************/
+	/*							    Heap Sort                               */
+	/************************************************************************/
+
+	template<typename ItType, typename PredType>
+	void Heapify(ItType InFirst, ItType InLast, int n, int i, PredType Pred)
+	{
+		int largest = i; // 将当前节点设为最大值
+		int left = 2 * i + 1; // 左子节点
+		int right = 2 * i + 2; // 右子节点
+
+		// 如果左子节点大于当前最大值
+		if (left < n && !Pred(InFirst[left], InFirst[largest]))
+			largest = left;
+
+		// 如果右子节点大于当前最大值
+		if (right < n && !Pred(InFirst[right], InFirst[largest]))
+			largest = right;
+
+		// 如果最大值不是根节点
+		if (largest != i)
+		{
+			std::swap(InFirst[i], InFirst[largest]); // 交换
+			Heapify(InFirst, InLast, n, largest, Pred); // 递归堆化受影响的子树
+		}
+	}
+
+	template<typename ItType, typename PredType>
+	void HeapSort(ItType InFirst, ItType InLast, PredType Pred)
+	{
+		auto n = std::distance(InFirst, InLast);
+
+		// 构建最大堆
+		for (int i = n / 2 - 1; i >= 0; i--)
+			Heapify(InFirst, InLast, n, i, Pred);
+
+		// 一个接一个地从堆中取出元素
+		for (auto i = n - 1; i > 0; i--)
+		{
+			// 将当前根（最大值）移到数组末尾
+			std::swap(*InFirst, InFirst[i]);
+
+			// 调用 Heapify 来将剩余的堆重新调整为最大堆
+			Heapify(InFirst, InLast, i, 0, Pred);
+		}
+	}
+
+	template<typename ItType>
+	inline void HeapSort(ItType InFirst, ItType InLast)
+	{
+		HeapSort(InFirst, InLast, std::less<>{});
 	}
 }

@@ -309,7 +309,10 @@ char* Linx::File::MemMap(size_t Size, size_t Offset, uint32_t AccessMode)
 
 void Linx::File::UnMemMap()
 {
-	munmap(pMemMap, MapSize);
+	if (pMemMap)
+	{
+		munmap(pMemMap, MapSize);
+	}
 }
 
 void Linx::File::Close() noexcept

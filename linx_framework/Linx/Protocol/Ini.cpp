@@ -66,7 +66,7 @@ bool Linx::Ini::Load(std::istream& IStream)
 
 void Linx::Ini::Save(std::ostream& OStream)
 {
-	OStream.seekp(0);
+	//OStream.seekp(0);
 
 	for (const auto& DataIt : IniData)
 	{
@@ -77,7 +77,7 @@ void Linx::Ini::Save(std::ostream& OStream)
 			continue;
 		}
 
-		OStream << "[" << DataIt.first << "]" << '\n';
+		OStream << "[" << DataIt.first << "]\n";
 		for (const auto& ItSection : DataIt.second)
 		{
 			// Write "key = value" line
@@ -86,10 +86,11 @@ void Linx::Ini::Save(std::ostream& OStream)
 			{
 				OStream << ' ' << ItSection.second.second;
 			}
-			OStream  << '\n';
+			OStream  << "\n";
 		}
-		OStream << endl;
+		OStream << "\n";
 	}
+	OStream.flush();
 }
 
 Linx::VariableString Linx::Ini::Get(const IniOption& Option)

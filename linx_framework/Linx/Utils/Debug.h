@@ -40,3 +40,13 @@ void DebugContainer(ContainerType& Container, size_t Cols = 8)
 	std::cout << #Container":" << endl;\
 	DebugContainer(Container, ##__VA_ARGS__);\
 }
+
+template<typename T>
+inline void DebugIterator(T ItBegin, T ItEnd)
+{
+	while (ItBegin != ItEnd)
+	{
+		std::cout << *ItBegin++ << '\t';
+	}
+	std::cout << std::endl;
+}
