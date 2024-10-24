@@ -278,5 +278,8 @@
     <ClInclude Include="Linx\Math\Sort.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Linx\Math\Random.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

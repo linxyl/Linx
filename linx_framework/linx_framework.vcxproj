@@ -81,6 +81,7 @@
     <ClInclude Include="Linx\IO\Uart.h" />
     <ClInclude Include="Linx\Math\DSP\FT.h" />
     <ClInclude Include="Linx\Math\MathLibrary.h" />
+    <ClInclude Include="Linx\Math\Random.h" />
     <ClInclude Include="Linx\Math\Sort.h" />
     <ClInclude Include="Linx\Protocol\Ini.h" />
     <ClInclude Include="Linx\System\Disk.h" />
@@ -160,6 +161,14 @@
       <AdditionalIncludeDirectories>$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
+    <Link>
+      <StackReserveSize>
+      </StackReserveSize>
+    </Link>
+    <Link>
+      <StackCommitSize>
+      </StackCommitSize>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>

@@ -5,8 +5,10 @@
 namespace Linx
 {
 	/************************************************************************/
-	/*							Insertion Sort                              */
+	/*							Comparison Sort                             */
 	/************************************************************************/
+
+	/************************** Insertion Sort ******************************/
 
 	template<typename ItType, typename PredType>
 	void InsertionSort(ItType InFirst, ItType InLast, PredType Pred)
@@ -30,9 +32,7 @@ namespace Linx
 		InsertionSort(InFirst, InLast, std::less<>{});
 	}
 
-	/************************************************************************/
-	/*							   Merge Sort                               */
-	/************************************************************************/
+	/***************************** Merge Sort *******************************/
 
 	/** Merge two sorted sequences. */
 	template<typename ItType, typename PredType>
@@ -68,12 +68,6 @@ namespace Linx
 		std::copy(Temp.begin(), Temp.end(), First);
 	}
 
-	template<typename ItType>
-	inline void Merge(ItType First, ItType Mid, ItType Last)
-	{
-		Merge(First, Mid, Last, std::less<>{});
-	}
-
 	template<typename ItType, typename PredType>
 	void MergeSort(ItType InFirst, ItType InLast, PredType Pred)
 	{
@@ -95,9 +89,7 @@ namespace Linx
 		MergeSort(InFirst, InLast, std::less<>{});
 	}
 
-	/************************************************************************/
-	/*							    Heap Sort                               */
-	/************************************************************************/
+	/****************************** Heap Sort *******************************/
 
 	template<typename ItType, typename PredType>
 	void Heapify(ItType InFirst, ItType InLast, int n, int i, PredType Pred)
@@ -146,5 +138,42 @@ namespace Linx
 	inline void HeapSort(ItType InFirst, ItType InLast)
 	{
 		HeapSort(InFirst, InLast, std::less<>{});
+	}
+
+	/****************************** Quick Sort *******************************/
+
+	template<typename ItType, typename PredType>
+	ItType Partition(ItType InFirst, ItType InLast, PredType Pred)
+	{
+		auto pivot = *std::prev(InLast); // 选择最后一个元素作为基准
+		auto i = InFirst;
+
+		for (auto j = InFirst; j != std::prev(InLast); ++j)
+		{
+			if (Pred(*j, pivot))
+			{
+				std::iter_swap(i, j);
+				++i;
+			}
+		}
+		std::iter_swap(i, std::prev(InLast)); // 将基准放到正确的位置
+		return i;
+	}
+
+	template<typename ItType, typename PredType>
+	void QuickSort(ItType InFirst, ItType InLast, PredType Pred)
+	{
+		if (InFirst < InLast)
+		{
+			auto pivot_it = Partition(InFirst, InLast, Pred);
+			QuickSort(InFirst, pivot_it, Pred);
+			QuickSort(std::next(pivot_it), InLast, Pred);
+		}
+	}
+
+	template<typename ItType>
+	inline void QuickSort(ItType InFirst, ItType InLast)
+	{
+		QuickSort(InFirst, InLast, std::less<>{});
 	}
 }
