@@ -43,6 +43,9 @@ namespace Linx
 	class File : public IOBase
 	{
 	public:
+		using Super = IOBase;
+
+	public:
 		File() noexcept = default;
 		/**
 		 * Open the file.
@@ -61,7 +64,7 @@ namespace Linx
 			Open(InFilename, InFlag);
 		}
 
-		inline ~File() noexcept { Close(); }
+		virtual ~File() noexcept { Close(); }
 
 	private:
 		std::string Filename;
@@ -94,7 +97,7 @@ namespace Linx
 		long Read(void* Buf, size_t BufSize) noexcept;
 
 		/** Write data to the file. */
-		long Write(const void* Buf, size_t BufSize) noexcept;
+		virtual size_t Write(const void* Buf, size_t BufSize) noexcept;
 
 		/** Sets the offset of the pointer from the start of the file. */
 		long SeekBegin(long Offset) const noexcept;

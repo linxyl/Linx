@@ -1,6 +1,6 @@
 #include "Linx/TestConfig.h"
 #ifdef TEST_UART
-#include "Linx/IO/Uart.h"
+#include "Linx/IO/Serial.h"
 #include "Linx/Utils/Debug.h"
 #include <thread>
 #include "Linx/Core.h"
@@ -12,13 +12,13 @@ int main()
 {
 	char writebuf[4]= "123" ;
 	char readbuf[4];
-	auto UartNames = Uart::GetAllUartNames();
-	DebugContainerEx(UartNames, 4);
+	auto SerialNames = Serial::GetAllSerialNames();
+	DebugContainerEx(SerialNames, 4);
 
-	UartConfig Config;
+	SerialConfig Config;
 	Config.bSync = true;
-	Uart uart;
-	if (!uart.Open(UartNames.back()))
+	Serial uart;
+	if (!uart.Open(SerialNames.back()))
 	{
 		cout << "Cannot open uart!\n";
 	}

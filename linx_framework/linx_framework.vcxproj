@@ -36,8 +36,8 @@
     <ClCompile Include="Linx\Core.cpp" />
     <ClCompile Include="Linx\IOStream\TestFileStream.cpp" />
     <ClCompile Include="Linx\IO\TestFile.cpp" />
-    <ClCompile Include="Linx\IO\TestUart.cpp" />
-    <ClCompile Include="Linx\IO\Uart.cpp" />
+    <ClCompile Include="Linx\IO\TestSerial.cpp" />
+    <ClCompile Include="Linx\IO\Serial.cpp" />
     <ClCompile Include="Linx\Math\DSP\TestFT.cpp" />
     <ClCompile Include="Linx\Math\MathLibrary.cpp" />
     <ClCompile Include="Linx\Math\TestSort.cpp" />
@@ -69,7 +69,7 @@
     <ClInclude Include="Linx\IOStream\Network\TcpServerStream.h" />
     <ClInclude Include="Linx\IOStream\Network\UdpStream.h" />
     <ClInclude Include="Linx\IOStream\StreambufBase.h" />
-    <ClInclude Include="Linx\IOStream\UartStream.h" />
+    <ClInclude Include="Linx\IOStream\SerialStream.h" />
     <ClInclude Include="Linx\IO\File.h" />
     <ClInclude Include="Linx\IO\IOBase.h" />
     <ClInclude Include="Linx\IO\Network\Base\SocketBase.h" />
@@ -78,7 +78,7 @@
     <ClInclude Include="Linx\IO\Network\TcpServerSocket.h" />
     <ClInclude Include="Linx\IO\Network\UdpSocket.h" />
     <ClInclude Include="Linx\Core.h" />
-    <ClInclude Include="Linx\IO\Uart.h" />
+    <ClInclude Include="Linx\IO\Serial.h" />
     <ClInclude Include="Linx\Math\DSP\FT.h" />
     <ClInclude Include="Linx\Math\MathLibrary.h" />
     <ClInclude Include="Linx\Math\Random.h" />

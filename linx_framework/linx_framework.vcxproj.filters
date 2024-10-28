@@ -84,10 +84,10 @@
     <ClCompile Include="Linx\Core.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Linx\IO\Uart.cpp">
+    <ClCompile Include="Linx\IO\Serial.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Linx\IO\TestUart.cpp">
+    <ClCompile Include="Linx\IO\TestSerial.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Linx\Protocol\Ini.cpp">
@@ -206,7 +206,7 @@
     <ClInclude Include="Linx\Core.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Linx\IO\Uart.h">
+    <ClInclude Include="Linx\IO\Serial.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Linx\Protocol\Ini.h">
@@ -251,7 +251,7 @@
     <ClInclude Include="Linx\IO\File.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Linx\IOStream\UartStream.h">
+    <ClInclude Include="Linx\IOStream\SerialStream.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Linx\Allocator\VirtualAllocator.h">

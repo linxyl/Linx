@@ -78,8 +78,10 @@ long Linx::File::Read(void* Buf, size_t BufSize) noexcept
 	return BytesRead;
 }
 
-long Linx::File::Write(const void* Buf, size_t BufSize) noexcept
+size_t Linx::File::Write(const void* Buf, size_t BufSize) noexcept
 {
+	Super::Write(Buf, BufSize);
+
 	if (ShouldRotate())
 	{
 		Rotate();
@@ -87,7 +89,7 @@ long Linx::File::Write(const void* Buf, size_t BufSize) noexcept
 
 	DWORD BytesWrite;
 	if (!WriteFile(Handle, Buf, BufSize, &BytesWrite, nullptr))
-		return -1;
+		return 0;
 	return BytesWrite;
 }
 
@@ -254,7 +256,7 @@ long Linx::File::Read(void* Buf, size_t BufSize) noexcept
 	return read(Handle, Buf, BufSize);
 }
 
-long Linx::File::Write(const void* Buf, size_t BufSize) noexcept
+size_t Linx::File::Write(const void* Buf, size_t BufSize) noexcept
 {
 	if (ShouldRotate())
 	{

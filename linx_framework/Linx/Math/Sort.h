@@ -129,7 +129,6 @@ namespace Linx
 			// 将当前根（最大值）移到数组末尾
 			std::swap(*InFirst, InFirst[i]);
 
-			// 调用 Heapify 来将剩余的堆重新调整为最大堆
 			Heapify(InFirst, InLast, i, 0, Pred);
 		}
 	}
@@ -145,7 +144,7 @@ namespace Linx
 	template<typename ItType, typename PredType>
 	ItType Partition(ItType InFirst, ItType InLast, PredType Pred)
 	{
-		auto pivot = *std::prev(InLast); // 选择最后一个元素作为基准
+		auto pivot = *std::prev(InLast);
 		auto i = InFirst;
 
 		for (auto j = InFirst; j != std::prev(InLast); ++j)
@@ -156,7 +155,7 @@ namespace Linx
 				++i;
 			}
 		}
-		std::iter_swap(i, std::prev(InLast)); // 将基准放到正确的位置
+		std::iter_swap(i, std::prev(InLast));
 		return i;
 	}
 

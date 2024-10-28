@@ -14,7 +14,7 @@
 
 namespace Linx
 {
-	namespace UartParam
+	namespace SerialParam
 	{
 #ifdef _WIN32
 		enum EBaudRate : uint32_t
@@ -141,16 +141,16 @@ namespace Linx
 #endif // _WIN32
 	}
 
-	struct UartConfig
+	struct SerialConfig
 	{
-		UartParam::EBaudRate Baudrate = UartParam::BR_115200;
-		UartParam::EParity Parity = UartParam::NoParity;
-		UartParam::EDataBits DataBits = UartParam::EightDataBits;
-		UartParam::EStopBits StopBits = UartParam::OneStopBit;
+		SerialParam::EBaudRate Baudrate = SerialParam::BR_115200;
+		SerialParam::EParity Parity = SerialParam::NoParity;
+		SerialParam::EDataBits DataBits = SerialParam::EightDataBits;
+		SerialParam::EStopBits StopBits = SerialParam::OneStopBit;
 		bool bSync = true;
 	};
 
-	struct UartTimeout
+	struct SerialTimeout
 	{
 		uint32_t ReadIntervalTimeout = -1;			/* Maximum time between read chars. */
 		uint32_t ReadTotalTimeoutMultiplier = 0;	/* Multiplier of characters.        */
@@ -159,35 +159,38 @@ namespace Linx
 		uint32_t WriteTotalTimeoutConstant = 0;		/* Constant in milliseconds.        */
 	};
 
-	class Uart : public IOBase
+	class Serial : public IOBase
 	{
 	public:
-		Uart() {};
-
-		/** Open Uart. */
-		Uart(const char* PortName, UartConfig InConfig = UartConfig());
-		inline Uart(const std::string& PortName, UartConfig InConfig = UartConfig()) :
-			Uart(PortName.c_str(), InConfig)
-		{};
-
-		virtual ~Uart() { Close(); }
+		using Super = IOBase;
 
 	public:
-		/** Open Uart. */
-		bool Open(const char* PortName, UartConfig InConfig = UartConfig());
-		inline bool Open(const std::string& PortName, UartConfig InConfig = UartConfig())
+		Serial() {};
+
+		/** Open Serial. */
+		Serial(const char* PortName, SerialConfig InConfig = SerialConfig());
+		inline Serial(const std::string& PortName, SerialConfig InConfig = SerialConfig()) :
+			Serial(PortName.c_str(), InConfig)
+		{};
+
+		virtual ~Serial() { Close(); }
+
+	public:
+		/** Open Serial. */
+		bool Open(const char* PortName, SerialConfig InConfig = SerialConfig());
+		inline bool Open(const std::string& PortName, SerialConfig InConfig = SerialConfig())
 		{
 			return Open(PortName.c_str(), InConfig);
 		}
 
-		/** Close Uart. */
+		/** Close Serial. */
 		void Close();
 
-		/** Read data from Uart. */
+		/** Read data from Serial. */
 		size_t Read(void* Buf, size_t Size);
 
-		/** Write data to Uart. */
-		size_t Write(void* Buf, size_t Size);
+		/** Write data to Serial. */
+		virtual size_t Write(void* Buf, size_t Size);
 
 		/**
 		 *  Set the size of the buffer.
@@ -195,16 +198,16 @@ namespace Linx
 		 */
 		bool SetBufSize(uint32_t ReadSize, uint32_t WriteSize) const;
 
-		/** Returns the Uart configuration. */
-		inline UartConfig GetConfig() const noexcept { return Config; }
+		/** Returns the Serial configuration. */
+		inline SerialConfig GetConfig() const noexcept { return Config; }
 
-		/** Returns all available Uart names. */
-		static std::vector<std::string> GetAllUartNames();
+		/** Returns all available Serial names. */
+		static std::vector<std::string> GetAllSerialNames();
 
 	public:
-		UartTimeout Timeout;
+		SerialTimeout Timeout;
 
 	private:
-		UartConfig Config;
+		SerialConfig Config;
 	};
 }

@@ -9,9 +9,9 @@ namespace Linx
 	template<typename Type>
 	inline Type Random(Type RangeFirst, Type RangeLast)
 	{
-		std::mt19937 gen(std::random_device{}()); // 以 rd() 作为种子的 Mersenne Twister 引擎  
+		std::mt19937 gen(std::random_device{}());  
 		using DisType = std::conditional_t<
-			is_floating_point_v<Type>,
+			std::is_floating_point_v<Type>,
 			std::uniform_real_distribution<>,
 			std::uniform_int_distribution<>>;
 	  
@@ -29,9 +29,9 @@ namespace Linx
 	template<typename Type, typename ItType>
 	void RandomSequence(Type RangeFirst, Type RangeLast, ItType OutFirst, ItType OutLast)
 	{
-		std::mt19937 gen(std::random_device{}()); // 以 rd() 作为种子的 Mersenne Twister 引擎  
+		std::mt19937 gen(std::random_device{}());  
 		using DisType = std::conditional_t<
-			is_floating_point_v<Type>,
+			std::is_floating_point_v<Type>,
 			std::uniform_real_distribution<>,
 			std::uniform_int_distribution<>>;
 		DisType Dis(RangeFirst, RangeLast);
