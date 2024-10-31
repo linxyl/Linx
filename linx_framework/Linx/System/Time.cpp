@@ -10,7 +10,7 @@
 using namespace Linx;
 using namespace std;
 
-Linx::TimeInfo Linx::GetTime()
+Linx::TimeInfo Linx::GetTime() noexcept
 {
 	auto now = std::chrono::system_clock::now();  
 	std::time_t now_c = std::chrono::system_clock::to_time_t(now);  
@@ -33,7 +33,7 @@ Linx::TimeInfo Linx::GetTime()
 	return Time;
 }
 
-long long Linx::GetTotalMilliSeconds()
+long long Linx::GetTotalMilliSeconds() noexcept
 {
 	auto now = std::chrono::system_clock::now();  
 	auto duration = now.time_since_epoch();  

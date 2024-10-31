@@ -10,9 +10,9 @@ namespace Linx
 	 */
 	class TcpServerSocket : public TcpSocket
 	{
+	public:
 		using Super = TcpSocket;
 
-	public:
 		TcpServerSocket();
 
 	public:

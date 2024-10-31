@@ -7,6 +7,7 @@
 #include "TcpClientSocket.h"
 #include "TcpServerSocket.h"
 #include "UdpSocket.h"
+#include "IcmpSocket.h"
 #include "Linx/IO/File.h"
 #include "Linx/Core.h"
 
@@ -16,6 +17,7 @@ using namespace Linx;
 void TestTcpClient();
 void TestTcpServer();
 void TestUdpSocket();
+void TestIcmpSocket();
 
 mutex m;
 
@@ -32,6 +34,10 @@ int main()
 	cout << "\nUDP test" << endl;
 
 	TestUdpSocket();
+
+	cout << "\nIcmp test" << endl;
+
+	TestIcmpSocket();
 
 	getchar();
 }
@@ -66,12 +72,12 @@ void TestTcpClient()
 	cout << "tcs recv " << buf << endl;
 	m.unlock();
 
-	if (tcs.Recv(buf, 4) <= 0)
-	{
-		cout << "tcs recv file failed\n";
-		return;
-	}
-	cout << "tcs recv file: " << buf << endl;
+	//if (tcs.Recv(buf, 4) <= 0)
+	//{
+	//	cout << "tcs recv file failed\n";
+	//	return;
+	//}
+	//cout << "tcs recv file: " << buf << endl;
 	///////////////////////////////////////
 
 	tcs.Close();
@@ -120,15 +126,15 @@ void TestTcpServer()
 	cout << "tss send 456\n";
 	m.unlock();
 
-	File file("sendfile.txt");
-	m.lock();
-	if (tss.SendFile(file, 3) <= 0)
-	{
-		cout << "tss send file failed\n";
-		return;
-	}
-	cout << "tss send file: abc\n";
-	m.unlock();
+	//File file("sendfile.txt");
+	//m.lock();
+	//if (tss.SendFile(file, 3) <= 0)
+	//{
+	//	cout << "tss send file failed\n";
+	//	return;
+	//}
+	//cout << "tss send file: abc\n";
+	//m.unlock();
 	///////////////////////////////////////
 
 	tss.Close();
@@ -149,5 +155,10 @@ void TestUdpSocket()
 	cout << "us recv " << buf << endl;
 
 	us.Close();
+}
+
+void TestIcmpSocket()
+{
+	IcmpSocket::PingTest("www.baidu.com");
 }
 #endif

@@ -153,6 +153,9 @@
     <ClCompile Include="Linx\Math\TestSort.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Linx\IO\Network\IcmpSocket.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Linx\Containers\RingBuffer.h">
@@ -279,6 +282,15 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Linx\Math\Random.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Linx\IO\Network\IcmpSocket.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Linx\Math\Check.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Linx\System\Process.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

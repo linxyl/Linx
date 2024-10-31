@@ -6,9 +6,9 @@ namespace Linx
 {
 	class UdpSocket : public SocketBase
 	{
+	public:
 		using Super = SocketBase;
 
-	public:
 		UdpSocket();
 
 	public:

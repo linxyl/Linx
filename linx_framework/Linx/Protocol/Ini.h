@@ -36,7 +36,7 @@ namespace Linx
 	class IniFile : public Ini
 	{
 	public:
-		IniFile() = default;
+		inline IniFile() { Load(); }
 		inline IniFile(const std::string& InFilename) { Open(InFilename); }
 
 	public:

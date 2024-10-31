@@ -54,36 +54,15 @@ namespace Linx
 		inline void Unlock() { LockInst.unlock(); }
 
 	protected:
-		virtual std::streamsize xsputn(const char* Ptr, std::streamsize Count) override
-		{
-			if (CurrentLevel < LogLevel || !LOG_ENABLE)
-			{
-				return std::streambuf::xsputn(Ptr, Count);
-			}
-			return Super::xsputn(Ptr, Count);
-		}
+		// Begin std::basic_streambuf Interface.
+		virtual std::streamsize xsputn(const char* Ptr, std::streamsize Count) override;
+		virtual int sync() override;
+		// End std::basic_streambuf Interface.
 
-		virtual int sync() override
-		{
-			auto Ret = Super::sync();
-			Unlock();
-			return Ret;
-		}
-
-		virtual int FlushWriteBuffer() override
-		{
-			if (CurrentLevel < LogLevel || !LOG_ENABLE)
-			{
-				ClearWriteBuffer();
-				return 0;
-			}
-			return Super::FlushWriteBuffer();
-		}
-
-		virtual void ClearWriteBuffer() override
-		{
-			Super::ClearWriteBuffer();
-		}
+		// Begin StreambufBase Interface.
+		virtual int FlushWriteBuffer() override;
+		virtual void ClearWriteBuffer() override;
+		// End StreambufBase Interface.
 
 	private:
 		ELogLevel::Type LogLevel = ELogLevel::LevelDebug;

@@ -12,7 +12,6 @@ int main()
 	try
 	{
 		IniFile file("test.ini");
-		file.Load();
 		file.Set({ "Test", "Key1" }, 3);
 		file.Set({ "Test", "Key2" }, "abc");
 		file.Set({ "II", "Key" }, 123);

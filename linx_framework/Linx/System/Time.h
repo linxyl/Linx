@@ -17,10 +17,10 @@ namespace Linx
 	};
 
 	/** Get current time. */
-	TimeInfo GetTime();
+	TimeInfo GetTime() noexcept;
 
 	/** Gets total milliseconds. */
-	long long GetTotalMilliSeconds();
+	long long GetTotalMilliSeconds() noexcept;
 
 	/**
 	 * Get the string of current time.

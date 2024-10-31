@@ -8,6 +8,7 @@
 #endif
 #else
 #include <arpa/inet.h>
+#include <netdb.h>
 #endif
 
 namespace Linx
@@ -36,8 +37,8 @@ namespace Linx
 		/** Close this socket */
 		virtual void Close() noexcept;
 
-		/** Set the IP and port of the target address to communicate with. */
-		virtual void SetTargetAddr(const char* IP, int Port) noexcept;
+		/** Set the IP or domain name and port of the target address to communicate with. */
+		hostent* SetTargetAddr(const char* Target, int Port) noexcept;
 
 		/** Select a port to receive remote message. */
 		bool Bind(int Port) noexcept;

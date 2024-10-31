@@ -29,6 +29,7 @@
     <ClCompile Include="Linx\IO\File.cpp" />
     <ClCompile Include="Linx\IO\Network\Base\SocketBase.cpp" />
     <ClCompile Include="Linx\IO\Network\Base\TcpSocket.cpp" />
+    <ClCompile Include="Linx\IO\Network\IcmpSocket.cpp" />
     <ClCompile Include="Linx\IO\Network\TcpClientSocket.cpp" />
     <ClCompile Include="Linx\IO\Network\TcpServerSocket.cpp" />
     <ClCompile Include="Linx\IO\Network\TestNetwork.cpp" />
@@ -74,11 +75,13 @@
     <ClInclude Include="Linx\IO\IOBase.h" />
     <ClInclude Include="Linx\IO\Network\Base\SocketBase.h" />
     <ClInclude Include="Linx\IO\Network\Base\TcpSocket.h" />
+    <ClInclude Include="Linx\IO\Network\IcmpSocket.h" />
     <ClInclude Include="Linx\IO\Network\TcpClientSocket.h" />
     <ClInclude Include="Linx\IO\Network\TcpServerSocket.h" />
     <ClInclude Include="Linx\IO\Network\UdpSocket.h" />
     <ClInclude Include="Linx\Core.h" />
     <ClInclude Include="Linx\IO\Serial.h" />
+    <ClInclude Include="Linx\Math\Check.h" />
     <ClInclude Include="Linx\Math\DSP\FT.h" />
     <ClInclude Include="Linx\Math\MathLibrary.h" />
     <ClInclude Include="Linx\Math\Random.h" />
@@ -86,6 +89,7 @@
     <ClInclude Include="Linx\Protocol\Ini.h" />
     <ClInclude Include="Linx\System\Disk.h" />
     <ClInclude Include="Linx\System\MemInfo.h" />
+    <ClInclude Include="Linx\System\Process.h" />
     <ClInclude Include="Linx\System\Time.h" />
     <ClInclude Include="Linx\TestConfig.h" />
     <ClInclude Include="Linx\Thread\Lock\NoLock.h" />

@@ -9,9 +9,9 @@ namespace Linx
 	 */
 	class TcpSocket : public SocketBase
 	{
+	public:
 		using Super = SocketBase;
 
-	public:
 		TcpSocket() = default;
 
 	public:
