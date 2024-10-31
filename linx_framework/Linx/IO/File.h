@@ -125,17 +125,17 @@ namespace Linx
 		/*               Set the splitting mode of files.                   */
 		/************************************************************************/
 
-		/** Set the number of days for splitting each file. */
-		inline void SetSplitByDay(size_t Days) noexcept { SplitMilliSeconds = Days * 24 * 60 * 60 * 1000; SplitSize = 0; }
-
-		/** Set the number of hours each file splits. */
-		inline void SetSplitByHour(size_t Hours) noexcept { SplitMilliSeconds = Hours * 60 * 60 * 1000; SplitSize = 0; }
-
-		/** Set the number of minutes each file splits. */
-		inline void SetSplitByMinute(size_t Minutes) noexcept { SplitMilliSeconds = Minutes * 60 * 1000; SplitSize = 0; }
-
 		/** Set the number of seconds each file splits. */
 		inline void SetSplitBySeconds(size_t Seconds) noexcept { SplitMilliSeconds = Seconds * 1000; SplitSize = 0; }
+
+		/** Set the number of minutes each file splits. */
+		inline void SetSplitByMinutes(size_t Minutes) noexcept { SplitMilliSeconds = Minutes * 60 * 1000; SplitSize = 0; }
+
+		/** Set the number of hours each file splits. */
+		inline void SetSplitByHours(size_t Hours) noexcept { SplitMilliSeconds = Hours * 60 * 60 * 1000; SplitSize = 0; }
+
+		/** Set the number of days for splitting each file. */
+		inline void SetSplitByDays(size_t Days) noexcept { SplitMilliSeconds = Days * 24 * 60 * 60 * 1000; SplitSize = 0; }
 
 		/** Set the number of bytes each file splits. */
 		inline void SetSplitBySize(size_t Size) noexcept { SplitSize = Size; SplitMilliSeconds = 0; }

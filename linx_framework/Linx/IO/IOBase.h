@@ -41,10 +41,9 @@ namespace Linx
 #endif
 		}
 
+		bool bShouldPrint = false;
+
 	protected:
 		HANDLE Handle = INVALID_HANDLE_VALUE;
-
-	private:
-		bool bShouldPrint = false;
 	};
 }

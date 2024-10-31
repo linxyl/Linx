@@ -2,10 +2,10 @@
 
 //#define TEST_RING_BUFFER
 //#define TEST_VARIABLE_STRING
-//#define TEST_LOGGER
+#define TEST_LOGGER
 //#define TEST_STRING_STREAM
 //#define TEST_FT
-#define TEST_SORT
+//#define TEST_SORT
 //#define TEST_NETWORK
 //#define TEST_FILE_STREAM
 //#define TEST_NETWORK_STREAM

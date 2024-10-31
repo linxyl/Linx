@@ -6,7 +6,8 @@
 #include <unistd.h>
 #endif
 
-#include "Config.h"
+//#include "Config.h"
+#include "Utils/Logger.h"
 
 namespace Linx
 {

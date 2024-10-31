@@ -11,14 +11,14 @@ void f1()
 {
 	while (1)
 	{
-		LOG_ERROR << 11111111 << endl;
+		LOG_ERROR << 11111111 << "aaa" << endl;
 	}
 }
 void f2()
 {
 	while (1)
 	{
-		LOG_FATAL << 22222222 << endl;
+		LOG_FATAL << "bbb" << 22222222 << endl;
 	}
 }
 

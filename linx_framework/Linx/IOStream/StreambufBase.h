@@ -15,6 +15,7 @@ namespace Linx
 
 	public:
 		StreambufBase(IOType* InIO);
+		virtual ~StreambufBase() { sync(); }
 
 	protected:
 		// Begin std::basic_streambuf Interface.
@@ -102,6 +103,7 @@ namespace Linx
 	template<class IOType>
 	std::streamsize Linx::StreambufBase<IOType>::xsputn(const char* Ptr, std::streamsize Count)
 	{
+		FlushWriteBuffer();
 		return IO->Write(Ptr, Count);
 	}
 
@@ -110,7 +112,7 @@ namespace Linx
 	{
 		if (traits_type::eof() == FlushWriteBuffer())
 		{
-			return -1;
+			return 0;
 		}
 		return Super::sync();
 	}
