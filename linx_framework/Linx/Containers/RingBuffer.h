@@ -525,8 +525,8 @@ namespace Linx
 		MaxLen(0),
 		Head(this),
 		Rear(this),
-		ReadMode(ERingBufferReadMode::ReadAll),
-		WriteMode(ERingBufferWriteMode::Fill)
+		ReadMode(ERingBufferReadMode::ReadNothing),
+		WriteMode(ERingBufferWriteMode::WriteNothing)
 	{
 	}
 
