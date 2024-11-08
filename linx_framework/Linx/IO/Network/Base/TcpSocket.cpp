@@ -2,9 +2,11 @@
 #ifdef _WIN32
 #include <WinSock2.h>
 #include <mswsock.h>
+#include <ws2ipdef.h>
 #pragma comment(lib, "Mswsock.lib")
 #else
 #include <sys/sendfile.h>
+#include <netinet/tcp.h>
 #endif
 #include "TcpSocket.h"
 #include "Linx/IO/File.h"
@@ -56,4 +58,27 @@ long TcpSocket::SendFile(HANDLE InHandle, size_t Size)
 long TcpSocket::SendFile(const class File& InFile, size_t Size)
 {
 	return SendFile(InFile.GetHandle(), Size);
+}
+
+bool TcpSocket::KeepAlive(bool Val, int Idle, int Interval, int Count)
+{
+	int optval = (int)Val;
+	int optlen = sizeof(optval);
+	if (setsockopt(Sock, SOL_SOCKET, SO_KEEPALIVE, (char*)&optval, optlen) < 0)
+	{
+		return false;
+	}
+	if (setsockopt(Sock, IPPROTO_TCP, TCP_KEEPIDLE, (char*)&Idle, sizeof(Idle)) < 0)
+	{
+		return false;
+    }
+    if (setsockopt(Sock, IPPROTO_TCP, TCP_KEEPINTVL, (char*)&Interval, sizeof(Interval)) < 0)
+	{
+		return false;
+    }
+    if (setsockopt(Sock, IPPROTO_TCP, TCP_KEEPCNT, (char*)&Count, sizeof(Count)) < 0)
+	{
+		return false;
+    }
+	return true;
 }

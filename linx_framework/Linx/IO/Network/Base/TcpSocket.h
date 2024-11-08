@@ -28,6 +28,8 @@ namespace Linx
 		long SendFile(HANDLE InHandle, size_t Size);
 		long SendFile(const class File& InFile, size_t Size);
 
+		bool KeepAlive(bool Val = true, int Idle = 1, int Interval = 1, int Count = 3);
+
 	protected:
 		/** Server socket */
 		socket_type* pServerSock;
