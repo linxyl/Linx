@@ -6,16 +6,15 @@
 #include <unistd.h>
 #endif
 
-//#include "Config.h"
-#include "Utils/Logger.h"
-
 namespace Linx
 {
 	void LinxInit();
 
 #ifdef _WIN32
-	inline void Sleep(int Milliseconds) { ::Sleep(Milliseconds); }
+	inline void SleepS(int Seconds) { ::Sleep(Seconds * 1000); }
+	inline void SleepM(int Milliseconds) { ::Sleep(Milliseconds); }
 #else
-	inline void Sleep(int Milliseconds) { usleep(Milliseconds * 1000); }
+	inline void SleepS(int Seconds) { ::sleep(Seconds); }
+	inline void SleepM(int Milliseconds) { usleep(Milliseconds * 1000); }
 #endif
 }

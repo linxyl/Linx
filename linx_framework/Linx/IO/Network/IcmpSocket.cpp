@@ -1,3 +1,4 @@
+#include <string.h>
 #include <stdexcept>
 #include <memory>
 #include <iostream>
@@ -92,6 +93,11 @@ bool IcmpSocket::PingTest(const char* Target, int Count /*= 4*/, int Size /*= 32
 	PingReply Reply;
 	size_t SuccessNum = 0;
 
+	if (!host)
+	{
+		return false;
+	}
+
 	cout << "PING " << host->h_name << " (" << inet_ntoa(*(in_addr*)*host->h_addr_list) << ") " << Size << " bytes of data" << endl;
 	for (int i = 1; i <= Count; i++)
 	{
@@ -116,7 +122,7 @@ bool IcmpSocket::PingTest(const char* Target, int Count /*= 4*/, int Size /*= 32
 
 		if (i != Count)
 		{
-			Sleep(Interval);
+			SleepM(Interval);
 		}
 	}
 	cout << "\n--- " << host->h_name << " ping statistics ---\n";

@@ -25,7 +25,7 @@ int main()
 	
 	uart.Write(writebuf, sizeof(writebuf));
 
-	Sleep(10);
+	SleepM(10);
 
 	uart.Read(readbuf, sizeof(readbuf));
 	DebugContainerEx(readbuf);

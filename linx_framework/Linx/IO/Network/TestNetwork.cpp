@@ -59,7 +59,7 @@ void TestTcpClient()
 	m.lock();
 	cout << "tcs send 123\n";
 	m.unlock();
-	Sleep(10);
+	SleepM(10);
 
 	m.lock();
 	char buf[4];
@@ -115,7 +115,7 @@ void TestTcpServer()
 	cout << "tss recv " << buf << endl;
 	m.unlock();
 
-	Sleep(10);
+	SleepM(10);
 
 	if (tss.Send("456", 4) <= 0)
 	{
@@ -159,6 +159,9 @@ void TestUdpSocket()
 
 void TestIcmpSocket()
 {
-	IcmpSocket::PingTest("www.baidu.com");
+	if (!IcmpSocket::PingTest("192.168.31.77"))
+	{
+		cout << "Ping failed" << endl;
+	}
 }
 #endif
