@@ -1,4 +1,5 @@
 #include <string.h>
+#include <stdexcept>
 #ifdef __linux__
 #include <unistd.h>
 #include <errno.h>
@@ -9,7 +10,8 @@
 
 using namespace Linx;
 
-SocketBase::SocketBase()
+SocketBase::SocketBase() :
+	bRecvAll(0)
 {
 #ifdef _WIN32
 	WSADATA wsa;
@@ -26,13 +28,23 @@ SocketBase::~SocketBase()
 	Close();
 }
 
-void SocketBase::SetTargetAddr(const char* IP, int Port) noexcept
+hostent* SocketBase::SetTargetAddr(const char* Target, int Port) noexcept
 {
+    auto* host = gethostbyname(Target);
+    if (host == nullptr)
+	{
+        return nullptr;
+    }
+	char cp[16];
+	strcpy(cp, inet_ntoa(*(in_addr*)*host->h_addr_list));
+
 	memset(&TargetAddr, 0, sizeof(TargetAddr));
 
 	TargetAddr.sin_family = AF_INET;
 	TargetAddr.sin_port = htons(Port);
-	TargetAddr.sin_addr.s_addr = inet_addr(IP);
+	TargetAddr.sin_addr.s_addr = inet_addr(cp);
+
+	return host;
 }
 
 bool SocketBase::Bind(int Port) noexcept

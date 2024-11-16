@@ -7,12 +7,16 @@ using namespace Linx;
 
 int main()
 {
-	File f("test.txt", EFileFlag::EWrite | EFileFlag::ECreate | EFileFlag::EOpen);
-	char buf[4096];
-	while (1)
+	File f("test.txt");
+	char buf[4096] = "abcd";
+	for (int i = 0; i < 1024; i++)
 	{
-		auto a = f.Write(buf, sizeof(buf));
+		f.Write(buf, sizeof(buf));
 	}
+
+	char* p = f.MemMap(1024);
+	p[1] = '2';
+
 	f.Close();
 }
 

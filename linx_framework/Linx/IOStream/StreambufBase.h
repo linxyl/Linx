@@ -14,7 +14,8 @@ namespace Linx
 		static constexpr size_t ReserveSize = 4;
 
 	public:
-		StreambufBase();
+		StreambufBase(IOType* InIO);
+		virtual ~StreambufBase() { sync(); }
 
 	protected:
 		// Begin std::basic_streambuf Interface.
@@ -33,12 +34,13 @@ namespace Linx
 		char ReadBuf[BufSize];
 		char WriteBuf[BufSize];
 
-		IOType IO;
+		IOType* IO;
 	};
 
+
 	template<class IOType>
-	StreambufBase<IOType>::StreambufBase() :
-		IO()
+	StreambufBase<IOType>::StreambufBase(IOType* InIO) :
+		IO(InIO)
 	{
 		// One character less to let the BufSize-th character cause a call of overflow()
 		setg(ReadBuf + ReserveSize, ReadBuf + ReserveSize, ReadBuf + ReserveSize);
@@ -95,13 +97,14 @@ namespace Linx
 	template<class IOType>
 	std::streamsize Linx::StreambufBase<IOType>::xsgetn(char* Ptr, std::streamsize Count)
 	{
-		return IO.Read(Ptr, Count);
+		return IO->Read(Ptr, Count);
 	}
 
 	template<class IOType>
 	std::streamsize Linx::StreambufBase<IOType>::xsputn(const char* Ptr, std::streamsize Count)
 	{
-		return IO.Write(Ptr, Count);
+		FlushWriteBuffer();
+		return IO->Write(Ptr, Count);
 	}
 
 	template<class IOType>
@@ -109,7 +112,7 @@ namespace Linx
 	{
 		if (traits_type::eof() == FlushWriteBuffer())
 		{
-			return -1;
+			return 0;
 		}
 		return Super::sync();
 	}
@@ -119,7 +122,7 @@ namespace Linx
 	{
 		int Count = pptr() - pbase();
 
-		if (IO.Write(WriteBuf, Count) <= 0)
+		if (IO->Write(WriteBuf, Count) <= 0)
 		{
 			return traits_type::eof();
 		}

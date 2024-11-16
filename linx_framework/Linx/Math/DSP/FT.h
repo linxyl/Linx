@@ -5,7 +5,7 @@
 #include <type_traits>
 
 #include "Linx/Utils/TypeTraits.h"
-#include "Linx/Math/MathUtils.h"
+#include "Linx/Math/MathLibrary.h"
 
 namespace Linx
 {

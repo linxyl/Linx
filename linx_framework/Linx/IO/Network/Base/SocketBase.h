@@ -1,10 +1,14 @@
 #pragma once
 
+#include <stdint.h>
 #ifdef _WIN32
 #include <windows.h>
+#ifdef _MSC_VER
 #pragma comment(lib, "ws2_32.lib")
+#endif
 #else
 #include <arpa/inet.h>
+#include <netdb.h>
 #endif
 
 namespace Linx
@@ -18,6 +22,7 @@ namespace Linx
 #ifdef _WIN32
 		using socket_type = SOCKET;
 #else
+		using HANDLE = int;
 		using socket_type = int;
 #endif
 
@@ -32,8 +37,8 @@ namespace Linx
 		/** Close this socket */
 		virtual void Close() noexcept;
 
-		/** Set the IP and port of the target address to communicate with. */
-		virtual void SetTargetAddr(const char* IP, int Port) noexcept;
+		/** Set the IP or domain name and port of the target address to communicate with. */
+		hostent* SetTargetAddr(const char* Target, int Port) noexcept;
 
 		/** Select a port to receive remote message. */
 		bool Bind(int Port) noexcept;
@@ -50,11 +55,30 @@ namespace Linx
 		 */
 		virtual int Send(const char* buf, size_t bufsize) noexcept = 0;
 
-		/** Same as Recv. */
-		inline int Read(char* buf, size_t bufsize) noexcept { return Recv(buf, bufsize); }
+		/** Same as Recv, but returns 0 if failed. */
+		inline size_t Read(char* buf, size_t bufsize) noexcept
+		{
+			auto Ret = Recv(buf, bufsize);
+			if (Ret < 0)
+			{
+				return 0;
+			}
+			return Ret;
+		}
 
-		/** Sample as Send. */
-		inline int Write(const char* buf, size_t bufsize) noexcept { return Send(buf, bufsize); }
+		/** Sample as Send, but returns 0 if failed. */
+		inline size_t Write(const char* buf, size_t bufsize) noexcept
+		{
+			auto Ret = Send(buf, bufsize);
+			if (Ret < 0)
+			{
+				return 0;
+			}
+			return Ret;
+		}
+
+		/** Returns the socket. */
+		inline socket_type GetSocket() const noexcept { return Sock; }
 
 	public:
 		/** Set the timeout period for receiving. */
@@ -68,6 +92,9 @@ namespace Linx
 
 		/** Set the size of the sending buffer. */
 		void SetSendBufSize(int size) noexcept;
+
+		/** Set whether to receive all the data of the requested length before returning. */
+		inline void SetRecvAll(bool Val) noexcept { bRecvAll = Val; }
 
 	public:
 		/** Get the number of the last error. */
@@ -83,5 +110,7 @@ namespace Linx
 		sockaddr_in Addr;
 		/** Stores the target socket information */
 		sockaddr_in TargetAddr;
+
+		uint8_t bRecvAll : 1;
 	};
 }

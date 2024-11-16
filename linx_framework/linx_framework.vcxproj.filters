@@ -84,10 +84,10 @@
     <ClCompile Include="Linx\Core.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Linx\IO\Uart.cpp">
+    <ClCompile Include="Linx\IO\Serial.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Linx\IO\TestUart.cpp">
+    <ClCompile Include="Linx\IO\TestSerial.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Linx\Protocol\Ini.cpp">
@@ -136,6 +136,24 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Linx\Allocator\TestFileAllocator.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Linx\System\TestMemInfo.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Linx\System\MemInfo.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Linx\System\Disk.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Linx\System\TestDisk.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Linx\Math\TestSort.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Linx\IO\Network\IcmpSocket.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -191,7 +209,7 @@
     <ClInclude Include="Linx\Core.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Linx\IO\Uart.h">
+    <ClInclude Include="Linx\IO\Serial.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Linx\Protocol\Ini.h">
@@ -233,28 +251,10 @@
     <ClInclude Include="Linx\IOStream\StreambufBase.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Linx\IO\Network\ITcpServerSocket.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Linx\IO\Network\Base\ISocketBase.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Linx\IO\Network\ITcpClientSocket.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Linx\IO\Network\IUdpSocket.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Linx\IO\File.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Linx\IO\IFile.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Linx\IO\IUart.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Linx\IOStream\UartStream.h">
+    <ClInclude Include="Linx\IOStream\SerialStream.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Linx\Allocator\VirtualAllocator.h">
@@ -267,6 +267,30 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Linx\Thread\Lock\NoLock.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Linx\IO\IOBase.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Linx\System\MemInfo.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Linx\System\Disk.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Linx\Math\Sort.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Linx\Math\Random.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Linx\IO\Network\IcmpSocket.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Linx\Math\Check.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Linx\System\Process.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

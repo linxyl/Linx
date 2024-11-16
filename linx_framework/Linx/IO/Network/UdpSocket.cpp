@@ -1,4 +1,7 @@
 #include <iostream>
+#ifdef _WIN32
+#include <WinSock2.h>
+#endif
 #include "UdpSocket.h"
 
 using namespace Linx;
@@ -13,7 +16,7 @@ void UdpSocket::Init()
 	Super::Init();
 
 	Sock = socket(AF_INET, SOCK_DGRAM, 0);
-	if(Sock < 0)
+	if((int)Sock < 0)
 	{
 		throw std::logic_error("Create socket failed\n");
 	}
@@ -26,7 +29,7 @@ int UdpSocket::Recv(char* buf, size_t bufsize) noexcept
 #else
 	socklen_t addr_len = sizeof(TargetAddr);
 #endif
-	int ret = recvfrom(Sock, buf, bufsize, 0, (sockaddr*)&TargetAddr, &addr_len);
+	int ret = recvfrom(Sock, buf, bufsize, bRecvAll ? MSG_WAITALL : 0, (sockaddr*)&TargetAddr, &addr_len);
 
 	return ret;
 }

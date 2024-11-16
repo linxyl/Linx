@@ -10,9 +10,9 @@ namespace Linx
 	 */
 	class TcpServerSocket : public TcpSocket
 	{
+	public:
 		using Super = TcpSocket;
 
-	public:
 		TcpServerSocket();
 
 	public:
@@ -42,9 +42,5 @@ namespace Linx
 	private:
 		/** Connected client sockets */
 		std::set<socket_type> ClientSockets;
-
-	private:
-		/** @note Should not be called. */
-		virtual void SetTargetAddr(const char* IP, int port) noexcept {}
 	};
 }

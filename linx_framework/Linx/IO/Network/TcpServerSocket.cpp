@@ -33,7 +33,7 @@ bool TcpServerSocket::Accept(bool bSwitchClient) noexcept
 #endif
 
 	socket_type AcceptSocket;
-	if((AcceptSocket = accept(Sock,(sockaddr*)&TargetAddr, &len)) == -1)
+	if((AcceptSocket = accept(Sock,(sockaddr*)&TargetAddr, &len)) == (socket_type)-1)
 	{
 		return false;
 	}

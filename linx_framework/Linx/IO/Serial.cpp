@@ -1,4 +1,4 @@
-#include "Linx/IO/Uart.h"
+#include "Linx/IO/Serial.h"
 #ifndef _WIN32
 #include <string.h>
 #include <fcntl.h>
@@ -9,7 +9,7 @@
 
 using namespace std;
 using namespace Linx;
-using namespace UartParam;
+using namespace SerialParam;
 
 #ifdef _WIN32
 
@@ -17,23 +17,23 @@ using namespace UartParam;
 /*                       Windows Definition                             */
 /************************************************************************/
 
-Linx::Uart::Uart(const char* PortName, UartConfig InConfig)
+Linx::Serial::Serial(const char* PortName, SerialConfig InConfig)
 {
 	Open(PortName, InConfig);
 }
 
-bool Linx::Uart::Open(const char* PortName, UartConfig InConfig)
+bool Linx::Serial::Open(const char* PortName, SerialConfig InConfig)
 {
 	if (InConfig.bSync)
 	{
-		hCom = CreateFile(PortName, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
+		Handle = CreateFile(PortName, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
 	}
 	else
 	{
-		hCom = CreateFile(PortName, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_FLAG_OVERLAPPED, NULL);
+		Handle = CreateFile(PortName, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_FLAG_OVERLAPPED, NULL);
 	}
 
-	if (hCom == (HANDLE)-1)
+	if (Handle == (HANDLE)-1)
 	{
 		return false;
 	}
@@ -81,7 +81,7 @@ bool Linx::Uart::Open(const char* PortName, UartConfig InConfig)
 		break;
 	}
 
-	if (!SetCommState(hCom, &p))
+	if (!SetCommState(Handle, &p))
 	{
 		return false;
 	}
@@ -92,31 +92,35 @@ bool Linx::Uart::Open(const char* PortName, UartConfig InConfig)
 	TempTimeout.ReadTotalTimeoutConstant = Timeout.ReadTotalTimeoutConstant;
 	TempTimeout.WriteTotalTimeoutMultiplier = Timeout.WriteTotalTimeoutMultiplier;
 	TempTimeout.WriteTotalTimeoutConstant = Timeout.WriteTotalTimeoutConstant;
-	SetCommTimeouts(hCom, &TempTimeout);
+	SetCommTimeouts(Handle, &TempTimeout);
 
 	// Clear buffer
-	PurgeComm(hCom, PURGE_TXCLEAR | PURGE_RXCLEAR);
+	PurgeComm(Handle, PURGE_TXCLEAR | PURGE_RXCLEAR);
 
 	Config = InConfig;
 	return true;
 }
 
-void Uart::Close()
+void Serial::Close()
 {
-	if (INVALID_HANDLE_VALUE != hCom)
+	if (INVALID_HANDLE_VALUE != Handle)
 	{
-		CloseHandle(hCom);
-		hCom = INVALID_HANDLE_VALUE;
+		CloseHandle(Handle);
+		Handle = INVALID_HANDLE_VALUE;
 	}
 }
 
-size_t Uart::Read(void* Buf, size_t Size)
+size_t Serial::Read(void* Buf, size_t Size)
 {
 	if (Config.bSync)
 	{
 		DWORD wCount; 
-		BOOL bReadStat = ReadFile(hCom, Buf, Size, &wCount, NULL); 
+		BOOL bReadStat = ReadFile(Handle, Buf, Size, &wCount, NULL);
 
+		if (!bReadStat)
+		{
+			return 0;
+		}
 		return wCount;
 	}
 	else
@@ -129,21 +133,21 @@ size_t Uart::Read(void* Buf, size_t Size)
 		memset(&m_osRead, 0, sizeof(m_osRead));
 		m_osRead.hEvent = CreateEvent(NULL, TRUE, FALSE, nullptr);
 
-		ClearCommError(hCom, &dwErrorFlags, &comStat); 
+		ClearCommError(Handle, &dwErrorFlags, &comStat); 
 		if (!comStat.cbInQue)
 			return 0; 
 									   
-		BOOL bReadStat = ReadFile(hCom, Buf, wCount, &wCount, &m_osRead); 
+		BOOL bReadStat = ReadFile(Handle, Buf, Size, &wCount, &m_osRead);
 
 		if (!bReadStat)
 		{
 			if (GetLastError() == ERROR_IO_PENDING) 
 			{
-				GetOverlappedResult(hCom, &m_osRead, &wCount, TRUE);
+				GetOverlappedResult(Handle, &m_osRead, &wCount, TRUE);
 			}
 			else
 			{
-				ClearCommError(hCom, &dwErrorFlags, &comStat); 
+				ClearCommError(Handle, &dwErrorFlags, &comStat); 
 				CloseHandle(m_osRead.hEvent); 
 				return 0;
 			}
@@ -153,12 +157,14 @@ size_t Uart::Read(void* Buf, size_t Size)
 	}
 }
 
-size_t Uart::Write(void* Buf, size_t Size)
+size_t Serial::Write(void* Buf, size_t Size)
 {
+	Super::Write(Buf, Size);
+
 	if (Config.bSync)
 	{
 		DWORD dwBytesWrite = Size; 
-		BOOL bWriteStat = WriteFile( hCom, Buf, dwBytesWrite, &dwBytesWrite, NULL ); 
+		BOOL bWriteStat = WriteFile( Handle, Buf, dwBytesWrite, &dwBytesWrite, NULL ); 
 
 		if (!bWriteStat)
 		{
@@ -176,8 +182,8 @@ size_t Uart::Write(void* Buf, size_t Size)
 		memset(&m_osWrite, 0, sizeof(m_osWrite));
 		m_osWrite.hEvent = CreateEvent(NULL, TRUE, FALSE, nullptr);
 
-		ClearCommError(hCom, &dwErrorFlags, &comStat); 
-		BOOL bWriteStat = WriteFile( hCom, Buf, dwBytesWrite, &dwBytesWrite, &m_osWrite ); 
+		ClearCommError(Handle, &dwErrorFlags, &comStat); 
+		BOOL bWriteStat = WriteFile( Handle, Buf, dwBytesWrite, &dwBytesWrite, &m_osWrite ); 
 
 		if (!bWriteStat)
 		{
@@ -187,7 +193,7 @@ size_t Uart::Write(void* Buf, size_t Size)
 			}
 			else
 			{
-				ClearCommError(hCom, &dwErrorFlags, &comStat); 
+				ClearCommError(Handle, &dwErrorFlags, &comStat); 
 				CloseHandle(m_osWrite.hEvent); 
 				return 0;
 			}
@@ -196,16 +202,15 @@ size_t Uart::Write(void* Buf, size_t Size)
 	}
 }
 
-std::vector<std::string> Uart::GetAllUartNames()
+std::vector<std::string> Serial::GetAllSerialNames()
 {
-	vector<string> Uarts;
+	vector<string> Serials;
 	HKEY hKey;
 	char portName[256], commName[256];
 	
-	if (ERROR_SUCCESS == ::RegOpenKeyEx(HKEY_LOCAL_MACHINE, "Hardware\\DeviceMap\\SerialComm", NULL, KEY_READ, &hKey))
+	if (ERROR_SUCCESS == ::RegOpenKeyEx(HKEY_LOCAL_MACHINE, "Hardware\\DeviceMap\\SerialComm", 0, KEY_READ, &hKey))
 	{
 		int i = 0;
-		int mm = 0;
 		DWORD  dwLong, dwSize;
 
 		while (1)
@@ -216,18 +221,18 @@ std::vector<std::string> Uart::GetAllUartNames()
 			{
 				break;
 			}
-			Uarts.emplace_back(commName);
+			Serials.emplace_back(commName);
 			i++;
 		}
 		RegCloseKey(hKey);
 
 	}
-	return Uarts;
+	return Serials;
 }
 
-bool Linx::Uart::SetBufSize(uint32_t ReadSize, uint32_t WriteSize) const
+bool Linx::Serial::SetBufSize(uint32_t ReadSize, uint32_t WriteSize) const
 {
-	return SetupComm(hCom, ReadSize, WriteSize);
+	return SetupComm(Handle, ReadSize, WriteSize);
 }
 
 #else // _WIN32
@@ -236,29 +241,29 @@ bool Linx::Uart::SetBufSize(uint32_t ReadSize, uint32_t WriteSize) const
 /*                       Linux Definition                               */
 /************************************************************************/
 
-Linx::Uart::Uart(const char* PortName, UartConfig InConfig)
+Linx::Serial::Serial(const char* PortName, SerialConfig InConfig)
 {
 	Open(PortName, InConfig);
 }
 
-bool Linx::Uart::Open(const char* PortName, UartConfig InConfig)
+bool Linx::Serial::Open(const char* PortName, SerialConfig InConfig)
 {
 
-	hCom = open(PortName, O_RDWR | O_NOCTTY | O_NDELAY);
-	if (hCom == -1)
+	Handle = open(PortName, O_RDWR | O_NOCTTY | O_NDELAY);
+	if (Handle == -1)
 	{
 	    return false;
 	}
 
 	if (InConfig.bSync)
 	{
-		fcntl(hCom, F_SETFL, 0);
+		fcntl(Handle, F_SETFL, 0);
 	}
 
 
 	struct termios tty;
 	memset(&tty, 0, sizeof tty);
-	if (tcgetattr(hCom, &tty) != 0)
+	if (tcgetattr(Handle, &tty) != 0)
 	{
 	    return false;
 	}
@@ -292,7 +297,7 @@ bool Linx::Uart::Open(const char* PortName, UartConfig InConfig)
 		tty.c_cflag |= CSTOPB;
 	tty.c_cflag &= ~CRTSCTS;
 
-	if (tcsetattr(hCom, TCSANOW, &tty) != 0)
+	if (tcsetattr(Handle, TCSANOW, &tty) != 0)
 	{
 	    return false;
 	}
@@ -301,36 +306,36 @@ bool Linx::Uart::Open(const char* PortName, UartConfig InConfig)
 	return true;
 }
 
-void Uart::Close()
+void Serial::Close()
 {
-	if (-1 != hCom)
+	if (-1 != Handle)
 	{
-		close(hCom);
-		hCom = (HANDLE)-1;
+		close(Handle);
+		Handle = (HANDLE)-1;
 	}
 }
 
-size_t Uart::Read(void* Buf, size_t Size)
+size_t Serial::Read(void* Buf, size_t Size)
 {
-	ssize_t Res = read(hCom, Buf, Size);
+	ssize_t Res = read(Handle, Buf, Size);
 	if (Res < 0)
 		return 0;
 	else
 		return Res;
 }
 
-size_t Uart::Write(void* Buf, size_t Size)
+size_t Serial::Write(void* Buf, size_t Size)
 {
-	ssize_t Res = write(hCom, Buf, Size);
+	ssize_t Res = write(Handle, Buf, Size);
 	if (Res < 0)
 		return 0;
 	else
 		return Res;
 }
 
-std::vector<std::string> Uart::GetAllUartNames()
+std::vector<std::string> Serial::GetAllSerialNames()
 {
-	vector<string> Uarts;
+	vector<string> Serials;
 
     FILE *fp;
     char path[1024];
@@ -338,21 +343,21 @@ std::vector<std::string> Uart::GetAllUartNames()
     fp = popen("ls /dev/ttyS* /dev/ttyUSB* /dev/ttyACM*", "r");
     if (fp == NULL)
     {
-    	return Uarts;
+    	return Serials;
     }
   
     while (fgets(path, sizeof(path)-1, fp))
     {
         path[strcspn(path, "\n")] = 0;
-        Uarts.emplace_back(path);
+        Serials.emplace_back(path);
     }  
 
     pclose(fp);
 
-	return Uarts;
+	return Serials;
 }
 
-bool Linx::Uart::SetBufSize(uint32_t ReadSize, uint32_t WriteSize) const
+bool Linx::Serial::SetBufSize(uint32_t ReadSize, uint32_t WriteSize) const
 {
 	return true;
 }

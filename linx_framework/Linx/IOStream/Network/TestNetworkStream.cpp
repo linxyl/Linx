@@ -48,7 +48,7 @@ void TestTcpClient()
 	m.lock();
 	cout << "tcs send 123\n";
 	m.unlock();
-	Sleep(10);
+	SleepM(10);
 
 	m.lock();
 	int Val;
@@ -88,7 +88,7 @@ void TestTcpServer()
 	cout << "tss recv " << Val << endl;
 	m.unlock();
 
-	Sleep(10);
+	SleepM(10);
 
 	tss << 456 << endl;
 	m.lock();

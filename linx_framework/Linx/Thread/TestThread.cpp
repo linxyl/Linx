@@ -27,14 +27,14 @@ int main()
 	TP.AddTask(T1(1));
 	TP.AddTask(T1(2));
 	TP.AddTask(T1(3));
-	Sleep(1000);
+	SleepM(1000);
 	TP.Stop();
-	Sleep(1000);
+	SleepM(1000);
 	TP.Start(8);
 	TP.AddTask(T1(1));
 	TP.AddTask(T1(2));
 	TP.AddTask(T1(3));
-	Sleep(1000);
+	SleepM(1000);
 	TP.Stop();
 
 	getchar();

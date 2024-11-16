@@ -1,142 +1,35 @@
 #include "Logger.h"
 
-#include <iostream>
-
-#include "Linx/System/Time.h"
-#include "Linx/Utils/MacroUtils.h"
-
 using namespace Linx;
 using namespace std;
 
-LoggerBuf::LoggerBuf()
+std::streamsize LoggerBuf::xsputn(const char* Ptr, std::streamsize Count)
 {
-	// One character less to let the BufSize-th character cause a call of overflow()
-	setp(Buffer, Buffer + (BufSize - 1));
-}
-
-LoggerBuf* LoggerBuf::Open()
-{
-	WrittenLen = 0;
-	LastMilliSeconds = GetTotalMilliSeconds();
-
-	FileStream = fopen((MainFilename + GetTimeString(".%Y-%m-%d_%H-%M-%S.log")).c_str(), "a");
-	if(FileStream)
+	if (CurrentLevel < LogLevel || !LOG_ENABLE)
 	{
-		return this;
+		return std::streambuf::xsputn(Ptr, Count);
 	}
-	else
-	{
-		return nullptr;
-	}
-}
-
-LoggerBuf::int_type LoggerBuf::overflow(int_type c)
-{
-	if (c != char_traits<char>::eof())
-	{
-		*pptr() = c;
-		pbump(1);
-	}
-
-	if (FlushBuffer() == char_traits<char>::eof())
-	{
-		return char_traits<char>::eof();
-	}
-	return c;
+	return Super::xsputn(Ptr, Count);
 }
 
 int LoggerBuf::sync()
 {
-	if (char_traits<char>::eof() == FlushBuffer())
-	{
-		return -1;
-	}
-	return 0;
+	auto Ret = Super::sync();
+	Unlock();
+	return Ret;
 }
 
-int LoggerBuf::FlushBuffer()
+int LoggerBuf::FlushWriteBuffer()
 {
-	if (CurrentLevel < LogLevel)
+	if (CurrentLevel < LogLevel || !LOG_ENABLE)
 	{
-		ClearBuffer();
+		ClearWriteBuffer();
 		return 0;
 	}
-
-	assert(IsOpen());
-
-	// Log rotate
-	if (ShouldRotate())
-	{
-		Rotate();
-	}
-
-	int Count = pptr() - pbase();
-	std::string Time = GetTimeString("[%Y-%m-%d %H:%M:%S.%s] ");
-	
-	// Output in console
-	if (bPrintable)
-	{
-		(cout << Time).write(Buffer, Count);
-		cout.flush();
-	}
-
-	// Write to file
-	if (Time.size() != fwrite(Time.c_str(), sizeof(decltype(Time)::size_type), Time.size(), FileStream))
-	{
-		return char_traits<char>::eof();
-	}
-	if ((size_t)Count != fwrite(Buffer, sizeof(Buffer[0]), Count, FileStream))
-	{
-		return char_traits<char>::eof();
-	}
-	fflush(FileStream);
-
-	WrittenLen += (Time.size() + Count);
-
-	ClearBuffer();
-	return 0;
+	return Super::FlushWriteBuffer();
 }
 
-void LoggerBuf::ClearBuffer()
+void LoggerBuf::ClearWriteBuffer()
 {
-	pbump(pbase() - pptr());
-	Unlock();
-}
-
-void LoggerBuf::Rotate() noexcept
-{
-	Close();
-	Open();
-}
-
-bool LoggerBuf::ShouldRotate() const noexcept
-{
-	if (SplitSize > 0 && WrittenLen >= SplitSize)
-	{
-		return true;
-	}
-	// Time alignment
-	else if (SplitMilliSeconds > 0 && GetTotalMilliSeconds() / SplitMilliSeconds > LastMilliSeconds / SplitMilliSeconds)
-	{
-		return true;
-	}
-	return false;
-}
-
-Logger::Logger(const string& InFilename, ELogLevel::Type InLevel) :
-	Super(addressof(Buf))
-{
-	Open(InFilename);
-	Buf.SetLogLevel(InLevel);
-}
-
-void Logger::Open(const std::string& InFilename)
-{
-	Buf.MainFilename = InFilename;
-	if (!Buf.Open())
-	{
-		setstate(ios_base::failbit);
-		return;
-	}
-	setstate(ios_base::goodbit);
+	Super::ClearWriteBuffer();
 }

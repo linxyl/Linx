@@ -4,7 +4,7 @@ using namespace std;
 
 long long Linx::VariableString::ConverToSigned()
 {
-	if ('0' == Str[0])
+	if (Str.size() > 1 && '0' == Str[0])
 	{
 		if ('x' == Str[1] || 'X' == Str[1])
 			return std::stoll(Str.substr(2), nullptr, 16);
@@ -21,7 +21,7 @@ long long Linx::VariableString::ConverToSigned()
 
 unsigned long long Linx::VariableString::ConvertToUnsigned()
 {
-	if ('0' == Str[0])
+	if (Str.size() > 1 && '0' == Str[0])
 	{
 		if ('x' == Str[1] || 'X' == Str[1])
 			return std::stoull(Str.substr(2), nullptr, 16);

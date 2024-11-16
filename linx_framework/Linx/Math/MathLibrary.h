@@ -23,8 +23,13 @@ namespace Linx
 	 * For example, input 3 returns 4, input 10 returns 16, and input 32 returns 32.
 	 */
 	template<typename Type, typename Enable = std::enable_if_t<std::is_integral_v<Type>>>
-	constexpr Type NextHigherPowerOfTwo(Type n) noexcept
+	constexpr Type CeilToPowerOfTwo(Type n) noexcept
 	{
+		if (0 == n)
+		{
+			return 1;
+		}
+
 		if ((n & (n - 1)) == 0)
 			return n;
 

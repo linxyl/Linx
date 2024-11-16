@@ -6,6 +6,8 @@
 #include <stdint.h>
 #include <string>
 
+#include "IOBase.h"
+
 namespace Linx
 {
 	/**
@@ -38,23 +40,20 @@ namespace Linx
 	/**
 	 * A file class that can rotate depending on time or size.
 	 */
-	class File
+	class File : public IOBase
 	{
 	public:
-#ifndef _WIN32
-		using HANDLE = int;
-		static constexpr int INVALID_HANDLE_VALUE = -1;
-#endif
+		using Super = IOBase;
 
 	public:
 		File() noexcept = default;
-		/** 
+		/**
 		 * Open the file.
 		 * @param InFilename	Filename format.
 		 *						%Y=year, %m=month, %d=day, %H=hour, %M=minute, %S=second, %s=millisecond.
 		 * @param InFlag		File properties, should be the value after EFileFlag is performed '|' operated.
 		 */
-		inline File(const char* InFilename, uint32_t InFlag = 
+		inline File(const char* InFilename, uint32_t InFlag =
 			EFileFlag::ERead | EFileFlag::EWrite | EFileFlag::ECreate | EFileFlag::EOpen) noexcept
 		{
 			Open(InFilename, InFlag);
@@ -65,7 +64,7 @@ namespace Linx
 			Open(InFilename, InFlag);
 		}
 
-		inline ~File() noexcept { Close(); }
+		virtual ~File() noexcept { Close(); }
 
 	private:
 		std::string Filename;
@@ -76,16 +75,16 @@ namespace Linx
 		/** Open the file based on the stored file information. */
 		bool Open() noexcept;
 
-		/** 
+		/**
 		 * Open the file.
 		 * @param InFilename	Filename format.
 		 *						%Y=year, %m=month, %d=day, %H=hour, %M=minute, %S=second, %s=millisecond.
 		 * @param InFlag		File properties, should be the value after EFileFlag is performed '|' operated.
 		 * @return whether the file is opened.
 		 */
-		bool Open(const char* InFilename, uint32_t InFlag = 
+		bool Open(const char* InFilename, uint32_t InFlag =
 			EFileFlag::ERead | EFileFlag::EWrite | EFileFlag::ECreate | EFileFlag::EOpen) noexcept;
-		bool Open(const std::string& InFilename, uint32_t InFlag = 
+		bool Open(const std::string& InFilename, uint32_t InFlag =
 			EFileFlag::ERead | EFileFlag::EWrite | EFileFlag::ECreate | EFileFlag::EOpen) noexcept;
 
 		/** Returns whether the file is opened. */
@@ -98,7 +97,7 @@ namespace Linx
 		long Read(void* Buf, size_t BufSize) noexcept;
 
 		/** Write data to the file. */
-		long Write(const void* Buf, size_t BufSize) noexcept;
+		virtual size_t Write(const void* Buf, size_t BufSize) noexcept;
 
 		/** Sets the offset of the pointer from the start of the file. */
 		long SeekBegin(long Offset) const noexcept;
@@ -109,23 +108,34 @@ namespace Linx
 		/** Sets the offset of the pointer from the end of the file. */
 		long SeekEnd(long Offset) const noexcept;
 
+		/**
+		 * Map a file to memory.
+		 * @param Size			The size to map.
+		 * @param Offset		Offset of the file map. Must be an integer multiple of the page of the MMU.
+		 * @param AccessMode	Read and write permissions. Should use EFileFlag.
+		 */
+		char* MemMap(size_t Size, size_t Offset = 0, uint32_t AccessMode = EFileFlag::ERead | EFileFlag::EWrite);
+
+		/** Unmap memory. */
+		void UnMemMap();
+
 	public:
 
 		/************************************************************************/
 		/*               Set the splitting mode of files.                   */
 		/************************************************************************/
 
-		/** Set the number of days for splitting each file. */
-		inline void SetSplitByDay(size_t Days) noexcept { SplitMilliSeconds = Days * 24 * 60 * 60 * 1000; SplitSize = 0; }
-
-		/** Set the number of hours each file splits. */
-		inline void SetSplitByHour(size_t Hours) noexcept { SplitMilliSeconds =  Hours * 60 * 60 * 1000; SplitSize = 0; }
-
-		/** Set the number of minutes each file splits. */
-		inline void SetSplitByMinute(size_t Minutes) noexcept { SplitMilliSeconds = Minutes * 60 * 1000; SplitSize = 0; }
-
 		/** Set the number of seconds each file splits. */
 		inline void SetSplitBySeconds(size_t Seconds) noexcept { SplitMilliSeconds = Seconds * 1000; SplitSize = 0; }
+
+		/** Set the number of minutes each file splits. */
+		inline void SetSplitByMinutes(size_t Minutes) noexcept { SplitMilliSeconds = Minutes * 60 * 1000; SplitSize = 0; }
+
+		/** Set the number of hours each file splits. */
+		inline void SetSplitByHours(size_t Hours) noexcept { SplitMilliSeconds = Hours * 60 * 60 * 1000; SplitSize = 0; }
+
+		/** Set the number of days for splitting each file. */
+		inline void SetSplitByDays(size_t Days) noexcept { SplitMilliSeconds = Days * 24 * 60 * 60 * 1000; SplitSize = 0; }
 
 		/** Set the number of bytes each file splits. */
 		inline void SetSplitBySize(size_t Size) noexcept { SplitSize = Size; SplitMilliSeconds = 0; }
@@ -160,8 +170,13 @@ namespace Linx
 		/** The split time. If it is 0, not divided by time */
 		long long SplitMilliSeconds = 0;
 
-	private:
-		/** Handle of the file. */
-		HANDLE Handle = INVALID_HANDLE_VALUE;
+#ifdef _WIN32
+		/** Used map the memory */
+		HANDLE hFileMap = NULL;
+#else
+		size_t MapSize;
+#endif
+
+		char* pMemMap = nullptr;
 	};
 }

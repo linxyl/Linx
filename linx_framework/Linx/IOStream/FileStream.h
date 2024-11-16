@@ -1,47 +1,29 @@
 #pragma once
 
 #include "Linx/IOStream/StreambufBase.h"
-#include "Linx/IO/IFile.h"
+#include "Linx/IO/File.h"
 
 namespace Linx
 {
-	class FileBuf : public StreambufBase<File>
-	{
-		friend class FileStream;
-	public:
-		FileBuf() : StreambufBase<File>() {};
-	};
-
 	/**
 	 * A file stream that can rotate depending on time or size.
 	 */
-	class FileStream : public std::iostream, public IFile
+	class FileStream : public std::iostream, public File
 	{
 	public:
-		FileStream() : std::iostream(&Buf), IFile(Buf.IO)
+		FileStream() : std::iostream(&Buf), Buf(this)
 		{};
-
-		/** 
-		 * Open the file.
-		 * @param InFilename	Filename format.
-		 *						%Y=year, %m=month, %d=day, %H=hour, %M=minute, %S=second, %s=millisecond.
-		 * @param InFlag		File properties, should be the value after EFileFlag is performed '|' operated.
-		 */
 		inline FileStream(const char* InFilename, uint32_t InFlag = 
-			EFileFlag::ERead | EFileFlag::EWrite | EFileFlag::ECreate | EFileFlag::EOpen) noexcept :
-			FileStream()
-		{
-			Buf.IO.Open(InFilename, InFlag);
-		};
-		inline FileStream(const std::string& InFilename, uint32_t InFlag = 
-			EFileFlag::ERead | EFileFlag::EWrite | EFileFlag::ECreate | EFileFlag::EOpen) noexcept :
-			FileStream()
-		{
-			Buf.IO.Open(InFilename, InFlag);
-		};
+			EFileFlag::ERead | EFileFlag::EWrite | EFileFlag::ECreate | EFileFlag::EOpen)
+			:std::iostream(&Buf), Buf(this), File(InFilename, InFlag)
+		{}
+		inline FileStream(std::string InFilename, uint32_t InFlag = 
+			EFileFlag::ERead | EFileFlag::EWrite | EFileFlag::ECreate | EFileFlag::EOpen)
+			:std::iostream(&Buf), Buf(this), File(InFilename, InFlag)
+		{}
 
 	protected:
-		FileBuf Buf;
+		StreambufBase<File> Buf;
 	};
 }
 
