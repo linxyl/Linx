@@ -11,6 +11,8 @@
 #include "Linx/IO/File.h"
 #include "Linx/Core.h"
 
+//#define TEST_SENDFILE
+
 using namespace std;
 using namespace Linx;
 
@@ -72,12 +74,14 @@ void TestTcpClient()
 	cout << "tcs recv " << buf << endl;
 	m.unlock();
 
-	//if (tcs.Recv(buf, 4) <= 0)
-	//{
-	//	cout << "tcs recv file failed\n";
-	//	return;
-	//}
-	//cout << "tcs recv file: " << buf << endl;
+#ifdef TEST_SENDFILE
+	if (tcs.Recv(buf, 4) <= 0)
+	{
+		cout << "tcs recv file failed\n";
+		return;
+	}
+	cout << "tcs recv file: " << buf << endl;
+#endif
 	///////////////////////////////////////
 
 	tcs.Close();
@@ -126,15 +130,17 @@ void TestTcpServer()
 	cout << "tss send 456\n";
 	m.unlock();
 
-	//File file("sendfile.txt");
-	//m.lock();
-	//if (tss.SendFile(file, 3) <= 0)
-	//{
-	//	cout << "tss send file failed\n";
-	//	return;
-	//}
-	//cout << "tss send file: abc\n";
-	//m.unlock();
+#ifdef TEST_SENDFILE
+	File file("sendfile.txt");
+	m.lock();
+	if (tss.SendFile(file, 3) <= 0)
+	{
+		cout << "tss send file failed\n";
+		return;
+	}
+	cout << "tss send file: abc\n";
+	m.unlock();
+#endif
 	///////////////////////////////////////
 
 	tss.Close();
@@ -159,7 +165,7 @@ void TestUdpSocket()
 
 void TestIcmpSocket()
 {
-	if (!IcmpSocket::PingTest("192.168.31.77"))
+	if (!IcmpSocket::PingTest("127.0.0.1"))
 	{
 		cout << "Ping failed" << endl;
 	}

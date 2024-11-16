@@ -77,7 +77,7 @@ namespace Linx
 		 * @param DataSize	Length of data.
 		 * @return whether the ping succeeds.
 		 */
-		bool Ping(PingReply* Reply = nullptr, int InSeq = 1, int DataSize = 32) noexcept;
+		int Ping(PingReply* Reply = nullptr, int InSeq = 1, int DataSize = 32) noexcept;
 
 		/** Implements the ping function from the terminal. */
 		static bool PingTest(const char* Target, int Count = 4, int Size = 32, int Interval = 1000) noexcept;

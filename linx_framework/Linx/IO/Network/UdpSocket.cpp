@@ -29,7 +29,7 @@ int UdpSocket::Recv(char* buf, size_t bufsize) noexcept
 #else
 	socklen_t addr_len = sizeof(TargetAddr);
 #endif
-	int ret = recvfrom(Sock, buf, bufsize, bRecvAll ? MSG_WAITALL : 0, (sockaddr*)&TargetAddr, &addr_len);
+	int ret = recv(Sock, buf, bufsize, bRecvAll ? MSG_WAITALL : 0);
 
 	return ret;
 }

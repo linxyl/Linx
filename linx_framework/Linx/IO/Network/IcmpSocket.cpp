@@ -24,7 +24,7 @@ void IcmpSocket::Init()
 	SetRecvTimeout(5000);
 }
 
-bool IcmpSocket::Ping(PingReply* Reply, int InSeq, int DataSize) noexcept
+int IcmpSocket::Ping(PingReply* Reply, int InSeq, int DataSize) noexcept
 {
     int SendSize = DataSize + sizeof(ICMPPackage);
 
@@ -35,13 +35,13 @@ bool IcmpSocket::Ping(PingReply* Reply, int InSeq, int DataSize) noexcept
     Send((char*)pICMPPackage, SendSize);
 	auto SendTime = GetTotalMilliSeconds();
 
-	int nRecvSize = 32 + DataSize;
+	int nRecvSize = DataSize + 64;
 	unique_ptr<char[]> upRecvbuf(new char[nRecvSize]);
 	char* const recvbuf = upRecvbuf.get();
 	auto nPacketSize = Recv(recvbuf, nRecvSize);
 	if (-1 == nPacketSize)
 	{
-		return false;
+		return -1;
 	}
 
 	auto RecvTime = GetTotalMilliSeconds();
@@ -51,7 +51,7 @@ bool IcmpSocket::Ping(PingReply* Reply, int InSeq, int DataSize) noexcept
 
 	if (!pICMPPackage->CheckReply(InSeq))
 	{
-		return false;
+		return -2;
 	}
 
 	if (Reply)
@@ -64,7 +64,7 @@ bool IcmpSocket::Ping(PingReply* Reply, int InSeq, int DataSize) noexcept
 		TempAddr.s_addr = pIPHeader->SrcIP;
 		strcpy(Reply->SrcIP, inet_ntoa(TempAddr));
 	}
-	return true;
+	return 0;
 }
 
 int IcmpSocket::Recv(char* buf, size_t bufsize) noexcept
@@ -74,7 +74,7 @@ int IcmpSocket::Recv(char* buf, size_t bufsize) noexcept
 #else
 	socklen_t addr_len = sizeof(TargetAddr);
 #endif
-	int ret = recvfrom(Sock, buf, bufsize, bRecvAll ? MSG_WAITALL : 0, (sockaddr*)&TargetAddr, &addr_len);
+	int ret = recv(Sock, buf, bufsize, bRecvAll ? MSG_WAITALL : 0);
 
 	return ret;
 }
@@ -92,7 +92,7 @@ bool IcmpSocket::PingTest(const char* Target, int Count /*= 4*/, int Size /*= 32
     auto host = is.SetTargetAddr(Target, 0);
 	PingReply Reply;
 	size_t SuccessNum = 0;
-
+	
 	if (!host)
 	{
 		return false;
@@ -101,7 +101,8 @@ bool IcmpSocket::PingTest(const char* Target, int Count /*= 4*/, int Size /*= 32
 	cout << "PING " << host->h_name << " (" << inet_ntoa(*(in_addr*)*host->h_addr_list) << ") " << Size << " bytes of data" << endl;
 	for (int i = 1; i <= Count; i++)
 	{
-		if (is.Ping(&Reply, i, Size))
+		auto Ret = is.Ping(&Reply, i, Size);
+		if (0 == Ret)
 		{
 			++SuccessNum;
 			cout << Reply.Bytes <<
@@ -115,9 +116,13 @@ bool IcmpSocket::PingTest(const char* Target, int Count /*= 4*/, int Size /*= 32
 				Reply.RoundTripTime <<
 				" ms" << endl;
 		}
-		else
+		else if (-1 == Ret)
 		{
 			cout << "transmit timeout." << endl;
+		}
+		else if (-2 == Ret)
+		{
+			cout << "Destination Host Unreachable." << endl;
 		}
 
 		if (i != Count)
