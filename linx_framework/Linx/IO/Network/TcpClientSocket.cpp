@@ -109,7 +109,7 @@ bool TcpClientSocket::Connect() noexcept
 #endif
 }
 
-bool TcpClientSocket::Connect(const char * IP, int Port) noexcept
+bool TcpClientSocket::Connect(const std::string& IP, int Port) noexcept
 {
 	SetTargetAddr(IP, Port);
 

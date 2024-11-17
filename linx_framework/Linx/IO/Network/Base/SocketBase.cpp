@@ -28,9 +28,9 @@ SocketBase::~SocketBase()
 	Close();
 }
 
-hostent* SocketBase::SetTargetAddr(const char* Target, int Port) noexcept
+hostent* SocketBase::SetTargetAddr(const std::string& Target, int Port) noexcept
 {
-    auto* host = gethostbyname(Target);
+    auto* host = gethostbyname(Target.c_str());
     if (host == nullptr)
 	{
         return nullptr;
