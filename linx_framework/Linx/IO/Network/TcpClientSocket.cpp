@@ -22,6 +22,14 @@ TcpClientSocket::TcpClientSocket()
 	pClientSock = &Sock;
 }
 
+TcpClientSocket::TcpClientSocket(TcpClientSocket&& InSocket) :
+	Super(std::move(InSocket)),
+	ConnectionTimeoutSeconds(InSocket.ConnectionTimeoutSeconds)
+{
+	pServerSock = &TargetSock;
+	pClientSock = &Sock;
+}
+
 bool TcpClientSocket::Connect() noexcept
 {
 #ifdef _WIN32
@@ -109,7 +117,7 @@ bool TcpClientSocket::Connect() noexcept
 #endif
 }
 
-bool TcpClientSocket::Connect(const char * IP, int Port) noexcept
+bool TcpClientSocket::Connect(const std::string& IP, int Port) noexcept
 {
 	SetTargetAddr(IP, Port);
 

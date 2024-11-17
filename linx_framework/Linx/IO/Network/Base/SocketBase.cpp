@@ -23,14 +23,25 @@ SocketBase::SocketBase() :
 #endif
 }
 
+SocketBase::SocketBase(SocketBase&& InSocket) :
+	Sock(InSocket.Sock),
+	TargetSock(InSocket.TargetSock),
+	Addr(InSocket.Addr),
+	TargetAddr(InSocket.TargetAddr),
+	bRecvAll(false)
+{
+	InSocket.Sock = 0;
+	InSocket.TargetSock = 0;
+}
+
 SocketBase::~SocketBase()
 {
 	Close();
 }
 
-hostent* SocketBase::SetTargetAddr(const char* Target, int Port) noexcept
+hostent* SocketBase::SetTargetAddr(const std::string& Target, int Port) noexcept
 {
-    auto* host = gethostbyname(Target);
+    auto* host = gethostbyname(Target.c_str());
     if (host == nullptr)
 	{
         return nullptr;

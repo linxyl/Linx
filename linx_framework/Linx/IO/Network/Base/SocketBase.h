@@ -10,6 +10,7 @@
 #include <arpa/inet.h>
 #include <netdb.h>
 #endif
+#include <string>
 
 namespace Linx
 {
@@ -28,6 +29,7 @@ namespace Linx
 
 	public:
 		SocketBase();
+		SocketBase(SocketBase&& InSocket);
 		virtual ~SocketBase();
 
 	public:
@@ -38,7 +40,7 @@ namespace Linx
 		virtual void Close() noexcept;
 
 		/** Set the IP or domain name and port of the target address to communicate with. */
-		hostent* SetTargetAddr(const char* Target, int Port) noexcept;
+		hostent* SetTargetAddr(const std::string& Target, int Port) noexcept;
 
 		/** Select a port to receive remote message. */
 		bool Bind(int Port) noexcept;

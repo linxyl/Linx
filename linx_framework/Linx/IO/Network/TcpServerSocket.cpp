@@ -14,6 +14,14 @@ TcpServerSocket::TcpServerSocket()
 	pClientSock = &TargetSock;
 }
 
+TcpServerSocket::TcpServerSocket(TcpServerSocket&& InSocket):
+	Super(std::move(InSocket)),
+	ClientSockets(InSocket.ClientSockets)
+{
+	pServerSock = &Sock;
+	pClientSock = &TargetSock;
+}
+
 bool TcpServerSocket::Listen(size_t Num) noexcept
 {
     if(listen(Sock, Num) < 0)

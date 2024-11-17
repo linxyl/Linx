@@ -13,11 +13,12 @@ namespace Linx
 		using Super = TcpSocket;
 
 		TcpClientSocket();
+		TcpClientSocket(TcpClientSocket&& InSocket);
 
 	public:
 		/** Connects to the tcp server. */
 		bool Connect() noexcept;
-		bool Connect(const char* IP, int Port) noexcept;
+		bool Connect(const std::string& IP, int Port) noexcept;
 
 	public:
 		/** Set the connection timeout period. */

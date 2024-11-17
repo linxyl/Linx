@@ -14,6 +14,7 @@ namespace Linx
 		using Super = TcpSocket;
 
 		TcpServerSocket();
+		TcpServerSocket(TcpServerSocket&& InSocket);
 
 	public:
 		/** Set self socket to listen and enables the server to receive connection requests from clients. */

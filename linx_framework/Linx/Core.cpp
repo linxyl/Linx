@@ -1,3 +1,6 @@
+#include <stdio.h>
+#include <stdexcept>
+
 #include "Core.h"
 #include "Linx/Utils/Logger.h"
 #include "Linx/Utils/Singleton.h"
@@ -28,4 +31,23 @@ void Linx::LinxInit()
 	LogInst->SetSplitBySizeM(LOG_SPLIT_SIZE_M);
 #endif
 #endif
+}
+
+std::string Linx::ExecCmd(const std::string& Cmd)
+{
+    char buffer[1024];
+    std::string result;
+    FILE* pipe = _popen(Cmd.c_str(), "r");
+	if (!pipe)
+	{
+		throw std::runtime_error("popen failed!");
+	}
+
+    while (fgets(buffer, sizeof(buffer), pipe) != nullptr)
+	{
+        result += buffer;
+    }
+    _pclose(pipe);
+
+    return result;
 }

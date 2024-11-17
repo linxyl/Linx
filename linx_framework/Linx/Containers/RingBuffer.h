@@ -214,14 +214,9 @@ namespace Linx
 		inline pointer GetPtr() const noexcept { return Super::RB->pBuffer + Super::GetOffset(); }
 
 	public:
-		inline RingBufferIterator(RingBuffer<Type, Alloc>* InPtr) noexcept :
-			Super(InPtr)
+		inline RingBufferIterator(RingBuffer<Type, Alloc>* InPtr) noexcept
 		{}
-
-		inline RingBufferIterator(const RingBufferIterator& InIterator) noexcept :
-			Super(InIterator)
-		{
-		}
+		inline RingBufferIterator(const RingBufferIterator& InIterator) = default;
 
 		inline reference operator*() const noexcept { return Super::RB->pBuffer[Super::GetOffset()]; }
 
