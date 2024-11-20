@@ -1,4 +1,6 @@
+#include <string.h>
 #include <stdexcept>
+
 #include "FTP.h"
 #include "Linx/IO/File.h"
 

@@ -1,10 +1,10 @@
 #ifdef _WIN32
 #include <windows.h>
-#include <stdexcept>
 #else
 #include <unistd.h>
 #include <sys/vfs.h>
 #endif
+#include <stdexcept>
 
 #include "Disk.h"
 
@@ -19,7 +19,8 @@ Linx::DiskInfo Linx::GetDiskInfo(const std::string& Path)
         &freeBytesAvailableToCaller,
         &totalNumberOfBytes,
         &totalNumberOfFreeBytes
-    )) {
+    ))
+    {
         throw std::logic_error("GetDiskInfo failed");
     }
 
@@ -30,15 +31,18 @@ Linx::DiskInfo Linx::GetDiskInfo(const std::string& Path)
     return Info;
 #else
     DiskInfo Info;
-    struct statfs disk_info;
-    if (statfs("/", &disk_info) == 0) { // 假设我们要检查根目录"/"的磁盘空间
+    struct statfs64 disk_info;
+    if (statfs64(Path.c_str(), &disk_info) == 0)
+    {
         long long total = disk_info.f_blocks * disk_info.f_bsize;
         long long avail = disk_info.f_bavail * disk_info.f_bsize;
         Info.TotalSpace = total;
         Info.AvailSpace = avail;
         Info.UsedSpace = Info.TotalSpace - Info.AvailSpace;
-    } else {
-
+    }
+    else
+    {
+        throw std::logic_error("GetDiskInfo failed");
     }
     return Info;
 #endif

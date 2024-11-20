@@ -34,11 +34,40 @@ void DebugContainer(ContainerType& Container, size_t Cols = 8)
 	std::cout << std::endl;
 }
 
+/** Same as DebugContainer, buf print in radix 16. */
+template<class ContainerType>
+void DebugContainer16(ContainerType& Container, size_t Cols = 8)
+{
+	size_t Count = 0;
+	std::cout << std::hex;
+	for (const auto& it: Container)
+	{
+		if (Count % Cols == 0)
+		{
+			std::cout << Count / Cols * Cols << " :\t";
+		}
+
+		std::cout << "0x" << it << '\t';
+
+		if (++Count % Cols == 0)
+		{
+			std::cout << std::endl;
+		}
+	}
+	std::cout << std::endl;
+}
+
 /** Same as DebugContainer, buf print container name. */
 #define DebugContainerEx(Container, ...)\
 {\
-	std::cout << #Container":" << endl;\
+	std::cout << "Line " << std::dec << __LINE__ << " : "#Container << endl;\
 	DebugContainer(Container, ##__VA_ARGS__);\
+}
+
+#define DebugContainer16Ex(Container, ...)\
+{\
+	std::cout << "Line " << std::dec << __LINE__ << " : "#Container << endl;\
+	DebugContainer16(Container, ##__VA_ARGS__);\
 }
 
 template<typename T>

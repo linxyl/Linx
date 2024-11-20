@@ -78,7 +78,7 @@ long Linx::File::Read(void* Buf, size_t BufSize) noexcept
 	return BytesRead;
 }
 
-size_t Linx::File::Write(const void* Buf, size_t BufSize) noexcept
+long Linx::File::Write(const void* Buf, size_t BufSize) noexcept
 {
 	Super::Write(Buf, BufSize);
 
@@ -89,7 +89,8 @@ size_t Linx::File::Write(const void* Buf, size_t BufSize) noexcept
 
 	DWORD BytesWrite;
 	if (!WriteFile(Handle, Buf, BufSize, &BytesWrite, nullptr))
-		return 0;
+		return -1;
+	WrittenLen += BytesWrite;
 	return BytesWrite;
 }
 
@@ -204,22 +205,25 @@ bool Linx::File::Open() noexcept
 {
 	Close();
 
-	int Mode = 0;
+	int Flag = 0;
 	if ((FileFlag & EFileFlag::EWrite) && !(FileFlag & EFileFlag::ERead))
-		Mode |= O_WRONLY;
+		Flag |= O_WRONLY;
 	else if (!(FileFlag & EFileFlag::EWrite) && (FileFlag & EFileFlag::ERead))
-		Mode |= O_RDONLY;
-	if ((FileFlag & EFileFlag::EWrite) && (FileFlag & EFileFlag::ERead))
-		Mode |= O_RDWR;
+		Flag |= O_RDONLY;
+	else if ((FileFlag & EFileFlag::EWrite) && (FileFlag & EFileFlag::ERead))
+		Flag |= O_RDWR;
+	else return false;
 
 	if(FileFlag & EFileFlag::ECreate)
-		Mode |= O_CREAT;
+		Flag |= O_CREAT;
 	if(!(FileFlag & EFileFlag::EOpen))
-		Mode |= O_EXCL;
+		Flag |= O_EXCL;
 	if(FileFlag & EFileFlag::EAppend)
-		Mode |= O_APPEND;
+		Flag |= O_APPEND;
+	if (FileFlag & EFileFlag::ETruncate)
+		Flag |= O_TRUNC;
 
-    Handle = open(GetTimeString(Filename).c_str(), O_RDWR | O_CREAT, 0666);
+    Handle = open(GetTimeString(Filename).c_str(), Flag, 0666);
 
 	WrittenLen = 0;
 	LastMilliSeconds = GetTotalMilliSeconds();
@@ -256,14 +260,21 @@ long Linx::File::Read(void* Buf, size_t BufSize) noexcept
 	return read(Handle, Buf, BufSize);
 }
 
-size_t Linx::File::Write(const void* Buf, size_t BufSize) noexcept
+long Linx::File::Write(const void* Buf, size_t BufSize) noexcept
 {
+	Super::Write(Buf, BufSize);
+
 	if (ShouldRotate())
 	{
 		Rotate();
 	}
 
-	return write(Handle, Buf, BufSize);
+	auto ret = write(Handle, Buf, BufSize);
+	if (ret >= 0)
+	{
+		WrittenLen += ret;
+	}
+	return ret;
 }
 
 long Linx::File::SeekBegin(long Offset) const noexcept

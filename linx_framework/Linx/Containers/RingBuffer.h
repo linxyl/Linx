@@ -214,9 +214,13 @@ namespace Linx
 		inline pointer GetPtr() const noexcept { return Super::RB->pBuffer + Super::GetOffset(); }
 
 	public:
-		inline RingBufferIterator(RingBuffer<Type, Alloc>* InPtr) noexcept
+		inline RingBufferIterator(RingBuffer<Type, Alloc>* InPtr) noexcept :
+			Super(InPtr)
 		{}
-		inline RingBufferIterator(const RingBufferIterator& InIterator) = default;
+		
+		inline RingBufferIterator(const RingBufferIterator& InIterator) noexcept :
+			Super(InIterator)
+		{}
 
 		inline reference operator*() const noexcept { return Super::RB->pBuffer[Super::GetOffset()]; }
 
@@ -368,6 +372,8 @@ namespace Linx
 		/** Specify a custom buffer. */
 		inline void SetBuffer(value_type* Ptr, size_type Size, std::function<void(value_type*)>&& InDeleter) noexcept
 		{
+			DeallocBuffer();
+
 			Deleter = InDeleter;
 			bUseCustomDeleter = true;
 			pBuffer = Ptr;
@@ -481,7 +487,7 @@ namespace Linx
 
 
 	private:
-		void DeallocBuffer(value_type* Ptr);
+		void DeallocBuffer();
 
 		size_type ReadImpl(value_type* DstPtr, size_type Len) noexcept;
 		size_type ReadImpl(RingBuffer& DstRingBuffer, size_type Len) noexcept;
@@ -559,7 +565,7 @@ namespace Linx
 	RingBuffer<Type, Alloc>::~RingBuffer()
 	{
 
-		DeallocBuffer(pBuffer);
+		DeallocBuffer();
 	}
 
 	template<class Type, class Alloc>
@@ -836,7 +842,7 @@ namespace Linx
 	{
 		Size = CeilToPowerOfTwo(Size);
 
-		DeallocBuffer(pBuffer);
+		DeallocBuffer();
 		pBuffer = Allocator.allocate(Size);
 		bUseCustomDeleter = false;
 		SetMaxLen(Size);
@@ -872,13 +878,13 @@ namespace Linx
 	}
 
 	template<class Type, class Alloc>
-	void RingBuffer<Type, Alloc>::DeallocBuffer(value_type* Ptr)
+	void RingBuffer<Type, Alloc>::DeallocBuffer()
 	{
 		if (pBuffer)
 		{
 			if (bUseCustomDeleter)
 			{
-				Deleter(Ptr);
+				Deleter(pBuffer);
 			}
 			else
 			{
@@ -994,17 +1000,25 @@ namespace Linx
 		}
 		else
 		{
+			auto ReadLen0 = MaxLen - Head.GetOffset();
+			auto ReadLen1 = Head.GetOffset() + Len - MaxLen;
 			if constexpr (std::is_void_v<decltype(Func(nullptr, 0))>)
 			{
-				Func(Head.GetPtr(), MaxLen - Head.GetOffset());
-				Func(pBuffer, Head.GetOffset() + Len - MaxLen);
+				if (ReadLen0 > 0)
+				{
+					Func(Head.GetPtr(), ReadLen0);
+				}
+				if (ReadLen1 > 0)
+				{
+					Func(pBuffer, ReadLen1);
+				}
 			}
 			else
 			{
 				RetType Ret;
-				if ((Ret = Func(Head.GetPtr(), MaxLen - Head.GetOffset())) < 0)
+				if (ReadLen0 > 0 && (Ret = Func(Head.GetPtr(), ReadLen0)) < 0)
 					return Ret;
-				if ((Ret = Func(pBuffer, Head.GetOffset() + Len - MaxLen)) < 0)
+				if (ReadLen1 > 0 && (Ret = Func(pBuffer, ReadLen1)) < 0)
 					return Ret;
 			}
 		}
@@ -1121,17 +1135,25 @@ namespace Linx
 		}
 		else
 		{
+			auto WriteLen0 = MaxLen - Rear.GetOffset();
+			auto WriteLen1 = Rear.GetOffset() + Len - MaxLen;
 			if constexpr (std::is_void_v<decltype(Func(nullptr, 0))>)
 			{
-				Func(Rear.GetPtr(), MaxLen - Rear.GetOffset());
-				Func(pBuffer, Rear.GetOffset() + Len - MaxLen);
+				if (WriteLen0 > 0)
+				{
+					Func(Rear.GetPtr(), WriteLen0);
+				}
+				if (WriteLen1 > 0)
+				{
+					Func(pBuffer, WriteLen1);
+				}
 			}
 			else
 			{
 				RetType Ret;
-				if (Ret = Func(Rear.GetPtr(), MaxLen - Rear.GetOffset()) < 0)
+				if (WriteLen0 > 0 && (Ret = Func(Rear.GetPtr(), WriteLen0)) < 0)
 					return Ret;
-				if (Ret = Func(pBuffer, Rear.GetOffset() + Len - MaxLen) < 0)
+				if (WriteLen1 > 0 && (Ret = Func(pBuffer, WriteLen1)) < 0)
 					return Ret;
 			}
 		}

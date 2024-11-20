@@ -49,6 +49,18 @@ namespace Linx
 
 		void Save();
 
+		inline VariableString Get(const IniOption& Option)
+		{
+			Load();
+			return Ini::Get(Option);
+		}
+
+		inline void Set(const IniOption& Option, const VariableString& Val)
+		{
+			Ini::Set(Option, Val);
+			Save();
+		}
+
 	private:
 		std::string Filename;
 	};

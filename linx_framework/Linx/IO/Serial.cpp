@@ -110,7 +110,7 @@ void Serial::Close()
 	}
 }
 
-size_t Serial::Read(void* Buf, size_t Size)
+long Serial::Read(void* Buf, size_t Size)
 {
 	if (Config.bSync)
 	{
@@ -119,7 +119,7 @@ size_t Serial::Read(void* Buf, size_t Size)
 
 		if (!bReadStat)
 		{
-			return 0;
+			return -1;
 		}
 		return wCount;
 	}
@@ -149,7 +149,7 @@ size_t Serial::Read(void* Buf, size_t Size)
 			{
 				ClearCommError(Handle, &dwErrorFlags, &comStat); 
 				CloseHandle(m_osRead.hEvent); 
-				return 0;
+				return -1;
 			}
 		}
 
@@ -157,7 +157,7 @@ size_t Serial::Read(void* Buf, size_t Size)
 	}
 }
 
-size_t Serial::Write(void* Buf, size_t Size)
+long Serial::Write(const void* Buf, size_t Size) noexcept
 {
 	Super::Write(Buf, Size);
 
@@ -168,7 +168,7 @@ size_t Serial::Write(void* Buf, size_t Size)
 
 		if (!bWriteStat)
 		{
-			return 0;
+			return -1;
 		}
 		return dwBytesWrite;
 	}
@@ -195,7 +195,7 @@ size_t Serial::Write(void* Buf, size_t Size)
 			{
 				ClearCommError(Handle, &dwErrorFlags, &comStat); 
 				CloseHandle(m_osWrite.hEvent); 
-				return 0;
+				return -1;
 			}
 		}
 		return dwBytesWrite;
@@ -315,22 +315,14 @@ void Serial::Close()
 	}
 }
 
-size_t Serial::Read(void* Buf, size_t Size)
+long Serial::Read(void* Buf, size_t Size)
 {
-	ssize_t Res = read(Handle, Buf, Size);
-	if (Res < 0)
-		return 0;
-	else
-		return Res;
+	return read(Handle, Buf, Size);
 }
 
-size_t Serial::Write(void* Buf, size_t Size)
+long Serial::Write(const void* Buf, size_t Size) noexcept
 {
-	ssize_t Res = write(Handle, Buf, Size);
-	if (Res < 0)
-		return 0;
-	else
-		return Res;
+	return write(Handle, Buf, Size);
 }
 
 std::vector<std::string> Serial::GetAllSerialNames()

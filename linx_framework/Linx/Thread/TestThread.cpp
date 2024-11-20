@@ -1,7 +1,8 @@
 #include "Linx/TestConfig.h"
 #ifdef TEST_THREAD
-#include "ThreadPool.h"
 #include <iostream>
+#include "ThreadPool.h"
+#include "Thread.h"
 #include "Linx/Core.h"
 
 using namespace std;
@@ -21,8 +22,36 @@ public:
 	int a;
 };
 
+class ThreadTest : public Thread
+{
+public:
+	using Thread::Thread;
+
+protected:
+	virtual void Run() override
+	{
+		while (!bStopFlag)
+		{}
+	}
+public:
+	virtual void Stop() override
+	{
+		bStopFlag = true;
+	}
+private:
+	bool bStopFlag = false;
+};
+
 int main()
 {
+	// Test Thread
+	ThreadTest TT(1);
+	TT.Start();
+	SleepS(6);
+	TT.Stop();
+	TT.Join();
+
+	// Test ThreadPool
 	ThreadPool TP;
 	TP.AddTask(T1(1));
 	TP.AddTask(T1(2));
