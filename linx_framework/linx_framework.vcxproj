@@ -44,8 +44,13 @@
     <ClCompile Include="Linx\Math\TestSort.cpp" />
     <ClCompile Include="Linx\Protocol\FTP.cpp" />
     <ClCompile Include="Linx\Protocol\Ini.cpp" />
+    <ClCompile Include="Linx\Protocol\Modbus\ModbusLibrary.h" />
+    <ClCompile Include="Linx\Protocol\Modbus\ModbusMasterUDP.cpp" />
+    <ClCompile Include="Linx\Protocol\Modbus\ModbusSlaveDevice.cpp" />
+    <ClCompile Include="Linx\Protocol\Modbus\ModbusSlaveUDP.cpp" />
     <ClCompile Include="Linx\Protocol\TestFTP.cpp" />
     <ClCompile Include="Linx\Protocol\TestIni.cpp" />
+    <ClCompile Include="Linx\Protocol\Modbus\TestModbusUDP.cpp" />
     <ClCompile Include="Linx\System\Disk.cpp" />
     <ClCompile Include="Linx\System\MemInfo.cpp" />
     <ClCompile Include="Linx\System\TestDisk.cpp" />
@@ -90,6 +95,10 @@
     <ClInclude Include="Linx\Math\Sort.h" />
     <ClInclude Include="Linx\Protocol\FTP.h" />
     <ClInclude Include="Linx\Protocol\Ini.h" />
+    <ClInclude Include="Linx\Protocol\Modbus\ModbusDef.h" />
+    <ClInclude Include="Linx\Protocol\Modbus\ModbusMasterUDP.h" />
+    <ClInclude Include="Linx\Protocol\Modbus\ModbusSlaveDevice.h" />
+    <ClInclude Include="Linx\Protocol\Modbus\ModbusSlaveUDP.h" />
     <ClInclude Include="Linx\System\Disk.h" />
     <ClInclude Include="Linx\System\MemInfo.h" />
     <ClInclude Include="Linx\System\Process.h" />

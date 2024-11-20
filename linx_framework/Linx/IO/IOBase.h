@@ -12,6 +12,12 @@ namespace Linx
 	class IOBase
 	{
 	public:
+		IOBase() = default;
+		IOBase(IOBase&& In) : bShouldPrint(In.bShouldPrint), Handle(In.Handle)
+		{
+			In.Handle = INVALID_HANDLE_VALUE;
+		}
+		IOBase(const IOBase&) = delete;
 		virtual ~IOBase() {};
 
 #ifndef _WIN32
@@ -19,7 +25,7 @@ namespace Linx
 		static constexpr int INVALID_HANDLE_VALUE = -1;
 #endif
 
-		virtual size_t Write(const void* Buf, size_t Size)
+		virtual long Write(const void* Buf, size_t Size) noexcept
 		{
 			if (bShouldPrint)
 			{

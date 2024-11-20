@@ -98,15 +98,12 @@ namespace Linx
 		int left = 2 * i + 1; // 左子节点
 		int right = 2 * i + 2; // 右子节点
 
-		// 如果左子节点大于当前最大值
 		if (left < n && !Pred(InFirst[left], InFirst[largest]))
 			largest = left;
 
-		// 如果右子节点大于当前最大值
 		if (right < n && !Pred(InFirst[right], InFirst[largest]))
 			largest = right;
 
-		// 如果最大值不是根节点
 		if (largest != i)
 		{
 			std::swap(InFirst[i], InFirst[largest]); // 交换
@@ -119,7 +116,6 @@ namespace Linx
 	{
 		auto n = std::distance(InFirst, InLast);
 
-		// 构建最大堆
 		for (int i = n / 2 - 1; i >= 0; i--)
 			Heapify(InFirst, InLast, n, i, Pred);
 
