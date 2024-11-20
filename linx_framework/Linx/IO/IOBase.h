@@ -19,7 +19,7 @@ namespace Linx
 		static constexpr int INVALID_HANDLE_VALUE = -1;
 #endif
 
-		virtual size_t Write(const void* Buf, size_t Size)
+		virtual long Write(const void* Buf, size_t Size) noexcept
 		{
 			if (bShouldPrint)
 			{

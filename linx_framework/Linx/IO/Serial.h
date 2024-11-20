@@ -187,10 +187,10 @@ namespace Linx
 		void Close();
 
 		/** Read data from Serial. */
-		size_t Read(void* Buf, size_t Size);
+		long Read(void* Buf, size_t Size);
 
 		/** Write data to Serial. */
-		virtual size_t Write(void* Buf, size_t Size);
+		virtual long Write(const void* Buf, size_t Size) noexcept override;
 
 		/**
 		 *  Set the size of the buffer.

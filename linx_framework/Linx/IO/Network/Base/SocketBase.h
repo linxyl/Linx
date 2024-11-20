@@ -58,25 +58,15 @@ namespace Linx
 		virtual int Send(const char* buf, size_t bufsize) noexcept = 0;
 
 		/** Same as Recv, but returns 0 if failed. */
-		inline size_t Read(char* buf, size_t bufsize) noexcept
+		inline long Read(char* buf, size_t bufsize) noexcept
 		{
-			auto Ret = Recv(buf, bufsize);
-			if (Ret < 0)
-			{
-				return 0;
-			}
-			return Ret;
+			return Recv(buf, bufsize);
 		}
 
 		/** Sample as Send, but returns 0 if failed. */
-		inline size_t Write(const char* buf, size_t bufsize) noexcept
+		inline long Write(const char* buf, size_t bufsize) noexcept
 		{
-			auto Ret = Send(buf, bufsize);
-			if (Ret < 0)
-			{
-				return 0;
-			}
-			return Ret;
+			return Send(buf, bufsize);
 		}
 
 		/** Returns the socket. */

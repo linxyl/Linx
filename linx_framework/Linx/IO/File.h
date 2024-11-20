@@ -97,7 +97,7 @@ namespace Linx
 		long Read(void* Buf, size_t BufSize) noexcept;
 
 		/** Write data to the file. */
-		virtual size_t Write(const void* Buf, size_t BufSize) noexcept;
+		virtual long Write(const void* Buf, size_t BufSize) noexcept override;
 
 		/** Sets the offset of the pointer from the start of the file. */
 		long SeekBegin(long Offset) const noexcept;

@@ -19,7 +19,6 @@ int main()
 		int i = file.Get({ "321", "k" });
 		file.Set({ "321", "k" }, i + 1);
 		file.Set({ "111", "k" }, 6);
-		file.Save();
 	}
 	catch(const exception& e)
 	{
