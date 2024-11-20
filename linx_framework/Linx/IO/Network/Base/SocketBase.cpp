@@ -23,6 +23,17 @@ SocketBase::SocketBase() :
 #endif
 }
 
+SocketBase::SocketBase(SocketBase&& InSocket) :
+	Sock(InSocket.Sock),
+	TargetSock(InSocket.TargetSock),
+	Addr(InSocket.Addr),
+	TargetAddr(InSocket.TargetAddr),
+	bRecvAll(false)
+{
+	InSocket.Sock = 0;
+	InSocket.TargetSock = 0;
+}
+
 SocketBase::~SocketBase()
 {
 	Close();

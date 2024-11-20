@@ -69,6 +69,7 @@ namespace Linx
 		using Super = SocketBase;
 
 		IcmpSocket() { Init(); }
+		IcmpSocket(IcmpSocket&&) = default;
 
 		/**
 		 * Execute ping once.

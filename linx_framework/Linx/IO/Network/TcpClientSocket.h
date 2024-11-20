@@ -13,6 +13,7 @@ namespace Linx
 		using Super = TcpSocket;
 
 		TcpClientSocket();
+		TcpClientSocket(TcpClientSocket&& InSocket);
 
 	public:
 		/** Connects to the tcp server. */

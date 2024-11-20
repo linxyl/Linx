@@ -22,6 +22,14 @@ TcpClientSocket::TcpClientSocket()
 	pClientSock = &Sock;
 }
 
+TcpClientSocket::TcpClientSocket(TcpClientSocket&& InSocket) :
+	Super(std::move(InSocket)),
+	ConnectionTimeoutSeconds(InSocket.ConnectionTimeoutSeconds)
+{
+	pServerSock = &TargetSock;
+	pClientSock = &Sock;
+}
+
 bool TcpClientSocket::Connect() noexcept
 {
 #ifdef _WIN32

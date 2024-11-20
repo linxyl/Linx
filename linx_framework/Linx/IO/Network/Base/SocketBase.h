@@ -29,6 +29,7 @@ namespace Linx
 
 	public:
 		SocketBase();
+		SocketBase(SocketBase&& InSocket);
 		virtual ~SocketBase();
 
 	public:

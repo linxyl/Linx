@@ -4,41 +4,83 @@
 #include "Linx/IO/Network/TcpClientSocket.h"
 #include "Linx/Core.h"
 
-using namespace std::literals::string_literals;
-
 namespace Linx
 {
+	/**
+	 * A simple FTP protocol that can connect to
+	 * a server, and download and upload the file
+	 * between the server and the local.
+	 */
 	class FTP
 	{
 	public:
+		/**
+		 * Connect to the target address and login.
+		 * If Username is null, will not login in.
+		 */
 		bool Connect(const std::string& InTargetAddr, const std::string& Username = "", const std::string& Password = "");
 
-		bool LoginUser(const std::string& Username, char* Response = nullptr, size_t ResponseSize = 0);
+		/** Connect in anonymous mode. */
+		bool ConnectInAnonymous(const std::string& InTargetAddr);
 
-		bool EnterPassword(const std::string& Password, char* Response = nullptr, size_t ResponseSize = 0);
+		/**
+		 * Enter username to login.
+		 * @param Username		The username to login.
+		 * @param Response		An array pointer that receives the returned string.
+		 * @param ResponseSize	Size of the array that receives the returned string.
+		 */
+		inline bool LoginUser(const std::string& Username, char* Response = nullptr, size_t ResponseSize = 0)
+		{
+			return SendCommand("USER " + std::string(Username) + "\r\n", Response, ResponseSize);
+		}
 
-		bool DownloadFile(const std::string& ServerPath, char* RecvBuf, size_t BufSize);
-		bool DownloadFile(const std::string& ServerPath, const std::string& LocalPath);
+		/**
+		 * Enter password to login.
+		 * @param Password		The password to login.
+		 * @param Response		An array pointer that receives the returned string.
+		 * @param ResponseSize	Size of the array that receives the returned string.
+		 */
+		inline bool EnterPassword(const std::string& Password, char* Response = nullptr, size_t ResponseSize = 0)
+		{
+			return SendCommand("PASS " + std::string(Password) + "\r\n", Response, ResponseSize);
+		}
 
-		bool UploadFile(const std::string& ServerPath, char* RecvBuf, size_t BufSize);
-		bool UploadFile(const std::string& ServerPath, const std::string& LocalPath);
+		/** Login without username and password. */
+		void AnonymousLogin(char* Response = nullptr, size_t ResponseSize = 0);
 
+		/** Download a file from the server to the buffer or local file. */
+		void DownloadFile(const std::string& ServerPath, char* RecvBuf, size_t BufSize);
+		void DownloadFile(const std::string& ServerPath, const std::string& LocalPath);
+
+		/** Upload a file from the buffer or local file to the server. */
+		void UploadFile(const std::string& ServerPath, char* RecvBuf, size_t BufSize);
+		void UploadFile(const std::string& ServerPath, const std::string& LocalPath);
+
+		/** Send the command and receive the response. */
 		bool SendCommand(const std::string& Cmd, char* Response = nullptr, size_t ResponseSize = 0);
 
-		constexpr TcpClientSocket& GetControlIO() noexcept { return ControlIO; }
-		constexpr TcpClientSocket& GetTransmitIO() noexcept { return TransmitIO; }
+		/** Returns the control socket. */
+		constexpr TcpClientSocket& GetControlSocket() noexcept { return ControlSocket; }
 
 	private:
-		bool ConnectInPassiveMode(char* Response = nullptr, size_t ResponseSize = 0);
-		bool RequestDownload(const std::string& ServerPath);
-		bool RequestUpload(const std::string& ServerPath);
+		/** Connect in passive mode with a transmitted socket. */
+		TcpClientSocket ConnectInPassiveMode(char* Response = nullptr, size_t ResponseSize = 0);
+
+		/** Send a download request to the server. */
+		inline bool RequestDownload(const std::string& ServerPath)
+		{
+			return SendCommand("RETR " + ServerPath + "\r\n");
+		}
+		
+		/** Send a upload request to the server. */
+		inline bool RequestUpload(const std::string& ServerPath)
+		{
+			return SendCommand("STOR " + ServerPath + "\r\n");
+		}
 
 	private:
-		TcpClientSocket ControlIO;
-		TcpClientSocket TransmitIO;
+		TcpClientSocket ControlSocket;
 
 		std::string TargetAddr;
-
-		int ServerTransmitPort = -1;
 	};
 }

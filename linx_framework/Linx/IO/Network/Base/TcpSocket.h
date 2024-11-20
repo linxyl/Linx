@@ -13,6 +13,7 @@ namespace Linx
 		using Super = SocketBase;
 
 		TcpSocket() = default;
+		TcpSocket(TcpSocket&& InSocket) = default;
 
 	public:
 		// Begin SocketBase Interface.

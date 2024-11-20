@@ -24,12 +24,20 @@ void UdpSocket::Init()
 
 int UdpSocket::Recv(char* buf, size_t bufsize) noexcept
 {
+	int ret;
+	if (bRecvAddr)
+	{
 #ifdef _WIN32
-	int addr_len = sizeof(TargetAddr);
+		int addr_len = sizeof(TargetAddr);
 #else
-	socklen_t addr_len = sizeof(TargetAddr);
+		socklen_t addr_len = sizeof(TargetAddr);
 #endif
-	int ret = recv(Sock, buf, bufsize, bRecvAll ? MSG_WAITALL : 0);
+		ret = recvfrom(Sock, buf, bufsize, bRecvAll ? MSG_WAITALL : 0, (sockaddr*)&TargetAddr, &addr_len);
+	}
+	else
+	{
+		ret = recv(Sock, buf, bufsize, bRecvAll ? MSG_WAITALL : 0);
+	}
 
 	return ret;
 }
