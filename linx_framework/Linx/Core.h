@@ -12,6 +12,13 @@ namespace Linx
 	/** Initialize global variables */
 	void LinxInit();
 
+	constexpr uint16_t ConvertEndian(uint16_t Val) { return (Val >> 8) | (Val << 8); }
+	constexpr uint32_t ConvertEndian(uint32_t Val)
+	{
+		Val = ((Val >> 8) & 0xFF00FF) | ((Val << 8) & 0xFF00FF00);
+		return (Val >> 16) | (Val << 16);
+	}
+
 #ifdef _WIN32
 	/** Sleep in seconds. */
 	inline void SleepS(int Seconds) { ::Sleep(Seconds * 1000); }

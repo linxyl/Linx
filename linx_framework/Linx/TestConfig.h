@@ -10,7 +10,8 @@
 //#define TEST_FILE_STREAM
 //#define TEST_NETWORK_STREAM
 //#define TEST_INI
-#define TEST_FTP
+//#define TEST_FTP
+#define TEST_MODBUS_UDP
 //#define TEST_THREAD
 //#define TEST_FILE
 //#define TEST_UART
