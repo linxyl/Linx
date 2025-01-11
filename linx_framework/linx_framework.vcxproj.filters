@@ -165,6 +165,18 @@
     <ClCompile Include="Linx\Protocol\Modbus\TestModbusUDP.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Linx\Protocol\Modbus\ModbusMasterUDP.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Linx\Protocol\Modbus\ModbusSlaveUDP.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Linx\Protocol\Modbus\ModbusSlaveDevice.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Linx\Protocol\Modbus\ModbusLibrary.h">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Linx\Containers\RingBuffer.h">
@@ -305,10 +317,16 @@
     <ClInclude Include="Linx\Protocol\FTP.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Linx\Protocol\Modbus\ModbusUDP.h">
+    <ClInclude Include="Linx\Protocol\Modbus\ModbusMasterUDP.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Linx\Protocol\Modbus\ModbusDef.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Linx\Protocol\Modbus\ModbusSlaveUDP.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Linx\Protocol\Modbus\ModbusSlaveDevice.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

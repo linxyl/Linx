@@ -101,8 +101,9 @@ Linx::VariableString Linx::Ini::Get(const IniOption& Option)
 		{
 			return IniData[Option.Section][Option.Key].first;
 		}
+		throw std::logic_error("Section : " + Option.Section + " not found");
 	}
-	throw std::logic_error("Option not found");
+	throw std::logic_error("Key : " + Option.Key + " not found");
 }
 
 void Linx::Ini::Set(const IniOption& Option, const VariableString& Val)

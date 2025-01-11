@@ -12,11 +12,62 @@ namespace Linx
 	/** Initialize global variables */
 	void LinxInit();
 
-	constexpr uint16_t ConvertEndian(uint16_t Val) { return (Val >> 8) | (Val << 8); }
-	constexpr uint32_t ConvertEndian(uint32_t Val)
+	template<typename Type>
+	constexpr Type ConvertEndian(Type Val) noexcept
 	{
-		Val = ((Val >> 8) & 0xFF00FF) | ((Val << 8) & 0xFF00FF00);
-		return (Val >> 16) | (Val << 16);
+		if constexpr (1 == sizeof(Type))
+		{
+			return Val;
+		}
+		else if constexpr (2 == sizeof(Type))
+		{
+			return (Val >> 8) | (Val << 8);
+		}
+		else if constexpr (4 == sizeof(Type))
+		{
+			Val = ((Val >> 8) & 0xFF00FF) | ((Val << 8) & 0xFF00FF00);
+			return (Val >> 16) | (Val << 16);
+		}
+		else if constexpr (8 == sizeof(Type))
+		{
+			Type Temp = 0;
+			Temp |= (Val & 0xFF) << 56;
+			Temp |= (Val & 0xFF00) << 40;
+			Temp |= (Val & 0xFF0000) << 24;
+			Temp |= (Val & 0xFF000000) << 8;
+			Temp |= (Val & 0xFF00000000) >> 8;
+			Temp |= (Val & 0xFF0000000000) >> 24;
+			Temp |= (Val & 0xFF000000000000) >> 40;
+			Temp |= (Val & 0xFF00000000000000) >> 56;
+			return Temp;
+		}
+
+		static_assert(
+			1 == sizeof(Val) ||
+			2 == sizeof(Val) ||
+			4 == sizeof(Val) ||
+			8 == sizeof(Val),
+			"Unsupported type");
+
+		return Type{};
+	}
+
+	template<typename ItSrcType, typename ItDstType>
+	void ConvertEndianCopy(ItSrcType SrcBegin, ItSrcType SrcLast, ItDstType DstBegin)
+	{
+		while (SrcBegin != SrcLast)
+		{
+			*DstBegin++ = ConvertEndian(*SrcBegin++);
+		}
+	}
+
+	template<typename ItSrcType, typename ItDstType>
+	void ConvertEndianCopy(ItSrcType SrcBegin, size_t Length, ItDstType DstBegin)
+	{
+		for (size_t i = 0; i < Length; i++)
+		{
+			DstBegin[i] = ConvertEndian(SrcBegin[i]);
+		}
 	}
 
 #ifdef _WIN32

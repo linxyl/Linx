@@ -97,14 +97,24 @@ namespace Linx
 	template<class IOType>
 	std::streamsize Linx::StreambufBase<IOType>::xsgetn(char* Ptr, std::streamsize Count)
 	{
-		return IO->Read(Ptr, Count);
+		auto Ret = IO->Read(Ptr, Count);
+		if (Ret < 0)
+		{
+			return 0;
+		}
+		return Ret;
 	}
 
 	template<class IOType>
 	std::streamsize Linx::StreambufBase<IOType>::xsputn(const char* Ptr, std::streamsize Count)
 	{
 		FlushWriteBuffer();
-		return IO->Write(Ptr, Count);
+		auto Ret = IO->Write(Ptr, Count);
+		if (Ret < 0)
+		{
+			return 0;
+		}
+		return Ret;
 	}
 
 	template<class IOType>
