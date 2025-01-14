@@ -14,12 +14,16 @@ void TestOperator();
 void TestReadWrite();
 void TestThreadReadWrite();
 
-void ThreadRead(RingBuffer<int>& RB);
-void ThreadWrite(RingBuffer<int>& RB);
+void ThreadRead0(RingBuffer<int>& RB);
+void ThreadWrite0(RingBuffer<int>& RB);
+void ThreadRead1(RingBuffer<int>& RB);
+void ThreadWrite1(RingBuffer<int>& RB);
+void ThreadRead2(RingBuffer<int>& RB);
+void ThreadWrite2(RingBuffer<int>& RB);
 
-#define THREAD_LINE_NUM		16
-#define THREAD_BLOCK_SIZE	32
-#define THREAD_TEST_SIZE	4096
+#define THREAD_LINE_NUM		16U
+#define THREAD_BLOCK_SIZE	32U
+#define THREAD_TEST_SIZE	1000000000U
 
 int main()
 {
@@ -71,6 +75,7 @@ void TestReadWrite()
 	cout << "\nTestReadWrite\n";
 
 	RingBuffer<short> RB1(4);
+	RB1.ReadMode = ERingBufferReadMode::ReadAll;
 	RingBuffer<short> RB2(6);
 
 	// Write arr1 to RB1, and read from RB1 to arr2.
@@ -107,21 +112,137 @@ void TestThreadReadWrite()
 
 	RingBuffer<int> RB(128);
 
-	thread TR(ThreadRead, ref(RB));
-	thread TW(ThreadWrite, ref(RB));
+	cout << "Test0:\n";
+	thread TR(ThreadRead0, ref(RB));
+	thread TW(ThreadWrite0, ref(RB));
+
+	TW.join();
+	TR.join();
+
+	cout << "Test1:\n";
+	RB.ReadMode = ERingBufferReadMode::ReadAll;
+	RB.WriteMode = ERingBufferWriteMode::WriteFill;
+	TR = thread(ThreadRead1, ref(RB));
+	TW = thread(ThreadWrite1, ref(RB));
+
+	TW.join();
+	TR.join();
+
+	cout << "Test2:\n";
+	TR = thread(ThreadRead2, ref(RB));
+	TW = thread(ThreadWrite2, ref(RB));
 
 	TW.join();
 	TR.join();
 }
 
-void ThreadRead(RingBuffer<int>& RB)
+void ThreadRead0(RingBuffer<int>& RB)
+{
+	size_t ErrNum = 0;
+	size_t ReadSize = 0;
+	while (true)
+	{
+		auto Size = THREAD_BLOCK_SIZE;
+		std::remove_reference_t<decltype(RB)>::value_type Buf[THREAD_BLOCK_SIZE];
+		ReadSize += RB.Read(Buf, Size);
+		for (int i = 0; i < Size; i++)
+		{
+			static int LastIndex = 0;
+			if (Buf[i] - LastIndex != 1)
+			{
+				ErrNum++;
+			}
+			LastIndex = Buf[i];
+		}
+
+		if (ReadSize >= THREAD_TEST_SIZE)
+		{
+			break;
+		}
+	}
+
+	cout << "Error number: " << ErrNum << endl;
+}
+
+void ThreadWrite0(RingBuffer<int>& RB)
+{
+	size_t WrittenSize = 0;
+	while (true)
+	{
+		auto Size = THREAD_BLOCK_SIZE;
+		std::remove_reference_t<decltype(RB)>::value_type Buf[THREAD_BLOCK_SIZE];
+		for (int i = 0; i < Size; i++)
+		{
+			static int index = 1;
+			Buf[i] = index++;
+		}
+
+		WrittenSize += RB.Write(Buf, Size);
+		if (WrittenSize >= THREAD_TEST_SIZE)
+		{
+			break;
+		}
+	}
+}
+
+void ThreadRead1(RingBuffer<int>& RB)
+{
+	size_t ErrNum = 0;
+	size_t ReadSize = 0;
+	while (true)
+	{
+		unsigned int DataLen = RB.GetDataLen();
+		auto Size = std::min(DataLen, THREAD_BLOCK_SIZE);
+		std::remove_reference_t<decltype(RB)>::value_type Buf[THREAD_BLOCK_SIZE];
+		ReadSize += RB.Read(Buf, Size);
+		for (int i = 0; i < Size; i++)
+		{
+			static int LastIndex = 0;
+			if (Buf[i] - LastIndex != 1)
+			{
+				ErrNum++;
+			}
+			LastIndex = Buf[i];
+		}
+
+		if (ReadSize >= THREAD_TEST_SIZE)
+		{
+			break;
+		}
+	}
+
+	cout << "Error number: " << ErrNum << endl;
+}
+
+void ThreadWrite1(RingBuffer<int>& RB)
+{
+	size_t WrittenSize = 0;
+	while (true)
+	{
+		unsigned int RemainLen = RB.GetRemainLen();
+		auto Size = std::min(RemainLen, THREAD_BLOCK_SIZE);
+		std::remove_reference_t<decltype(RB)>::value_type Buf[THREAD_BLOCK_SIZE];
+		for (int i = 0; i < Size; i++)
+		{
+			static int index = 1;
+			Buf[i] = index++;
+		}
+
+		WrittenSize += RB.Write(Buf, Size);
+		if (WrittenSize >= THREAD_TEST_SIZE)
+		{
+			break;
+		}
+	}
+}
+
+void ThreadRead2(RingBuffer<int>& RB)
 {
 	size_t ErrNum = 0;
 	size_t ReadSize = 0;
 	while (true)
 	{
 		ReadSize += RB.Read([&](int* Ptr, size_t Size) {
-			// Print RingBuffer
 			for (int i = 0; i < Size; i++)
 			{
 				static int LastIndex = 0;
@@ -142,7 +263,7 @@ void ThreadRead(RingBuffer<int>& RB)
 	cout << "Error number: " << ErrNum << endl;
 }
 
-void ThreadWrite(RingBuffer<int>& RB)
+void ThreadWrite2(RingBuffer<int>& RB)
 {
 	size_t WrittenSize = 0;
 	while (true)

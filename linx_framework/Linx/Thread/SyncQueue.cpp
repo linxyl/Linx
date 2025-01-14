@@ -5,7 +5,7 @@ using namespace std;
 shared_ptr<Task> Linx::SyncQueue::Take()
 {
 	std::unique_lock<decltype(Mutex)> locker(Mutex);
-	NotEmpty.wait(locker, [this] {return bNeedStop || !Queue.empty(); });
+	NotEmpty.wait(locker, [this] { return bNeedStop || !Queue.empty(); });
 	if (bNeedStop)
 	{
 		return shared_ptr<Task>();
@@ -20,7 +20,7 @@ shared_ptr<Task> Linx::SyncQueue::Take()
 void Linx::SyncQueue::Take(list<shared_ptr<Task>>& List)
 {
 	std::unique_lock<decltype(Mutex)> locker(Mutex);
-	NotEmpty.wait(locker, [this] {return bNeedStop || !Queue.empty(); });
+	NotEmpty.wait(locker, [this] { return bNeedStop || !Queue.empty(); });
 	if (bNeedStop)
 	{
 		return;
