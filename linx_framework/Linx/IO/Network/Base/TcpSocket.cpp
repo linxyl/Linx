@@ -13,27 +13,24 @@
 
 using namespace Linx;
 
-void TcpSocket::Init()
+bool TcpSocket::Recreate() noexcept
 {
-	Super::Init();
+	Super::Recreate();
 
 	Sock = socket(AF_INET, SOCK_STREAM, 0);
-	if ((int)Sock < 0)
-	{
-		throw std::logic_error("Create socket failed\n");
-	}
+	return (int)Sock > 0;
 }
 
-int TcpSocket::Recv(char* buf, size_t bufsize) noexcept
+int TcpSocket::Recv(char* buf, size_t bufsize) const noexcept
 {
-	int ret = recv(*pClientSock, buf, bufsize, bRecvAll ? MSG_WAITALL : 0);
+	int ret = recv(Sock, buf, bufsize, bRecvAll ? MSG_WAITALL : 0);
 
 	return ret;
 }
 
-int TcpSocket::Send(const char* buf, size_t bufsize) noexcept
+int TcpSocket::Send(const char* buf, size_t bufsize) const noexcept
 {
-	int ret = send(*pClientSock, buf, bufsize, 0);
+	int ret = send(Sock, buf, bufsize, 0);
 
 	return ret;
 }
@@ -41,7 +38,7 @@ int TcpSocket::Send(const char* buf, size_t bufsize) noexcept
 long TcpSocket::SendFile(HANDLE InHandle, size_t Size)
 {
 #ifdef _WIN32
-	auto Ret = TransmitFile(*pClientSock,
+	auto Ret = TransmitFile(Sock,
 		InHandle,
 		Size,
 		0,
@@ -51,7 +48,7 @@ long TcpSocket::SendFile(HANDLE InHandle, size_t Size)
 	return Ret ? Size : -1;
 #else
 	off_t offset = 0;
-	return sendfile(*pClientSock, InHandle, &offset, Size);
+	return sendfile(Sock, InHandle, &offset, Size);
 #endif
 }
 

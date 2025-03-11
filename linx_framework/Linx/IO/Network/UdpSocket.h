@@ -19,9 +19,9 @@ namespace Linx
 		bool bRecvAddr = true;
 
 		// Begin SocketBase Interface.
-		virtual void Init() override;
-		virtual int Recv(char* buf, size_t bufsize) noexcept override;
-		virtual int Send(const char* buf, size_t bufsize) noexcept override;
+		virtual bool Recreate() noexcept override;
+		virtual int Recv(char* buf, size_t bufsize) const noexcept override;
+		virtual int Send(const char* buf, size_t bufsize) const noexcept override;
 		// End SocketBase Interface.
 	};
 }

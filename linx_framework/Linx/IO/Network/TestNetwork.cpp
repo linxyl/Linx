@@ -103,7 +103,8 @@ void TestTcpServer()
 		return;
 	}
 
-	if (!tss.Accept())
+	auto ts = tss.Accept();
+	if (!ts.IsValid())
 	{
 		cout << "Accept failed\n";
 		return;
@@ -111,7 +112,7 @@ void TestTcpServer()
 	////////////////////////////////////////
 	m.lock();
 	char buf[4];
-	if (tss.Recv(buf, 4) <= 0)
+	if (ts.Recv(buf, 4) <= 0)
 	{
 		cout << "tss recv failed\n";
 		return;
@@ -121,7 +122,7 @@ void TestTcpServer()
 
 	SleepM(10);
 
-	if (tss.Send("456", 4) <= 0)
+	if (ts.Send("456", 4) <= 0)
 	{
 		cout << "tss send failed\n";
 		return;
@@ -133,7 +134,7 @@ void TestTcpServer()
 #ifdef TEST_SENDFILE
 	File file("sendfile.txt");
 	m.lock();
-	if (tss.SendFile(file, 3) <= 0)
+	if (ts.SendFile(file, 3) <= 0)
 	{
 		cout << "tss send file failed\n";
 		return;
@@ -141,9 +142,6 @@ void TestTcpServer()
 	cout << "tss send file: abc\n";
 	m.unlock();
 #endif
-	///////////////////////////////////////
-
-	tss.Close();
 }
 
 void TestUdpSocket()

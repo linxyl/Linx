@@ -329,5 +329,8 @@
     <ClInclude Include="Linx\Protocol\Modbus\ModbusSlaveDevice.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Linx\ConfigCore.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

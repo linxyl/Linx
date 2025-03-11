@@ -8,40 +8,26 @@ namespace Linx
 	/**
 	 * Listen for connections from tcp clients and transfer data
 	 */
-	class TcpServerSocket : public TcpSocket
+	class TcpServerSocket : private TcpSocket
 	{
 	public:
 		using Super = TcpSocket;
 
 		TcpServerSocket();
-		TcpServerSocket(TcpServerSocket&& InSocket);
+		TcpServerSocket(TcpServerSocket&& InSocket) = default;
 
 	public:
-		/** Set self socket to listen and enables the server to receive connection requests from clients. */
-		bool Listen(size_t Num = 1) noexcept;
+		/** Select a port to receive remote message. */
+		bool Bind(int Port) const noexcept { return Super::Bind(Port); }
 
-		/**
-		 * Whether to switch the target of the communication upon successful acceptance.
-		 * @param bSwitch	Whether switch target client socket.
-		 */
-		bool Accept(bool bSwitchClient = true) noexcept;
+		/** Listen for incoming connection requests. */
+		bool Listen(size_t Num = 1) const noexcept { return 0 == listen(Sock, Num); }
 
-		/** Set the target client to communicate with. */
-		void SetTargetClient(socket_type ClientSocket) noexcept;
-
-		/** Close the connection to the client. */
-		void CloseClient(socket_type ClientSocket) noexcept;
+		/** Accept a connection on a socket. */
+		TcpSocket Accept() const noexcept;
 
 		// Begin SocketBase Interface.
-		virtual void Init() override;
-		virtual void Close() noexcept override;
+		virtual bool Recreate() noexcept override;
 		// End SocketBase Interface.
-
-		/** Returns the reference of the connected client sockets. */
-		const std::set<socket_type>& GetClientSockets() const noexcept { return ClientSockets; }
-
-	private:
-		/** Connected client sockets */
-		std::set<socket_type> ClientSockets;
 	};
 }

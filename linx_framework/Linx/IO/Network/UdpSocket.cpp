@@ -8,21 +8,18 @@ using namespace Linx;
 
 UdpSocket::UdpSocket()
 {
-	Init();
+	Recreate();
 }
 
-void UdpSocket::Init()
+bool UdpSocket::Recreate() noexcept
 {
-	Super::Init();
+	Super::Recreate();
 
 	Sock = socket(AF_INET, SOCK_DGRAM, 0);
-	if((int)Sock < 0)
-	{
-		throw std::logic_error("Create socket failed\n");
-	}
+	return (int)Sock > 0;
 }
 
-int UdpSocket::Recv(char* buf, size_t bufsize) noexcept
+int UdpSocket::Recv(char* buf, size_t bufsize) const noexcept
 {
 	int ret;
 	if (bRecvAddr)
@@ -42,7 +39,7 @@ int UdpSocket::Recv(char* buf, size_t bufsize) noexcept
 	return ret;
 }
 
-int UdpSocket::Send(const char* buf, size_t bufsize) noexcept
+int UdpSocket::Send(const char* buf, size_t bufsize) const noexcept
 {
 	int ret = sendto(Sock, buf, bufsize, 0, (sockaddr*)&TargetAddr, sizeof TargetAddr);
 

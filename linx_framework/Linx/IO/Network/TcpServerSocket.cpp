@@ -8,31 +8,10 @@ using namespace Linx;
 
 TcpServerSocket::TcpServerSocket()
 {
-	Init();
-
-	pServerSock = &Sock;
-	pClientSock = &TargetSock;
+	Recreate();
 }
 
-TcpServerSocket::TcpServerSocket(TcpServerSocket&& InSocket):
-	Super(std::move(InSocket)),
-	ClientSockets(InSocket.ClientSockets)
-{
-	pServerSock = &Sock;
-	pClientSock = &TargetSock;
-}
-
-bool TcpServerSocket::Listen(size_t Num) noexcept
-{
-    if(listen(Sock, Num) < 0)
-    {
-		return false;
-    }
-
-	return true;
-}
-
-bool TcpServerSocket::Accept(bool bSwitchClient) noexcept
+TcpSocket TcpServerSocket::Accept() const noexcept
 {
 #ifdef _WIN32
 	int len = sizeof(TargetAddr);
@@ -43,63 +22,19 @@ bool TcpServerSocket::Accept(bool bSwitchClient) noexcept
 	socket_type AcceptSocket;
 	if((AcceptSocket = accept(Sock,(sockaddr*)&TargetAddr, &len)) == (socket_type)-1)
 	{
-		return false;
+		return TcpSocket();
 	}
-
-	if (bSwitchClient)
-	{
-		TargetSock = AcceptSocket;
-	}
-
-	ClientSockets.insert(TargetSock);
-
-	return true;
+	return TcpSocket(AcceptSocket);
 }
 
-void TcpServerSocket::SetTargetClient(socket_type ClientSocket) noexcept
+bool TcpServerSocket::Recreate() noexcept
 {
-	TargetSock = ClientSocket;
-}
-
-void TcpServerSocket::CloseClient(socket_type ClientSocket) noexcept
-{
-	if (ClientSocket)
-	{
-#ifdef _WIN32
-		closesocket(ClientSocket);
-#else
-		close(ClientSocket);
-#endif
-		ClientSockets.erase(ClientSocket);
-	}
-}
-
-void TcpServerSocket::Init()
-{
-	Super::Init();
+	Super::Recreate();
 
 	int optval = 1;  
 	if (setsockopt(Sock, SOL_SOCKET, SO_REUSEADDR, (char*)&optval, sizeof(optval)) < 0)
 	{  
-		throw "setsockopt failed\n";
+		return false;
 	}
-}
-
-void TcpServerSocket::Close() noexcept
-{
-	Super::Close();
-
-	for (auto it : ClientSockets)
-	{
-		if (it)
-		{
-	#ifdef _WIN32
-			closesocket(it);
-	#else
-			close(it);
-	#endif
-		}
-	}
-
-	ClientSockets = decltype(ClientSockets)();
+	return true;
 }

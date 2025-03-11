@@ -14,23 +14,12 @@
 
 using namespace Linx;
 
-TcpClientSocket::TcpClientSocket()
+TcpClientSocket::TcpClientSocket() noexcept
 {
-	Init();
-
-	pServerSock = &TargetSock;
-	pClientSock = &Sock;
+	Recreate();
 }
 
-TcpClientSocket::TcpClientSocket(TcpClientSocket&& InSocket) :
-	Super(std::move(InSocket)),
-	ConnectionTimeoutSeconds(InSocket.ConnectionTimeoutSeconds)
-{
-	pServerSock = &TargetSock;
-	pClientSock = &Sock;
-}
-
-bool TcpClientSocket::Connect() noexcept
+bool TcpClientSocket::Connect() const noexcept
 {
 #ifdef _WIN32
 	unsigned long mode = 1;
@@ -86,19 +75,6 @@ bool TcpClientSocket::Connect() noexcept
 		{
 			return false;
 		}
-		// fd_set wset;
-		// FD_ZERO(&wset);
-		// FD_SET(Sock, &wset);
-		// n = select(Sock + 1, NULL, &wset, NULL, &ConnectTimeout);
-		// if (n < 0)
-		// {
-		// 	return false;
-		// }
-		// else if (0 == n)
-		// {
-		// 	// 超时 				
-		// 	return false;
-		// };
 
 		int so_error;  
 		socklen_t len = sizeof(so_error);  
@@ -119,7 +95,9 @@ bool TcpClientSocket::Connect() noexcept
 
 bool TcpClientSocket::Connect(const std::string& IP, int Port) noexcept
 {
-	SetTargetAddr(IP, Port);
-
+	if (!SetTargetAddr(IP, Port))
+	{
+		return false;
+	}
 	return Connect();
 }

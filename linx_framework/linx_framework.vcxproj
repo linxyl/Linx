@@ -70,6 +70,7 @@
     <ClInclude Include="Linx\Allocator\FileAllocator.h" />
     <ClInclude Include="Linx\Allocator\VirtualAllocator.h" />
     <ClInclude Include="Linx\Config.h" />
+    <ClInclude Include="Linx\ConfigCore.h" />
     <ClInclude Include="Linx\Containers\RingBuffer.h" />
     <ClInclude Include="Linx\FunctionLibrary\StringLibrary.h" />
     <ClInclude Include="Linx\IOStream\FileStream.h" />
