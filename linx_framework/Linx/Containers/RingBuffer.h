@@ -6,6 +6,7 @@
 #include <memory>
 #include <functional>
 #include <atomic>
+#include <mutex>
 
 #include "Linx/Math/MathLibrary.h"
 
@@ -18,6 +19,9 @@ namespace Linx
 		{
 			/** Do noting */
 			ReadNothing = 0,
+
+			/** Block until the data length is sufficient */
+			ReadBlock,
 
 			/** Read remaining data */
 			ReadAll
@@ -32,11 +36,14 @@ namespace Linx
 			/** Do nothing */
 			WriteNothing = 0,
 
+			/** Block until the remaining length is sufficient */
+			WriteBlock,
+
 			/** Cover the data from the position of Front, and set Front to Rear */
-			Cover,
+			WriteCover,
 
 			/** Write data to the remaining space */
-			Fill
+			WriteFill
 		};
 	}
 
@@ -66,18 +73,18 @@ namespace Linx
 	public:
 		inline pointer GetPtr() const noexcept { return RB->pBuffer + GetOffset(); }
 
-		inline size_type GetOffset() const noexcept { return CompleteOffset & RB->OffsetMask; }
+		inline size_type GetOffset() const noexcept { return EntireOffset & RB->OffsetMask; }
 
 	public:
 		inline RingBufferConstIterator(RingBuffer<Type, Alloc>* InPtr) noexcept :
 			RB(InPtr),
-			CompleteOffset()
+			EntireOffset()
 		{}
 
 		inline RingBufferConstIterator(const RingBufferConstIterator& InIterator) noexcept :
 			RB(InIterator.RB)
 		{
-			CompleteOffset.store(InIterator.CompleteOffset);
+			EntireOffset.store(InIterator.EntireOffset);
 		}
 
 		inline reference operator*() const noexcept { return RB->pBuffer[GetOffset()]; }
@@ -86,7 +93,7 @@ namespace Linx
 
 		inline RingBufferConstIterator& operator++() noexcept
 		{
-			CompleteOffset += 1;
+			EntireOffset += 1;
 			return *this;
 		}
 
@@ -99,7 +106,7 @@ namespace Linx
 
 		inline RingBufferConstIterator& operator--() noexcept
 		{
-			CompleteOffset -= 1;
+			EntireOffset -= 1;
 			return *this;
 		}
 
@@ -112,7 +119,7 @@ namespace Linx
 
 		inline RingBufferConstIterator& operator+=(const difference_type InOffset) noexcept
 		{
-			CompleteOffset += InOffset;
+			EntireOffset += InOffset;
 			return *this;
 		}
 
@@ -131,7 +138,7 @@ namespace Linx
 		inline RingBufferConstIterator& operator=(const RingBufferConstIterator& Right) noexcept
 		{
 			RB = Right.RB;
-			CompleteOffset = Right.CompleteOffset;
+			EntireOffset = Right.EntireOffset;
 			return *this;
 		}
 
@@ -144,7 +151,7 @@ namespace Linx
 
 		inline difference_type operator-(const RingBufferConstIterator& Right) const noexcept
 		{
-			return CompleteOffset - Right.CompleteOffset;
+			return EntireOffset - Right.EntireOffset;
 		}
 
 		inline reference operator[](const difference_type InOffset) const noexcept
@@ -154,7 +161,7 @@ namespace Linx
 
 		inline bool operator==(const RingBufferConstIterator& Right) const noexcept
 		{
-			return CompleteOffset == Right.CompleteOffset;
+			return EntireOffset == Right.EntireOffset;
 		}
 
 		inline bool operator!=(const RingBufferConstIterator& Right) const noexcept
@@ -164,12 +171,12 @@ namespace Linx
 
 		inline bool operator<(const RingBufferConstIterator& Right) const noexcept
 		{
-			return CompleteOffset < Right.CompleteOffset;
+			return EntireOffset < Right.EntireOffset;
 		}
 
 		inline bool operator>(const RingBufferConstIterator& Right) const noexcept
 		{
-			return CompleteOffset > Right.CompleteOffset;
+			return EntireOffset > Right.EntireOffset;
 		}
 
 		inline bool operator<=(const RingBufferConstIterator& Right) const noexcept
@@ -186,8 +193,8 @@ namespace Linx
 		/** Indicates which RingBuffer is pointed to */
 		RingBuffer<Type, Alloc>* RB;
 
-		/** The complete offset of the element in the RingBuffer */
-		std::atomic<uint64_t> CompleteOffset = 0;
+		/** The entire offset of the element in the RingBuffer */
+		std::atomic<uint64_t> EntireOffset = 0;
 	};
 
 	/**
@@ -228,7 +235,7 @@ namespace Linx
 
 		inline RingBufferIterator& operator++() noexcept
 		{
-			Super::CompleteOffset += 1;
+			Super::EntireOffset += 1;
 			return *this;
 		}
 
@@ -241,7 +248,7 @@ namespace Linx
 
 		inline RingBufferIterator& operator--() noexcept
 		{
-			Super::CompleteOffset -= 1;
+			Super::EntireOffset -= 1;
 			return *this;
 		}
 
@@ -254,7 +261,7 @@ namespace Linx
 
 		inline RingBufferIterator& operator+=(const difference_type InOffset) noexcept
 		{
-			Super::CompleteOffset += InOffset;
+			Super::EntireOffset += InOffset;
 			return *this;
 		}
 
@@ -273,7 +280,7 @@ namespace Linx
 		inline RingBufferIterator& operator=(const RingBufferIterator& Right) noexcept
 		{
 			Super::RB = Right.RB;
-			Super::CompleteOffset.store(Right.CompleteOffset);
+			Super::EntireOffset.store(Right.EntireOffset);
 			return *this;
 		}
 
@@ -286,7 +293,7 @@ namespace Linx
 
 		inline difference_type operator-(const RingBufferIterator& Right) const noexcept
 		{
-			return Super::CompleteOffset - Right.Super::CompleteOffset;
+			return Super::EntireOffset - Right.Super::EntireOffset;
 		}
 
 		inline reference operator[](const difference_type InOffset) const noexcept
@@ -296,7 +303,7 @@ namespace Linx
 
 		inline bool operator==(const RingBufferIterator& Right) const noexcept
 		{
-			return Super::CompleteOffset == Right.Super::CompleteOffset;
+			return Super::EntireOffset == Right.Super::EntireOffset;
 		}
 
 		bool operator!=(const RingBufferIterator& Right) const noexcept
@@ -306,12 +313,12 @@ namespace Linx
 
 		bool operator<(const RingBufferIterator& Right) const noexcept
 		{
-			return Super::CompleteOffset < Right.Super::CompleteOffset;
+			return Super::EntireOffset < Right.Super::EntireOffset;
 		}
 
 		bool operator>(const RingBufferIterator& Right) const noexcept
 		{
-			return Super::CompleteOffset > Right.Super::CompleteOffset;
+			return Super::EntireOffset > Right.Super::EntireOffset;
 		}
 
 		bool operator<=(const RingBufferIterator& Right) const noexcept
@@ -343,7 +350,6 @@ namespace Linx
 		using const_reference = const Type&;
 		using size_type = size_t;
 		using difference_type = ptrdiff_t;
-
 		using iterator = RingBufferIterator<Type, Alloc>;
 		using const_iterator = RingBufferConstIterator<Type, Alloc>;
 		using reverse_iterator = std::reverse_iterator<iterator>;
@@ -418,31 +424,6 @@ namespace Linx
 		 */
 		size_type ReallocBuffer(size_type Size) noexcept;
 
-	private:
-		/** Pointer to the buffer */
-		Type* pBuffer;
-
-		/** Length of the buffer */
-		size_type MaxLen;
-
-		/** Used to mask the offset */
-		size_type OffsetMask;
-
-		/** Iterator pointing to the read position */
-		iterator Head;
-
-		/** Iterator pointing to the write position */
-		iterator Rear;
-
-		/** Used to allocate the buffer */
-		allocator_type Allocator;
-
-		/** A custom function to free the buffer */
-		std::function<void(value_type*)> Deleter;
-
-		/** Whether to use a custom function to free the buffer */
-		bool bUseCustomDeleter = false;
-
 	public:
 		/** Returns data length. */
 		inline size_type GetDataLen() const noexcept { return Rear - Head; }
@@ -485,6 +466,45 @@ namespace Linx
 		inline const_reverse_iterator crbegin() const noexcept { return rbegin(); }
 		inline const_reverse_iterator crend() const noexcept { return rend(); }
 
+	private:
+		/** Pointer to the buffer */
+		Type* pBuffer;
+
+		/** Length of the buffer */
+		size_type MaxLen;
+
+		/** Used to mask the offset */
+		size_type OffsetMask;
+
+		/** Iterator pointing to the read position */
+		iterator Head;
+
+		/** Iterator pointing to the write position */
+		iterator Rear;
+
+		/** Used to allocate the buffer */
+		allocator_type Allocator;
+
+		/** A custom function to free the buffer */
+		std::function<void(value_type*)> Deleter;
+
+		/** Whether to use a custom function to free the buffer */
+		bool bUseCustomDeleter = false;
+
+		/** Used by read condition variable */
+		std::mutex ReadConditionMutex;
+
+		/** Used when read mode is ReadBlock */
+		std::condition_variable ReadConditionVar;
+
+		/** Used by write condition variable */
+		std::mutex WriteConditionMutex;
+
+		/** Used when write mode is ReadBlock */
+		std::condition_variable WriteConditionVar;
+
+		/** Used to avoid the conflict between reading and writing */
+		std::mutex WaitLock;
 
 	private:
 		void DeallocBuffer();
@@ -514,6 +534,34 @@ namespace Linx
 			MaxLen = Size;
 			OffsetMask = MaxLen - 1;
 		}
+
+		void ReadWait(size_type Len) noexcept
+		{
+			while (GetDataLen() < Len)
+			{
+				std::unique_lock<std::mutex> lock(WaitLock, std::defer_lock);
+				if (lock.try_lock())
+				{
+					std::unique_lock<std::mutex> uLock(ReadConditionMutex);
+					ReadConditionVar.wait(uLock);
+				}
+				WriteConditionVar.notify_one();
+			}
+		}
+
+		void WriteWait(size_type Len) noexcept
+		{
+			while (GetRemainLen() < Len)
+			{
+				std::unique_lock<std::mutex> lock(WaitLock, std::defer_lock);
+				if (lock.try_lock())
+				{
+					std::unique_lock<std::mutex> uLock(WriteConditionMutex);
+					WriteConditionVar.wait(uLock);
+				}
+				ReadConditionVar.notify_one();
+			}
+		}
 	};
 
 	/************************************************************************/
@@ -526,8 +574,8 @@ namespace Linx
 		MaxLen(0),
 		Head(this),
 		Rear(this),
-		ReadMode(ERingBufferReadMode::ReadNothing),
-		WriteMode(ERingBufferWriteMode::WriteNothing)
+		ReadMode(ERingBufferReadMode::ReadBlock),
+		WriteMode(ERingBufferWriteMode::WriteBlock)
 	{
 	}
 
@@ -589,6 +637,10 @@ namespace Linx
 			{
 			case ERingBufferReadMode::ReadNothing:
 				break;
+			case ERingBufferReadMode::ReadBlock:
+				ReadWait(Len);
+				Ret = ReadImpl(DstPtr, Len);
+				break;
 			case ERingBufferReadMode::ReadAll:
 				Ret = ReadImpl(DstPtr, DataLen);
 				break;
@@ -596,6 +648,8 @@ namespace Linx
 				break;
 			}
 		}
+
+		WriteConditionVar.notify_one();
 
 		return Ret;
 	}
@@ -623,6 +677,9 @@ namespace Linx
 			case ERingBufferReadMode::ReadNothing:
 				TransLen = 0;
 				break;
+			case ERingBufferReadMode::ReadBlock:
+				ReadWait(Len);
+				break;
 			case ERingBufferReadMode::ReadAll:
 				TransLen = DataLen;
 				break;
@@ -641,10 +698,13 @@ namespace Linx
 			case ERingBufferWriteMode::WriteNothing:
 				TransLen = 0;
 				break;
-			case ERingBufferWriteMode::Cover:
+			case ERingBufferWriteMode::WriteBlock:
+				DstRingBuffer.WriteWait(TransLen);
+				break;
+			case ERingBufferWriteMode::WriteCover:
 				bCoverFlag = true;
 				break;
-			case ERingBufferWriteMode::Fill:
+			case ERingBufferWriteMode::WriteFill:
 				TransLen = DstRemainLen;
 				break;
 			default:
@@ -658,6 +718,9 @@ namespace Linx
 		{
 			DstRingBuffer.Head = DstRingBuffer.Rear;
 		}
+
+		WriteConditionVar.notify_one();
+		DstRingBuffer.ReadConditionVar.notify_one();
 
 		return Ret;
 	}
@@ -689,6 +752,10 @@ namespace Linx
 			{
 			case ERingBufferReadMode::ReadNothing:
 				break;
+			case ERingBufferReadMode::ReadBlock:
+				ReadWait(Len);
+				Ret = ReadImpl(Func, Len);
+				break;
 			case ERingBufferReadMode::ReadAll:
 				Ret = ReadImpl(Func, DataLen);
 				break;
@@ -696,6 +763,8 @@ namespace Linx
 				break;
 			}
 		}
+
+		WriteConditionVar.notify_one();
 
 		return Ret;
 	}
@@ -721,16 +790,22 @@ namespace Linx
 			{
 			case ERingBufferWriteMode::WriteNothing:
 				break;
-			case ERingBufferWriteMode::Cover:
+			case ERingBufferWriteMode::WriteBlock:
+				WriteWait(Len);
 				Ret = WriteImpl(SrcPtr, Len);
 				break;
-			case ERingBufferWriteMode::Fill:
+			case ERingBufferWriteMode::WriteCover:
+				Ret = WriteImpl(SrcPtr, Len);
+				break;
+			case ERingBufferWriteMode::WriteFill:
 				Ret = WriteImpl(SrcPtr, RemainLen);
 				break;
 			default:
 				break;
 			}
 		}
+
+		ReadConditionVar.notify_one();
 
 		return Ret;
 	}
@@ -758,6 +833,9 @@ namespace Linx
 			case ERingBufferReadMode::ReadNothing:
 				TransLen = 0;
 				break;
+			case ERingBufferReadMode::ReadBlock:
+				SrcRingBuffer.ReadWait(Len);
+				break;
 			case ERingBufferReadMode::ReadAll:
 				TransLen = SrcDataLen;
 				break;
@@ -776,10 +854,13 @@ namespace Linx
 			case ERingBufferWriteMode::WriteNothing:
 				TransLen = 0;
 				break;
-			case ERingBufferWriteMode::Cover:
+			case ERingBufferWriteMode::WriteBlock:
+				WriteWait(TransLen);
+				break;
+			case ERingBufferWriteMode::WriteCover:
 				bCoverFlag = true;
 				break;
-			case ERingBufferWriteMode::Fill:
+			case ERingBufferWriteMode::WriteFill:
 				TransLen = RemainLen;
 				break;
 			default:
@@ -793,6 +874,9 @@ namespace Linx
 		{
 			Head = Rear;
 		}
+
+		SrcRingBuffer.WriteConditionVar.notify_one();
+		ReadConditionVar.notify_one();
 
 		return Ret;
 	}
@@ -823,16 +907,22 @@ namespace Linx
 			{
 			case ERingBufferWriteMode::WriteNothing:
 				break;
-			case ERingBufferWriteMode::Cover:
+			case ERingBufferWriteMode::WriteBlock:
+				WriteWait(Len);
 				Ret = WriteImpl(Func, Len);
 				break;
-			case ERingBufferWriteMode::Fill:
+			case ERingBufferWriteMode::WriteCover:
+				Ret = WriteImpl(Func, Len);
+				break;
+			case ERingBufferWriteMode::WriteFill:
 				Ret = WriteImpl(Func, RemainLen);
 				break;
 			default:
 				break;
 			}
 		}
+
+		ReadConditionVar.notify_one();
 
 		return Ret;
 	}
@@ -1168,8 +1258,8 @@ namespace Linx
 	template<class Type, class Alloc>
 	void RingBuffer<Type, Alloc>::CopyPart(const RingBuffer& RB) noexcept
 	{
-		Head.CompleteOffset.store(RB.Head.CompleteOffset);
-		Rear.CompleteOffset.store(RB.Rear.CompleteOffset);
+		Head.EntireOffset.store(RB.Head.EntireOffset);
+		Rear.EntireOffset.store(RB.Rear.EntireOffset);
 		ReadMode = RB.ReadMode;
 		WriteMode = RB.WriteMode;
 		bUseCustomDeleter = RB.bUseCustomDeleter;

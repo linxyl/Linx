@@ -5,7 +5,6 @@
 #include "Linx/IOStream/FileStream.h"
 #include "Linx/Utils/Singleton.h"
 #include "Linx/Thread/Lock/SpinLock.h"
-#include "Linx/Config.h"
 
 namespace Linx
 {

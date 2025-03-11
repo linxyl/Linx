@@ -68,7 +68,7 @@ namespace Linx
 	public:
 		using Super = SocketBase;
 
-		IcmpSocket() { Init(); }
+		IcmpSocket() noexcept { Recreate(); }
 		IcmpSocket(IcmpSocket&&) = default;
 
 		/**
@@ -78,15 +78,15 @@ namespace Linx
 		 * @param DataSize	Length of data.
 		 * @return whether the ping succeeds.
 		 */
-		int Ping(PingReply* Reply = nullptr, int InSeq = 1, int DataSize = 32) noexcept;
+		int Ping(PingReply* Reply = nullptr, int InSeq = 1, int DataSize = 32) const noexcept;
 
 		/** Implements the ping function from the terminal. */
 		static bool PingTest(const char* Target, int Count = 4, int Size = 32, int Interval = 1000) noexcept;
 
 		// Begin SocketBase Interface.
-		virtual void Init() override;
-		virtual int Recv(char* buf, size_t bufsize) noexcept override;
-		virtual int Send(const char* buf, size_t bufsize) noexcept override;
+		virtual bool Recreate() noexcept override;
+		virtual int Recv(char* buf, size_t bufsize) const noexcept override;
+		virtual int Send(const char* buf, size_t bufsize) const noexcept override;
 		// End SocketBase Interface.
 	};
 }

@@ -11,20 +11,22 @@
 using namespace Linx;
 using namespace std;
 
-void IcmpSocket::Init()
+bool IcmpSocket::Recreate() noexcept
 {
-	Super::Init();
+	Super::Recreate();
 
 	Sock = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP);
-	if((int)Sock < 0)
+	if((int)Sock <= 0)
 	{
-		throw std::logic_error("Create socket failed, you need add sudo to run\n");
+		return false;
 	}
 
 	SetRecvTimeout(5000);
+
+	return true;
 }
 
-int IcmpSocket::Ping(PingReply* Reply, int InSeq, int DataSize) noexcept
+int IcmpSocket::Ping(PingReply* Reply, int InSeq, int DataSize) const noexcept
 {
     int SendSize = DataSize + sizeof(ICMPPackage);
 
@@ -67,7 +69,7 @@ int IcmpSocket::Ping(PingReply* Reply, int InSeq, int DataSize) noexcept
 	return 0;
 }
 
-int IcmpSocket::Recv(char* buf, size_t bufsize) noexcept
+int IcmpSocket::Recv(char* buf, size_t bufsize) const noexcept
 {
 #ifdef _WIN32
 	int addr_len = sizeof(TargetAddr);
@@ -79,7 +81,7 @@ int IcmpSocket::Recv(char* buf, size_t bufsize) noexcept
 	return ret;
 }
 
-int IcmpSocket::Send(const char* buf, size_t bufsize) noexcept
+int IcmpSocket::Send(const char* buf, size_t bufsize) const noexcept
 {
 	int ret = sendto(Sock, buf, bufsize, 0, (sockaddr*)&TargetAddr, sizeof TargetAddr);
 

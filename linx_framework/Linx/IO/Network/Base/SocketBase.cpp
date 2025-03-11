@@ -10,7 +10,7 @@
 
 using namespace Linx;
 
-SocketBase::SocketBase() :
+SocketBase::SocketBase() noexcept :
 	bRecvAll(0)
 {
 #ifdef _WIN32
@@ -23,18 +23,15 @@ SocketBase::SocketBase() :
 #endif
 }
 
-SocketBase::SocketBase(SocketBase&& InSocket) :
+SocketBase::SocketBase(SocketBase&& InSocket) noexcept :
 	Sock(InSocket.Sock),
-	TargetSock(InSocket.TargetSock),
-	Addr(InSocket.Addr),
 	TargetAddr(InSocket.TargetAddr),
 	bRecvAll(false)
 {
 	InSocket.Sock = 0;
-	InSocket.TargetSock = 0;
 }
 
-SocketBase::~SocketBase()
+SocketBase::~SocketBase() noexcept
 {
 	Close();
 }
@@ -58,9 +55,9 @@ hostent* SocketBase::SetTargetAddr(const std::string& Target, int Port) noexcept
 	return host;
 }
 
-bool SocketBase::Bind(int Port) noexcept
+bool SocketBase::Bind(int Port) const noexcept
 {
-	memset(&Addr, 0, sizeof(Addr));
+	sockaddr_in Addr{ 0 };
 	Addr.sin_family = AF_INET;
 	Addr.sin_port = htons(Port);
 	Addr.sin_addr.s_addr = htonl(INADDR_ANY);
@@ -81,27 +78,35 @@ void SocketBase::Close() noexcept
 	}
 }
 
-void Linx::SocketBase::SetRecvTimeout(int mseconds) noexcept
+bool SocketBase::IsValid() const noexcept
 {
-	::setsockopt(Sock, SOL_SOCKET, SO_RCVTIMEO, (char*)&mseconds, sizeof(mseconds));
+	int error = 0;
+	int len = sizeof(error);
+	int ret = getsockopt(Sock, SOL_SOCKET, SO_ERROR, (char*)&error, &len);
+	return ret == 0 && error == 0;
 }
 
-void Linx::SocketBase::SetSendTimeout(int mseconds) noexcept
+bool Linx::SocketBase::SetRecvTimeout(int mseconds) const noexcept
 {
-	::setsockopt(Sock, SOL_SOCKET, SO_SNDTIMEO, (char*)&mseconds, sizeof(mseconds));
+	return 0 == ::setsockopt(Sock, SOL_SOCKET, SO_RCVTIMEO, (char*)&mseconds, sizeof(mseconds));
 }
 
-void Linx::SocketBase::SetRecvBufSize(int size) noexcept
+bool Linx::SocketBase::SetSendTimeout(int mseconds) const noexcept
 {
-	::setsockopt(Sock, SOL_SOCKET, SO_RCVBUF, (char*)&size, sizeof(size));
+	return 0 == ::setsockopt(Sock, SOL_SOCKET, SO_SNDTIMEO, (char*)&mseconds, sizeof(mseconds));
 }
 
-void Linx::SocketBase::SetSendBufSize(int size) noexcept
+bool Linx::SocketBase::SetRecvBufSize(int size) const noexcept
 {
-	::setsockopt(Sock, SOL_SOCKET, SO_SNDBUF, (char*)&size, sizeof(size));
+	return 0 == ::setsockopt(Sock, SOL_SOCKET, SO_RCVBUF, (char*)&size, sizeof(size));
 }
 
-unsigned int SocketBase::GetLastError() noexcept
+bool Linx::SocketBase::SetSendBufSize(int size) const noexcept
+{
+	return 0 == ::setsockopt(Sock, SOL_SOCKET, SO_SNDBUF, (char*)&size, sizeof(size));
+}
+
+unsigned int SocketBase::GetLastError() const noexcept
 {
 #ifdef _WIN32
 	return WSAGetLastError();

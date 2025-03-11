@@ -5,7 +5,7 @@ using namespace std;
 
 std::streamsize LoggerBuf::xsputn(const char* Ptr, std::streamsize Count)
 {
-	if (CurrentLevel < LogLevel || !LOG_ENABLE)
+	if (CurrentLevel < LogLevel)
 	{
 		return std::streambuf::xsputn(Ptr, Count);
 	}
@@ -21,7 +21,7 @@ int LoggerBuf::sync()
 
 int LoggerBuf::FlushWriteBuffer()
 {
-	if (CurrentLevel < LogLevel || !LOG_ENABLE)
+	if (CurrentLevel < LogLevel)
 	{
 		ClearWriteBuffer();
 		return 0;

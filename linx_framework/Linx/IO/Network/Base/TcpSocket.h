@@ -13,13 +13,13 @@ namespace Linx
 		using Super = SocketBase;
 
 		TcpSocket() = default;
-		TcpSocket(TcpSocket&& InSocket) = default;
+		TcpSocket(socket_type InSocket) noexcept : Super(InSocket) {};
 
 	public:
 		// Begin SocketBase Interface.
-		virtual void Init() override;
-		virtual int Recv(char* buf, size_t bufsize) noexcept override;
-		virtual int Send(const char* buf, size_t bufsize) noexcept override;
+		virtual bool Recreate() noexcept override;
+		virtual int Recv(char* buf, size_t bufsize) const noexcept override;
+		virtual int Send(const char* buf, size_t bufsize) const noexcept override;
 		// End SocketBase Interface.
 
 		/**
@@ -30,11 +30,5 @@ namespace Linx
 		long SendFile(const class File& InFile, size_t Size);
 
 		bool KeepAlive(bool Val = true, int Idle = 1, int Interval = 1, int Count = 3);
-
-	protected:
-		/** Server socket */
-		socket_type* pServerSock;
-		/** Client socket */
-		socket_type* pClientSock;
 	};
 }

@@ -28,43 +28,44 @@ namespace Linx
 #endif
 
 	public:
-		SocketBase();
-		SocketBase(SocketBase&& InSocket);
-		virtual ~SocketBase();
+		SocketBase() noexcept;
+		SocketBase(SocketBase&& InSocket) noexcept;
+		SocketBase(socket_type InSocket) noexcept : Sock(InSocket) {};
+		virtual ~SocketBase() noexcept;
 
 	public:
 		/** Initialize and create socket. */
-		virtual void Init() {};
+		virtual bool Recreate() noexcept { Close(); return true; }
 
 		/** Close this socket */
-		virtual void Close() noexcept;
+		void Close() noexcept;
 
 		/** Set the IP or domain name and port of the target address to communicate with. */
 		hostent* SetTargetAddr(const std::string& Target, int Port) noexcept;
 
 		/** Select a port to receive remote message. */
-		bool Bind(int Port) noexcept;
+		bool Bind(int Port) const noexcept;
 
 		/**
 		 * Receive data from remote address.
 		 * @return	Number of bytes received. If failed, returns -1.
 		 */
-		virtual int Recv(char* buf, size_t bufsize) noexcept = 0;
+		virtual int Recv(char* buf, size_t bufsize) const noexcept = 0;
 
 		/**
 		 * Send data to remote address.
 		 * @return	Number of bytes sent. If failed, returns -1.
 		 */
-		virtual int Send(const char* buf, size_t bufsize) noexcept = 0;
+		virtual int Send(const char* buf, size_t bufsize) const noexcept = 0;
 
 		/** Same as Recv, but returns 0 if failed. */
-		inline long Read(char* buf, size_t bufsize) noexcept
+		inline long Read(char* buf, size_t bufsize) const noexcept
 		{
 			return Recv(buf, bufsize);
 		}
 
 		/** Sample as Send, but returns 0 if failed. */
-		inline long Write(const char* buf, size_t bufsize) noexcept
+		inline long Write(const char* buf, size_t bufsize) const noexcept
 		{
 			return Send(buf, bufsize);
 		}
@@ -73,33 +74,31 @@ namespace Linx
 		inline socket_type GetSocket() const noexcept { return Sock; }
 
 	public:
+		bool IsValid() const noexcept;
+
 		/** Set the timeout period for receiving. */
-		void SetRecvTimeout(int mseconds) noexcept;
+		bool SetRecvTimeout(int mseconds) const noexcept;
 
 		/** Set the timeout period for sending. */
-		void SetSendTimeout(int mseconds) noexcept;
+		bool SetSendTimeout(int mseconds) const noexcept;
 
 		/** Set the size of the receiving buffer. */
-		void SetRecvBufSize(int size) noexcept;
+		bool SetRecvBufSize(int size) const noexcept;
 
 		/** Set the size of the sending buffer. */
-		void SetSendBufSize(int size) noexcept;
+		bool SetSendBufSize(int size) const noexcept;
 
 		/** Set whether to receive all the data of the requested length before returning. */
 		inline void SetRecvAll(bool Val) noexcept { bRecvAll = Val; }
 
 	public:
 		/** Get the number of the last error. */
-		unsigned int GetLastError() noexcept;
+		unsigned int GetLastError() const noexcept;
 
 	protected:
 		/** An ID of the self socket */
 		socket_type Sock = 0;
-		/** An ID of the target socket */
-		socket_type TargetSock = 0;
 
-		/** Stores self socket information */
-		sockaddr_in Addr;
 		/** Stores the target socket information */
 		sockaddr_in TargetAddr;
 
