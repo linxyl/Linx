@@ -177,6 +177,9 @@
     <ClCompile Include="Linx\Protocol\Modbus\ModbusLibrary.h">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="Linx\Utils\TestArray.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Linx\Containers\RingBuffer.h">
@@ -330,6 +333,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Linx\ConfigCore.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Linx\Utils\Array.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

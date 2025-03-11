@@ -59,6 +59,7 @@
     <ClCompile Include="Linx\Thread\Task.cpp" />
     <ClCompile Include="Linx\Thread\TestThread.cpp" />
     <ClCompile Include="Linx\Utils\Logger.cpp" />
+    <ClCompile Include="Linx\Utils\TestArray.cpp" />
     <ClCompile Include="Linx\Utils\TestLogger.cpp" />
     <ClCompile Include="Linx\Utils\TestVariableString.cpp" />
     <ClCompile Include="Linx\Utils\VariableString.cpp" />
@@ -67,6 +68,7 @@
     <ClCompile Include="Linx\Thread\SyncQueue.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Linx\Utils\Array.h" />
     <ClInclude Include="Linx\Allocator\FileAllocator.h" />
     <ClInclude Include="Linx\Allocator\VirtualAllocator.h" />
     <ClInclude Include="Linx\Config.h" />
