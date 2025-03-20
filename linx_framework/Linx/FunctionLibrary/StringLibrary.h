@@ -4,6 +4,16 @@
 
 namespace Linx
 {
+	inline static std::string WcharToString(const std::wstring& wstr) noexcept
+	{
+		size_t bufferSize = wstr.size() * 4 + 1;
+		std::string result(bufferSize, 0);
+	 
+		wcstombs(result.data(), wstr.c_str(), bufferSize);
+	 
+		return result;
+	}
+
 	/**
 	 * Replace the old string with the new string.
 	 * @param Target	The string to be operated on.

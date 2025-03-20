@@ -1,6 +1,9 @@
 #include <algorithm>
 #include "StringLibrary.h"
 
+#ifdef _WIN32
+#include <windows.h>
+#endif
 using namespace std;
 
 std::string& Linx::Replace(std::string& Target, const std::string& Old, const std::string& New)

@@ -81,7 +81,11 @@ void SocketBase::Close() noexcept
 bool SocketBase::IsValid() const noexcept
 {
 	int error = 0;
+#ifdef _WIN32
 	int len = sizeof(error);
+#else
+	socklen_t len = sizeof(error);
+#endif
 	int ret = getsockopt(Sock, SOL_SOCKET, SO_ERROR, (char*)&error, &len);
 	return ret == 0 && error == 0;
 }

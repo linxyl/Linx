@@ -20,4 +20,5 @@
 //#define TEST_FILE_ALLOCATOR
 //#define TEST_MEM_INFO
 //#define TEST_DISK
-#define TEST_ARRAY
+//#define TEST_ARRAY
+#define TEST_NETWORK_INTERFACE

@@ -7,6 +7,7 @@
 #include <functional>
 #include <atomic>
 #include <mutex>
+#include <condition_variable>
 
 #include "Linx/Math/MathLibrary.h"
 

@@ -9,6 +9,7 @@
 #include "Linx/Utils/Logger.h"
 #include "Linx/Utils/Singleton.h"
 #include "Linx/Config.h"
+#include "Linx/Utils/Array.h"
 
 namespace Linx
 {

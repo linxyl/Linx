@@ -53,8 +53,10 @@
     <ClCompile Include="Linx\Protocol\Modbus\TestModbusUDP.cpp" />
     <ClCompile Include="Linx\System\Disk.cpp" />
     <ClCompile Include="Linx\System\MemInfo.cpp" />
+    <ClCompile Include="Linx\System\NetworkInterface.cpp" />
     <ClCompile Include="Linx\System\TestDisk.cpp" />
     <ClCompile Include="Linx\System\TestMemInfo.cpp" />
+    <ClCompile Include="Linx\System\TestNetworkInterface.cpp" />
     <ClCompile Include="Linx\System\Time.cpp" />
     <ClCompile Include="Linx\Thread\Task.cpp" />
     <ClCompile Include="Linx\Thread\TestThread.cpp" />
@@ -68,6 +70,7 @@
     <ClCompile Include="Linx\Thread\SyncQueue.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Linx\System\NetworkInterface.h" />
     <ClInclude Include="Linx\Utils\Array.h" />
     <ClInclude Include="Linx\Allocator\FileAllocator.h" />
     <ClInclude Include="Linx\Allocator\VirtualAllocator.h" />
