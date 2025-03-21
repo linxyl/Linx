@@ -425,6 +425,9 @@ namespace Linx
 		 */
 		size_type ReallocBuffer(size_type Size) noexcept;
 
+		/** Clear the buffer. */
+		void Clear() noexcept;
+
 	public:
 		/** Returns data length. */
 		inline size_type GetDataLen() const noexcept { return Rear - Head; }
@@ -939,6 +942,13 @@ namespace Linx
 		SetMaxLen(Size);
 
 		return Size;
+	}
+
+	template<class Type, class Alloc>
+	void RingBuffer<Type, Alloc>::Clear() noexcept
+	{
+		Head->EntireOffset = 0;
+		Rear->EntireOffset = 0;
 	}
 
 	template<class Type, class Alloc>

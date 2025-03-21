@@ -93,9 +93,6 @@
     <ClCompile Include="Linx\Protocol\Ini.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Linx\Utils\VariableString.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="Linx\Utils\TestVariableString.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -184,6 +181,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Linx\System\TestNetworkInterface.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Linx\Utils\ArgParser.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Linx\Utils\TestArgParse.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -345,6 +348,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Linx\System\NetworkInterface.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Linx\Utils\ArgParser.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
