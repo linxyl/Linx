@@ -29,24 +29,20 @@ namespace Linx
 		inline VariableString& operator=(const std::string& Val) noexcept { Str = Val; return *this; }
 
 		inline operator bool() { return Str == "1"; }
-		inline operator signed char() { return ConverToSigned(); }
-		inline operator short() { return ConverToSigned(); }
-		inline operator int() { return ConverToSigned(); }
-		inline operator long long() { return ConverToSigned(); }
-		inline operator unsigned char() { return ConvertToUnsigned(); }
-		inline operator unsigned short() { return ConvertToUnsigned(); }
-		inline operator unsigned int() { return ConvertToUnsigned(); }
-		inline operator unsigned long long() { return ConvertToUnsigned(); }
-		inline operator float() { return std::stof(Str); }
-		inline operator double() { return std::stod(Str); }
-		inline operator long double() { return std::stold(Str); }
+		inline operator signed char() const noexcept { return strtol(Str.c_str(), nullptr, 0); }
+		inline operator short() const noexcept { return strtol(Str.c_str(), nullptr, 0); }
+		inline operator int() const noexcept { return strtol(Str.c_str(), nullptr, 0); }
+		inline operator long long() const noexcept { return strtoll(Str.c_str(), nullptr, 0); }
+		inline operator unsigned char() const noexcept { return strtoul(Str.c_str(), nullptr, 0); }
+		inline operator unsigned short() const noexcept { return strtoul(Str.c_str(), nullptr, 0); }
+		inline operator unsigned int() const noexcept { return strtoul(Str.c_str(), nullptr, 0); }
+		inline operator unsigned long long() const noexcept { return strtoull(Str.c_str(), nullptr, 0); }
+		inline operator float() const noexcept { return strtof(Str.c_str(), nullptr); }
+		inline operator double() const noexcept { return strtod(Str.c_str(), nullptr); }
+		inline operator long double() const noexcept { return strtold(Str.c_str(), nullptr); }
 		inline operator std::string() const noexcept { return Str; }
 
 		inline std::string GetString() const noexcept { return Str; }
-
-	private:
-		long long ConverToSigned();
-		unsigned long long ConvertToUnsigned();
 
 	private:
 		std::string Str;
