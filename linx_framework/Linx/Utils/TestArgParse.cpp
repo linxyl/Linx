@@ -8,6 +8,8 @@ using namespace Linx;
 int IntTest;
 string StringTest;
 char CharTest[16];
+double DoubleTest;
+bool BoolTest;
 
 void func(int a)
 {
@@ -15,11 +17,12 @@ void func(int a)
 }
 
 BEGIN_MAKE_ARG_PARSER(MainArgParser)
-	BEGIN_ARG_PARSER_ADD_OPT
-		BIND_ARG_PARSER_ONE_OPT("-i", IntTest)
-		BIND_ARG_PARSER_TWO_OPT("-s", "--string", StringTest)
-		BIND_ARG_PARSER_ONE_OPT("-c", CharTest)
-		BIND_ARG_PARSER_FUNCTION("-f", func, 3)
+	BIND_ARG_PARSER_ONE_OPT("-i", IntTest)
+	BIND_ARG_PARSER_TWO_OPT("-s", "--string", StringTest)
+	BIND_ARG_PARSER_ONE_OPT("-c", CharTest)
+	BIND_ARG_PARSER_ONE_OPT("-d", DoubleTest)
+	BIND_ARG_PARSER_TWO_OPT("-b", "--bool", BoolTest)
+	BIND_ARG_PARSER_FUNCTION("-f", func, 3)
 	END_ARG_PARSER_ADD_OPT
 	SET_ARG_PARSER_HELP_STRING(\
 		"Help string\n"
@@ -31,7 +34,7 @@ END_MAKE_ARG_PARSER
 
 int main(int argc, char** argv)
 {
-	char* argv2[] = {"", "-i", "0x14", "--string", "abc", "-c", "123", "-f"};
+	char* argv2[] = {"", "-i", "0x14", "--string", "abc", "-c", "123", "-f", "-d", "12124.321", "-b"};
 	int argc2 = sizeof(argv2) / sizeof(argv2[0]);
 
 #ifdef USING_MAIN_ARG

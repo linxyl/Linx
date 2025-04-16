@@ -183,9 +183,6 @@
     <ClCompile Include="Linx\System\TestNetworkInterface.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Linx\Utils\ArgParser.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="Linx\Utils\TestArgParse.cpp">
       <Filter>源文件</Filter>
     </ClCompile>

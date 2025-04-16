@@ -13,26 +13,26 @@ bool Linx::File::Open() noexcept
 	Close();
 
 	size_t AccessMode = 0;
-	if (FileFlag & EFileFlag::EWrite)
+	if (FileFlag.bWrite)
 		AccessMode |= GENERIC_WRITE;
-	if (FileFlag & EFileFlag::ERead)
+	if (FileFlag.bRead)
 		AccessMode |= GENERIC_READ;
-	if (FileFlag & EFileFlag::EAppend)
+	if (FileFlag.bAppend)
 		AccessMode |= FILE_APPEND_DATA;
 
 	size_t CreateMode = 0;
-	if (FileFlag & EFileFlag::ECreate)
+	if (FileFlag.bCreate)
 	{
-		if (FileFlag & EFileFlag::ETruncate)
+		if (FileFlag.bTruncate)
 			CreateMode = CREATE_ALWAYS;
-		else if (FileFlag & EFileFlag::EOpen)
+		else if (FileFlag.bOpen)
 			CreateMode = OPEN_ALWAYS;
 		else
 			CreateMode = CREATE_NEW;
 	}
 	else
 	{
-		if (FileFlag & EFileFlag::ETruncate)
+		if (FileFlag.bTruncate)
 			CreateMode = TRUNCATE_EXISTING;
 		else
 			CreateMode = OPEN_EXISTING;
@@ -46,14 +46,14 @@ bool Linx::File::Open() noexcept
 	return Handle != INVALID_HANDLE_VALUE;
 }
 
-bool Linx::File::Open(const std::string& InFilename, uint32_t InFlag) noexcept
+bool Linx::File::Open(const std::string& InFilename, FileOpenFlag InFlag) noexcept
 {
 	Filename = InFilename;
 	FileFlag = InFlag;
 	return Open();
 }
 
-bool Linx::File::Open(const char* InFilename, uint32_t InFlag) noexcept
+bool Linx::File::Open(const char* InFilename, FileOpenFlag InFlag) noexcept
 {
 	Filename = InFilename;
 	FileFlag = InFlag;
@@ -109,17 +109,17 @@ long Linx::File::SeekEnd(long Offset) const noexcept
 	return SetFilePointer(Handle, Offset, nullptr, FILE_END);
 }
 
-char* Linx::File::MemMap(size_t Size, size_t Offset, uint32_t AccessMode)
+char* Linx::File::MemMap(size_t Size, size_t Offset, FileOpenFlag AccessMode)
 {
 
 	DWORD Prot;
 	DWORD dwDesiredAccess = 0;
-	if (AccessMode & EFileFlag::ERead)
+	if (AccessMode.bRead)
 	{
 		Prot = PAGE_READONLY;
 		dwDesiredAccess |= FILE_MAP_READ;
 	}
-	if (AccessMode & EFileFlag::EWrite)
+	if (AccessMode.bWrite)
 	{
 		Prot = PAGE_READWRITE;
 		dwDesiredAccess |= FILE_MAP_WRITE;
@@ -206,21 +206,21 @@ bool Linx::File::Open() noexcept
 	Close();
 
 	int Flag = 0;
-	if ((FileFlag & EFileFlag::EWrite) && !(FileFlag & EFileFlag::ERead))
+	if ((FileFlag.bWrite) && !(FileFlag.bRead))
 		Flag |= O_WRONLY;
-	else if (!(FileFlag & EFileFlag::EWrite) && (FileFlag & EFileFlag::ERead))
+	else if (!(FileFlag.bWrite) && (FileFlag.bRead))
 		Flag |= O_RDONLY;
-	else if ((FileFlag & EFileFlag::EWrite) && (FileFlag & EFileFlag::ERead))
+	else if ((FileFlag.bWrite) && (FileFlag.bRead))
 		Flag |= O_RDWR;
 	else return false;
 
-	if(FileFlag & EFileFlag::ECreate)
+	if(FileFlag.bCreate)
 		Flag |= O_CREAT;
-	if(!(FileFlag & EFileFlag::EOpen))
+	if(!(FileFlag.bOpen))
 		Flag |= O_EXCL;
-	if(FileFlag & EFileFlag::EAppend)
+	if(FileFlag.bAppend)
 		Flag |= O_APPEND;
-	if (FileFlag & EFileFlag::ETruncate)
+	if (FileFlag.bTruncate)
 		Flag |= O_TRUNC;
 
     Handle = open(GetTimeString(Filename).c_str(), Flag, 0666);
@@ -231,14 +231,14 @@ bool Linx::File::Open() noexcept
 	return Handle != INVALID_HANDLE_VALUE;
 }
 
-bool Linx::File::Open(const std::string& InFilename, uint32_t InFlag) noexcept
+bool Linx::File::Open(const std::string& InFilename, FileOpenFlag InFlag) noexcept
 {
 	Filename = InFilename;
 	FileFlag = InFlag;
 	return Open();
 }
 
-bool Linx::File::Open(const char* InFilename, uint32_t InFlag) noexcept
+bool Linx::File::Open(const char* InFilename, FileOpenFlag InFlag) noexcept
 {
 	Filename = InFilename;
 	FileFlag = InFlag;
@@ -292,7 +292,7 @@ long Linx::File::SeekEnd(long Offset) const noexcept
 	return lseek(Handle, Offset, SEEK_END);
 }
 
-char* Linx::File::MemMap(size_t Size, size_t Offset, uint32_t AccessMode)
+char* Linx::File::MemMap(size_t Size, size_t Offset, FileOpenFlag AccessMode)
 {
     struct stat sb;
     if (fstat(Handle, &sb) == -1)
@@ -301,11 +301,11 @@ char* Linx::File::MemMap(size_t Size, size_t Offset, uint32_t AccessMode)
     }
 
 	int Prot = 0;
-	if (AccessMode & EFileFlag::ERead)
+	if (AccessMode.bRead)
 	{
 		Prot |= PROT_READ;
 	}
-	if (AccessMode & EFileFlag::EWrite)
+	if (AccessMode.bWrite)
 	{
 		Prot |= PROT_WRITE;
 	}

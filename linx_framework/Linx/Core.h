@@ -10,6 +10,7 @@
 #include "Linx/Utils/Singleton.h"
 #include "Linx/Config.h"
 #include "Linx/Utils/Array.h"
+#include "Linx/Utils/TypeTraits.h"
 
 namespace Linx
 {
@@ -71,13 +72,10 @@ namespace Linx
 			Temp |= (Val & 0xFF00000000000000) >> 56;
 			return Temp;
 		}
-
-		static_assert(
-			1 == sizeof(Val) ||
-			2 == sizeof(Val) ||
-			4 == sizeof(Val) ||
-			8 == sizeof(Val),
-			"Unsupported type");
+		else
+		{
+			static_assert(Linx::dependent_false_v<Type>, "Unsupported type");
+		}
 
 		return Type{};
 	}

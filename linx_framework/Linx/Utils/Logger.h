@@ -79,12 +79,10 @@ namespace Linx
 	public:
 		Logger() : std::iostream(&Buf), Buf(this)
 		{};
-		inline Logger(const char* InFilename, uint32_t InFlag = 
-			EFileFlag::ERead | EFileFlag::EWrite | EFileFlag::ECreate | EFileFlag::EOpen)
+		inline Logger(const char* InFilename, FileOpenFlag InFlag = FileOpenFlag())
 			:std::iostream(&Buf), Buf(this), File(InFilename, InFlag)
 		{}
-		inline Logger(std::string InFilename, uint32_t InFlag = 
-			EFileFlag::ERead | EFileFlag::EWrite | EFileFlag::ECreate | EFileFlag::EOpen)
+		inline Logger(std::string InFilename, FileOpenFlag InFlag = FileOpenFlag())
 			:std::iostream(&Buf), Buf(this), File(InFilename, InFlag)
 		{}
 

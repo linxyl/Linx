@@ -1,13 +1,17 @@
 #pragma once
 
 #include <type_traits>
+#include <complex>
 
 namespace Linx
 {
+	template <typename T, typename... Ts>
+	inline constexpr bool is_any_of_v = std::disjunction_v<std::is_same<T, Ts>...>;
+
 	/** Determine whether is a character type. */
 	template<typename T>
 	constexpr bool is_char_type_v =
-		std::_Is_any_of_v<std::remove_cv_t<T>,
+	is_any_of_v<std::remove_cv_t<T>,
 		char,
 		signed char,
 		unsigned char,
@@ -24,6 +28,9 @@ namespace Linx
 
 	template<typename T>
 	constexpr bool is_complex_iterator_v = is_complex_iterator<T>::value;
+
+	template <typename T>
+	constexpr bool dependent_false_v  = std::false_type::value;
 
 #define GENERATE_HAS_MEMBER_FUNCTION(F)\
 	template<typename, typename = void>\

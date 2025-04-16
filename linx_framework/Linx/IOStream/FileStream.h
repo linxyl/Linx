@@ -13,12 +13,10 @@ namespace Linx
 	public:
 		FileStream() : std::iostream(&Buf), Buf(this)
 		{};
-		inline FileStream(const char* InFilename, uint32_t InFlag = 
-			EFileFlag::ERead | EFileFlag::EWrite | EFileFlag::ECreate | EFileFlag::EOpen)
+		inline FileStream(const char* InFilename, FileOpenFlag InFlag = FileOpenFlag())
 			:std::iostream(&Buf), Buf(this), File(InFilename, InFlag)
 		{}
-		inline FileStream(std::string InFilename, uint32_t InFlag = 
-			EFileFlag::ERead | EFileFlag::EWrite | EFileFlag::ECreate | EFileFlag::EOpen)
+		inline FileStream(std::string InFilename, FileOpenFlag InFlag = FileOpenFlag())
 			:std::iostream(&Buf), Buf(this), File(InFilename, InFlag)
 		{}
 

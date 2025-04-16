@@ -19,7 +19,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Linx\Utils\ArgParser.cpp" />
     <ClCompile Include="Linx\Allocator\TestFileAllocator.cpp" />
     <ClCompile Include="Linx\Allocator\TestVirtualAllocator.cpp" />
     <ClCompile Include="Linx\Containers\RingBuffer.cpp" />

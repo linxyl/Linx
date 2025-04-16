@@ -13,29 +13,45 @@ namespace Linx
 	/**
 	 * Set the properties of the open file.
 	 */
-	namespace EFileFlag
+	struct FileOpenFlag
 	{
-		enum Mode : uint32_t
-		{
-			/** File writable. */
-			EWrite = 0x00000001,
+		/** File writable. */
+		uint8_t bWrite : 1;
 
-			/** File readable. */
-			ERead = 0x00000002,
+		/** File readable. */
+		uint8_t bRead : 1;
 
-			/** Create when the file does not exist. */
-			ECreate = 0x00000004,
+		/** Create when the file does not exist. */
+		uint8_t bCreate : 1;
 
-			/** Can be opened when the file already exists. */
-			EOpen = 0x00000008,
+		/** Can be opened when the file already exists. */
+		uint8_t bOpen : 1;
 
-			/** Empty the contents of the file when it is opened. */
-			ETruncate = 0x00000010,
+		/** mpty the contents of the file when it is opened. */
+		uint8_t bTruncate : 1;
 
-			/** Append content to the end of a file when it is opened. */
-			EAppend = 0x00000020
-		};
-	}
+		/** Append content to the end of a file when it is opened. */
+		uint8_t bAppend : 1;
+
+	public:
+		inline FileOpenFlag() noexcept :
+			bWrite(true),
+			bRead(true),
+			bCreate(true),
+			bOpen(true),
+			bTruncate(false),
+			bAppend(false)
+		{}
+
+		inline FileOpenFlag(bool flag) noexcept :
+			bWrite(false),
+			bRead(false),
+			bCreate(false),
+			bOpen(false),
+			bTruncate(false),
+			bAppend(false)
+		{}
+	};
 
 	/**
 	 * A file class that can rotate depending on time or size.
@@ -53,13 +69,11 @@ namespace Linx
 		 *						%Y=year, %m=month, %d=day, %H=hour, %M=minute, %S=second, %s=millisecond.
 		 * @param InFlag		File properties, should be the value after EFileFlag is performed '|' operated.
 		 */
-		inline File(const char* InFilename, uint32_t InFlag =
-			EFileFlag::ERead | EFileFlag::EWrite | EFileFlag::ECreate | EFileFlag::EOpen) noexcept
+		inline File(const char* InFilename, FileOpenFlag InFlag = FileOpenFlag()) noexcept
 		{
 			Open(InFilename, InFlag);
 		}
-		inline File(const std::string& InFilename, uint32_t InFlag =
-			EFileFlag::ERead | EFileFlag::EWrite | EFileFlag::ECreate | EFileFlag::EOpen) noexcept
+		inline File(const std::string& InFilename, FileOpenFlag InFlag = FileOpenFlag()) noexcept
 		{
 			Open(InFilename, InFlag);
 		}
@@ -69,7 +83,7 @@ namespace Linx
 	private:
 		std::string Filename;
 
-		uint32_t FileFlag;
+		FileOpenFlag FileFlag;
 
 	public:
 		/** Open the file based on the stored file information. */
@@ -82,10 +96,8 @@ namespace Linx
 		 * @param InFlag		File properties, should be the value after EFileFlag is performed '|' operated.
 		 * @return whether the file is opened.
 		 */
-		bool Open(const char* InFilename, uint32_t InFlag =
-			EFileFlag::ERead | EFileFlag::EWrite | EFileFlag::ECreate | EFileFlag::EOpen) noexcept;
-		bool Open(const std::string& InFilename, uint32_t InFlag =
-			EFileFlag::ERead | EFileFlag::EWrite | EFileFlag::ECreate | EFileFlag::EOpen) noexcept;
+		bool Open(const char* InFilename, FileOpenFlag InFlag = FileOpenFlag()) noexcept;
+		bool Open(const std::string& InFilename, FileOpenFlag InFlag = FileOpenFlag()) noexcept;
 
 		/** Returns whether the file is opened. */
 		bool IsOpen() const noexcept;
@@ -114,7 +126,7 @@ namespace Linx
 		 * @param Offset		Offset of the file map. Must be an integer multiple of the page of the MMU.
 		 * @param AccessMode	Read and write permissions. Should use EFileFlag.
 		 */
-		char* MemMap(size_t Size, size_t Offset = 0, uint32_t AccessMode = EFileFlag::ERead | EFileFlag::EWrite);
+		char* MemMap(size_t Size, size_t Offset = 0, FileOpenFlag InFlag = FileOpenFlag());
 
 		/** Unmap memory. */
 		void UnMemMap();

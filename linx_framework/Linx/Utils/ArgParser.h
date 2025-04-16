@@ -1,12 +1,15 @@
 #pragma once
 
+#include <string.h>
+
 #include <type_traits>
 #include <string>
 #include <iostream>
 
+#include "TypeTraits.h"
+
 #define BEGIN_MAKE_ARG_PARSER(ClassName)						BEGIN_MAKE_ARG_PARSER_IMPL(ClassName)
 #define END_MAKE_ARG_PARSER										};
-#define BEGIN_ARG_PARSER_ADD_OPT								BEGIN_ARG_PARSER_ADD_OPT_IMPL
 #define END_ARG_PARSER_ADD_OPT									END_ARG_PARSER_ADD_OPT_IMPL
 #define BIND_ARG_PARSER_FUNCTION(Opt0, Func, ...)				ParseOneOpt(Opt0, Func, ##__VA_ARGS__);
 #define BIND_ARG_PARSER_ONE_OPT(Opt0, ...)						ParseOneOpt(Opt0, __VA_ARGS__);
@@ -19,11 +22,8 @@
 #define BEGIN_MAKE_ARG_PARSER_IMPL(ClassName)\
 	class ClassName : public ArgParserBase\
 	{\
-		using SelfClassName = ClassName;
-
-#define BEGIN_ARG_PARSER_ADD_OPT_IMPL\
 	public:\
-		SelfClassName(int argc, char** argv) : ArgParserBase(argc, argv)\
+		ClassName(int argc, char** argv) : ArgParserBase(argc, argv)\
 		{\
 			try\
 			{\
@@ -40,8 +40,7 @@
 #define SET_ARG_PARSER_HELP_STRING_IMPY(s)\
 	protected:\
 		static void PrintHelp() noexcept\
-		{ cout << s << endl; exit(0); }
-
+		{ std::cout << s << std::endl; exit(0); }
 
 namespace Linx
 {
@@ -60,22 +59,26 @@ namespace Linx
 			{
 				throw 0;
 			}
-			
+
 			if constexpr (std::is_integral_v<std::remove_reference_t<Type>>)
 			{
-				Var = stoll(argv[index], nullptr, 0);
+				Var = std::stoll(argv[index], nullptr, 0);
+			}
+			else if constexpr (std::is_floating_point_v<std::remove_reference_t<Type>>)
+			{
+				Var = std::stold(argv[index]);
 			}
 			else if constexpr (std::is_same_v<std::remove_reference_t<Type>, std::string>)
 			{
 				Var = argv[index];
 			}
-			else if constexpr (is_same_v<std::decay_t<std::remove_reference_t<Type>>, char*>)
+			else if constexpr (std::is_same_v<std::decay_t<std::remove_reference_t<Type>>, char*>)
 			{
 				strcpy(Var, argv[index]);
 			}
 			else
 			{
-				static_assert(false, "Invalid type");
+				static_assert(Linx::dependent_false_v<Type>, "Invalid type");
 			}
 
 			ParseRecursion(index + 1, std::forward<Args>(args)...);
@@ -88,7 +91,11 @@ namespace Linx
 			{
 				if (0 == strcmp(argv[i], Opt))
 				{
-					if constexpr (std::is_function_v<std::remove_pointer_t<Type0>>)
+					if constexpr (std::is_same_v<std::remove_reference_t<Type0>, bool>)
+					{
+						Arg0 = true;
+					}
+					else if constexpr (std::is_function_v<std::remove_pointer_t<Type0>>)
 					{
 						Arg0(std::forward<Args>(args)...);
 					}
@@ -99,6 +106,12 @@ namespace Linx
 					return true;
 				}
 			}
+
+			if constexpr (std::is_same_v<std::remove_reference_t<Type0>, bool>)
+			{
+				Arg0 = false;
+			}
+
 			return false;
 		}
 

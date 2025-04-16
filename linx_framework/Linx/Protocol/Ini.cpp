@@ -113,12 +113,19 @@ void Linx::Ini::Set(const IniOption& Option, const VariableString& Val)
 
 bool Linx::IniFile::Load()
 {
-	FileStream File(Filename, EFileFlag::ERead | EFileFlag::EOpen);
+	FileOpenFlag Flag{false};
+	Flag.bRead = true;
+	Flag.bOpen = true;
+	FileStream File(Filename, Flag);
 	return Ini::Load(File);
 }
 
 void Linx::IniFile::Save()
 {
-	FileStream File(Filename, EFileFlag::EWrite | EFileFlag::ECreate | EFileFlag::ETruncate);
+	FileOpenFlag Flag{false};
+	Flag.bWrite = true;
+	Flag.bCreate = true;
+	Flag.bTruncate = true;
+	FileStream File(Filename, Flag);
 	Ini::Save(File);
 }
