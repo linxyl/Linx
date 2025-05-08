@@ -947,8 +947,8 @@ namespace Linx
 	template<class Type, class Alloc>
 	void RingBuffer<Type, Alloc>::Clear() noexcept
 	{
-		Head->EntireOffset = 0;
-		Rear->EntireOffset = 0;
+		Head.EntireOffset = 0;
+		Rear.EntireOffset = 0;
 	}
 
 	template<class Type, class Alloc>
